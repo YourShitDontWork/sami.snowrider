@@ -1,112 +1,103 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Centro de Juegos Colegio La Vaguada por Antonio Macian</title>
+  <title>GK4 - Juegos</title>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
-      padding: 0;
-      background: url('espan.jpg') no-repeat center center fixed;
-      background-size: cover;
-    }
-    header {
-      background: #007bff;
+      font-family: Arial, sans-serif;
+      background: black;
       color: white;
-      padding: 20px;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+    }
+    h1 {
       text-align: center;
-      font-size: 2em;
+      margin-top: 20px;
+      font-size: 3em;
     }
-    #search {
-      display: block;
-      margin: 20px auto;
+    .search-container {
+      text-align: center;
+      margin: 20px;
+    }
+    input[type="text"] {
       padding: 10px;
-      width: 80%;
-      font-size: 1em;
+      font-size: 16px;
+      width: 60%;
+      border-radius: 8px;
+      border: none;
     }
-    .game-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
+      max-width: 1200px;
+      margin: auto;
     }
-    .game-card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 180px;
+    .game {
+      background: #111;
+      border-radius: 12px;
+      overflow: hidden;
       text-align: center;
-      text-decoration: none;
-      color: black;
-      transition: transform 0.2s;
+      box-shadow: 0 0 10px #00ffcc55;
+      transition: transform 0.3s;
     }
-    .game-card:hover {
+    .game:hover {
       transform: scale(1.05);
     }
-    .game-card img {
+    .game img {
       width: 100%;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      height: 150px;
+      object-fit: cover;
     }
-    .game-card p {
+    .game-title {
       padding: 10px;
-      margin: 0;
+      font-size: 1.2em;
     }
   </style>
 </head>
 <body>
-  <header>unblocked games</header>
-  <input type="text" id="search" placeholder="Buscar juegos...">
 
- <div class="game-grid" id="gameGrid">
-  <a href="2048-master/index.html" class="game-card">
-    <img src="2048-master/favicon.ico" alt="2048">
-    <span>2048</span>
-  </a>
+  <h1>GK4 - Juegos</h1>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />
+  </div>
 
-   <div class="game-grid" id="gameGrid">
-  <a href="Slope-Source-code-main/index.html" class="game-card">
-    <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="SLOPE">
-    <span>SLOPE</span>
-  </a>
- <div>
-   <div class="game-grid" id="gameGrid">
-  <a href="BurritoBison-main/" class="game-card">
-    <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito">
-    <span>Burrito</span>
-  </a>
- <div>
- <div>
-   <div class="game-grid" id="gameGrid">
-  <a href="drive-mad-main/" class="game-card">
-    <img src="drive-mad-main/webapp/cover.jpg" alt="Drive MAD">
-    <span>Drive MAD</span>
-  </a>
- <div>
-   <div>
-   <div class="game-grid" id="gameGrid">
-  <a href="moto-x3m-main/index.htlm" class="game-card">
-    <img src="bancoalimentos3.jpg" alt="MOTOR">
-    <span>MOTOR X3M</span>
-  </a>
- <div>
+  <div class="grid" id="gameGrid">
+    <!-- Ejemplo de juego -->
+    <div class="game">
+      <a href="games/slope/index.html">
+        <img src="images/slope.jpg" alt="Slope">
+        <div class="game-title">Slope</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="games/subway/index.html">
+        <img src="images/subway.jpg" alt="Subway Surfers">
+        <div class="game-title">Subway Surfers</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="games/flappy/index.html">
+        <img src="images/flappy.jpg" alt="Flappy Bird">
+        <div class="game-title">Flappy Bird</div>
+      </a>
+    </div>
+    <!-- Agrega más juegos aquí -->
+  </div>
 
   <script>
-    const searchInput = document.getElementById("search");
-    const gameGrid = document.getElementById("gameGrid");
-
-    searchInput.addEventListener("input", function () {
-      const filter = searchInput.value.toLowerCase();
-      const cards = gameGrid.querySelectorAll(".game-card");
-
-      cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(filter) ? "" : "none";
+    function searchGames() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const games = document.querySelectorAll(".game");
+      games.forEach(game => {
+        const title = game.querySelector(".game-title").textContent.toLowerCase();
+        game.style.display = title.includes(input) ? "block" : "none";
       });
-    });
+    }
   </script>
+
 </body>
 </html>
