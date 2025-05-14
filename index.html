@@ -10,29 +10,27 @@
   }  
 
   body {  
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(#000000, #0f0f0f);
-      color: white;
-      background-image: url("back.jpg");
-      background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      position: relative;
-      z-index: 0;
-    }
+      margin: 0;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+      background: radial-gradient(#000000, #0f0f0f);  
+      color: white;  
+      background-image: url("back.jpg");  
+      background-size: cover;  
+      background-attachment: fixed;  
+      background-repeat: no-repeat;  
+      position: relative;  
+      z-index: 0;  
+    }  
 
-  /* El pseudo-elemento para colocar un filtro suave sobre la imagen, opcional */  
-  body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: brightness(0.3) blur(1px);
-      z-index: -1;
-
+  body::before {  
+      content: "";  
+      position: fixed;  
+      inset: 0;  
+      background-size: cover;  
+      background-position: center;  
+      background-repeat: no-repeat;  
+      filter: brightness(0.3) blur(1px);  
+      z-index: -1;  
   }  
 
   h1 {  
@@ -43,7 +41,6 @@
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #00fff2;  
   }  
 
-  /* Estilo para el cuadro clickeable */  
   #toggleButton {  
     width: 250px;  
     height: 50px;  
@@ -63,7 +60,6 @@
     transition: all 0.3s ease;  
   }  
 
-  /* Sección de créditos / actualizaciones */  
   #creditsSection {  
     display: none;  
     text-align: center;  
@@ -79,10 +75,9 @@
     font-size: 1.2em;  
   }  
 
-  /* Estilo para el grid de juegos */  
   .grid {  
     display: grid;  
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  
     gap: 25px;  
     padding: 20px;  
     max-width: 1200px;  
@@ -96,6 +91,11 @@
     text-align: center;  
     box-shadow: 0 0 15px #00fff255;  
     transition: transform 0.2s, box-shadow 0.2s;  
+    /* Tamaño más rectangular */  
+    height: 180px;  
+    display: flex;  
+    flex-direction: column;  
+    justify-content: center;  
   }  
 
   .game:hover {  
@@ -104,15 +104,16 @@
   }  
 
   .game img {  
-    width: 100%;  
-    height: 150px;  
+    width: 80%;  
+    height: 120px;  
     object-fit: cover;  
     border-bottom: 2px solid #00fff2;  
+    margin: 0 auto; /* Centrar la imagen */  
   }  
 
   .game-title {  
-    font-size: 1.2em;  
-    padding: 12px;  
+    font-size: 1em;  
+    padding: 8px;  
     color: white;  
     text-shadow: 0 0 5px #00fff2;  
   }  
@@ -127,8 +128,8 @@
   }  
 </style>  
 </head>  
-<body>   
- <h1>CELEX - Juegos</h1>
+<body>  
+<h1>CELEX - Juegos</h1>  
 
 <!-- Cuadro clickeable debajo del título -->  
 <div id="toggleButton">Ver Actualizaciones y Créditos</div>  
@@ -141,102 +142,111 @@
   <p>Actualizaciones:</p>  
   <p>Se ha eliminado 1v1.lol por el puto iRiS</p>  
   <p>Se ha añadido Tunnel Rush</p>  
-</div>   
+</div>  
 
-
-  <!-- Cuadro clickeable debajo del título -->  
- 
-  <!-- Grid de juegos -->  
-  <div class="grid" id="gameGrid">  
-    <div class="game">  
-      <a href="Slope-Source-code-main/index.html">  
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
-        <div class="game-title">Slope</div>  
-      </a>  
-    <div class="game">  
-      <a href="DriftHunters/index.html">  
-        <img src="drift.jpeg" alt="Drifter Hunters" />  
-        <div class="game-title">Drifter Hunters</div>  
-      </a>  
-    <div class="game">  
-      <a href="BurritoBison-main/index.html">  
-        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />  
-        <div class="game-title">Burrito Bison</div>  
-      </a> 
-    <div class="game">  
-      <a href="Tunnel-Rush/index.html">  
-        <img src="Tunnel-Rush/favicon.ico" alt="Tunnel Rush " />  
-        <div class="game-title">Tunnel Rush</div>  
-      </a>  
-    <div class="game">  
-      <a href="drive-mad-main/index.html">  
-        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />  
-        <div class="game-title">Drive Mad</div>  
-      </a>  
-    <div class="game">  
-      <a href="bitlife/index.html">  
-        <img src="bitlife/logo.png" alt="Bitlife" />  
-        <div class="game-title">Bitlife</div>  
-      </a>   
-    <div class="game">  
-      <a href="driftboss/index.html">  
-        <img src="driftboss/branding/logo1.png" alt="Drift Boss" />  
-        <div class="game-title">Drift Boss</div>  
-      </a>  
-    <div class="game">  
-      <a href="happywheels/index.html">  
-        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />  
-        <div class="game-title">Happy Wheels</div>  
-      </a>  
-    <div class="game">  
-      <a href="pacman/index.html">  
-        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />  
-        <div class="game-title">Pacman</div>  
-      </a>  
-    <div class="game">  
-      <a href="skibidi1v100/index.html">  
-        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />  
-        <div class="game-title">Skibidi 1v100</div>  
-      </a>   
-    <div class="game">  
-      <a href="snowrider3d/index.html">  
-        <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />  
-        <div class="game-title">Snow Rider 3D</div>  
-      </a>  
-    <div class="game">  
-      <a href="volleyrandom/index.html">  
-        <img src="volleyrandom/splash.png" alt="Volley Random" />  
-        <div class="game-title">Volley Random</div>  
-      </a>  
+<!-- Grid de juegos -->  
+<div class="grid" id="gameGrid">  
+  <div class="game">  
+    <a href="Slope-Source-code-main/index.html">  
+      <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
+      <div class="game-title">Slope</div>  
+    </a>  
   </div>  
+  <div class="game">  
+    <a href="DriftHunters/index.html">  
+      <img src="drift.jpeg" alt="Drifter Hunters" />  
+      <div class="game-title">Drifter Hunters</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="BurritoBison-main/index.html">  
+      <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />  
+      <div class="game-title">Burrito Bison</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="Tunnel-Rush/index.html">  
+      <img src="Tunnel-Rush/favicon.ico" alt="Tunnel Rush" />  
+      <div class="game-title">Tunnel Rush</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="drive-mad-main/index.html">  
+      <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />  
+      <div class="game-title">Drive Mad</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="bitlife/index.html">  
+      <img src="bitlife/logo.png" alt="Bitlife" />  
+      <div class="game-title">Bitlife</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="driftboss/index.html">  
+      <img src="driftboss/branding/logo1.png" alt="Drift Boss" />  
+      <div class="game-title">Drift Boss</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="happywheels/index.html">  
+      <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />  
+      <div class="game-title">Happy Wheels</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="pacman/index.html">  
+      <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />  
+      <div class="game-title">Pacman</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="skibidi1v100/index.html">  
+      <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />  
+      <div class="game-title">Skibidi 1v100</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="snowrider3d/index.html">  
+      <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />  
+      <div class="game-title">Snow Rider 3D</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="volleyrandom/index.html">  
+      <img src="volleyrandom/splash.png" alt="Volley Random" />  
+      <div class="game-title">Volley Random</div>  
+    </a>  
+  </div>  
+</div>  
 
-  <script>  
-    const toggleBtn = document.getElementById("toggleButton");  
-    const creditsSection = document.getElementById("creditsSection");  
-    const gameGrid = document.getElementById("gameGrid");  
+<script>  
+  const toggleBtn = document.getElementById("toggleButton");  
+  const creditsSection = document.getElementById("creditsSection");  
+  const gameGrid = document.getElementById("gameGrid");  
 
-    toggleBtn.onclick = () => {  
-      if (creditsSection.style.display === "none") {  
-        // Mostrar créditos, ocultar juegos  
-        creditsSection.style.display = "block";  
-        gameGrid.style.display = "none";  
-        toggleBtn.innerHTML = "Volver a los Juegos";  
-      } else {  
-        // Mostrar juegos, ocultar créditos  
-        creditsSection.style.display = "none";  
-        gameGrid.style.display = "grid";  
-        toggleBtn.innerHTML = "Ver Actualizaciones y Créditos";  
-      }  
-    };  
-
-    function searchGames() {  
-      const input = document.getElementById("searchInput").value.toLowerCase();  
-      const games = document.querySelectorAll(".game");  
-      games.forEach(game => {  
-        const title = game.querySelector(".game-title").textContent.toLowerCase();  
-        game.style.display = title.includes(input) ? "block" : "none";  
-      });  
+  toggleBtn.onclick = () => {  
+    if (creditsSection.style.display === "none") {  
+      // Mostrar créditos, ocultar juegos  
+      creditsSection.style.display = "block";  
+      gameGrid.style.display = "none";  
+      toggleBtn.innerHTML = "Volver a los Juegos";  
+    } else {  
+      // Mostrar juegos, ocultar créditos  
+      creditsSection.style.display = "none";  
+      gameGrid.style.display = "grid";  
+      toggleBtn.innerHTML = "Ver Actualizaciones y Créditos";  
     }  
-  </script>  
+  };  
+
+  function searchGames() {  
+    const input = document.getElementById("searchInput").value.toLowerCase();  
+    const games = document.querySelectorAll(".game");  
+    games.forEach(game => {  
+      const title = game.querySelector(".game-title").textContent.toLowerCase();  
+      game.style.display = title.includes(input) ? "block" : "none";  
+    });  
+  }  
+</script>  
 </body>  
 </html>
