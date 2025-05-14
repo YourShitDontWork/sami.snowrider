@@ -22,13 +22,16 @@
   }  
 
   /* El pseudo-elemento para colocar un filtro suave sobre la imagen, opcional */  
-  body::before {  
-    content: "";  
-    position: fixed;  
-    inset: 0;  
-    background: rgba(0, 0, 0, 0.3); /* un filtro oscuro suave para mejorar lectura */  
-    /* Puedes ajustar el RGBA para más o menos opacidad */  
-    z-index: -1;  
+  body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: brightness(0.3) blur(1px);
+      z-index: -1;
+
   }  
 
   h1 {  
