@@ -1,206 +1,254 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CELEX - Juegos</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>CELEX - Juegos</title>  
+  <style>  
+    * {  
+      box-sizing: border-box;  
+    }  
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(#000000, #0f0f0f);
-      color: white;
-      background-image: url("game.jpg");
-      background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      position: relative;
-      z-index: 0;
-    }
+    body {  
+      margin: 0;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+      background: radial-gradient(#000000, #0f0f0f);  
+      color: white;  
+      background-image: url("game.jpg");  
+      background-size: cover;  
+      background-attachment: fixed;  
+      background-repeat: no-repeat;  
+      position: relative;  
+      z-index: 0;  
+    }  
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: brightness(0.3) blur(1px);
-      z-index: -1;
-    }
+    body::before {  
+      content: "";  
+      position: fixed;  
+      inset: 0;  
+      background-size: cover;  
+      background-position: center;  
+      background-repeat: no-repeat;  
+      filter: brightness(0.3) blur(1px);  
+      z-index: -1;  
+    }  
 
-    h1 {
-      text-align: center;
-      margin: 30px 0 10px 0;
-      font-size: 3em;
-      color: white;
-      text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #00fff2;
-    }
+    h1 {  
+      text-align: center;  
+      margin: 30px 0 10px 0;  
+      font-size: 3em;  
+      color: white;  
+      text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #00fff2;  
+    }  
 
-    .search-container {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+    /* Nuevo estilo para la sección de créditos y actualizaciones */  
+    .info-box {  
+      margin: 20px auto;  
+      padding: 20px;  
+      max-width: 600px;  
+      border-radius: 15px;  
+      background: linear-gradient(45deg, #00fff2, #00f2ff, #00fff2);  
+      background-size: 600% 600%;  
+      animation: gradientBorder 3s ease infinite, pulse 2s infinite;  
+      box-shadow: 0 0 20px #00fff2aa, inset 0 0 10px #00fff2aa;  
+      border: 3px solid transparent;  
+      position: relative;  
+      text-align: center;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+      color: white;  
+      font-size: 1.5em;  
+    }  
 
-    input[type="text"] {
-      padding: 12px 20px;
-      width: 70%;
-      font-size: 18px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      background: #1c1c1c;
-      color: white;
-      box-shadow: 0 0 10px #FFFFFF;
-    }
+    .info-box h2 {  
+      margin: 0;  
+      padding: 0;  
+    }  
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 25px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
+    /* Animaciones para la caja */  
+    @keyframes gradientBorder {  
+      0% {  
+        background-position: 0% 50%;  
+      }  
+      50% {  
+        background-position: 100% 50%;  
+      }  
+      100% {  
+        background-position: 0% 50%;  
+      }  
+    }  
 
-    .game {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      overflow: hidden;
-      text-align: center;
-      box-shadow: 0 0 15px #00fff255;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+    @keyframes pulse {  
+      0%, 100% {  
+        box-shadow: 0 0 20px #00fff2aa, inset 0 0 10px #00fff2aa;  
+      }  
+      50% {  
+        box-shadow: 0 0 40px #00fff2ff, inset 0 0 15px #00fff2ff;  
+      }  
+    }  
 
-    .game:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #00fff2aa;
-    }
+    .search-container {  
+      text-align: center;  
+      margin-bottom: 30px;  
+    }  
 
-    .game img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-bottom: 2px solid #00fff2;
-    }
+    input[type="text"] {  
+      padding: 12px 20px;  
+      width: 70%;  
+      font-size: 18px;  
+      border-radius: 10px;  
+      border: none;  
+      outline: none;  
+      background: #1c1c1c;  
+      color: white;  
+      box-shadow: 0 0 10px #FFFFFF;  
+    }  
 
-    .game-title {
-      font-size: 1.2em;
-      padding: 12px;
-      color: white;
-      text-shadow: 0 0 5px #00fff2;
-    }
+    .grid {  
+      display: grid;  
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  
+      gap: 25px;  
+      padding: 20px;  
+      max-width: 1200px;  
+      margin: auto;  
+    }  
 
-    a {
-      color: white;
-      text-decoration: none;
-    }
+    .game {  
+      background: rgba(255, 255, 255, 0.05);  
+      border-radius: 15px;  
+      overflow: hidden;  
+      text-align: center;  
+      box-shadow: 0 0 15px #00fff255;  
+      transition: transform 0.2s, box-shadow 0.2s;  
+    }  
 
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
+    .game:hover {  
+      transform: scale(1.05);  
+      box-shadow: 0 0 25px #00fff2aa;  
+    }  
 
-  <h1>GK4 - Juegos</h1>
+    .game img {  
+      width: 100%;  
+      height: 150px;  
+      object-fit: cover;  
+      border-bottom: 2px solid #00fff2;  
+    }  
 
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
-  </div>
+    .game-title {  
+      font-size: 1.2em;  
+      padding: 12px;  
+      color: white;  
+      text-shadow: 0 0 5px #00fff2;  
+    }  
 
-  <div class="grid" id="gameGrid">
-    <div class="game">
-      <a href="Slope-Source-code-main/index.html">
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
-        <div class="game-title">Slope</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="Subway-Surfers/index.html">
-        <img src="R.png" alt="Subway Surfers">
-        <div class="game-title">Subway Surfers</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="BurritoBison-main/index.html">
-        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison">
-        <div class="game-title">Burrito Bison</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="drive-mad-main/index.html">
-        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad">
-        <div class="game-title">Drive Mad</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="1v1lol/">
-        <img src="1v1lol/logo.png" alt="1v1.lol">
-        <div class="game-title">1v1.lol</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="bitlife/index.html">
-        <img src="bitlife/logo.png" alt="Bitlife">
-        <div class="game-title">Bitlife</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="driftboss/index.html">
-        <img src="driftboss/branding/logo1.png" alt="Drift Boss">
-        <div class="game-title">Drift Boss</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="happywheels/index.html">
-        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels">
-        <div class="game-title">Happy Wheels</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="pacman/index.html">
-        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman">
-        <div class="game-title">Pacman</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="skibidi1v100/index.html">
-        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100">
-        <div class="game-title">Skibidi 1v100</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="snowrider3d/index.html">
-        <img src="snowrider3d/snow.png" alt="Snow Rider 3D">
-        <div class="game-title">Snow Rider 3D</div>
-      </a>
-    </div>
-        <div class="game">
-      <a href="volleyrandom/index.html">
-        <img src="volleyrandom/splash.png" alt="Volley Random">
-        <div class="game-title">Volley Random</div>
-      </a>
-    </div>
-  </div> <!-- Fin del contenedor de .grid -->
+    a {  
+      color: white;  
+      text-decoration: none;  
+    }  
 
-    </div>
-  </div> <!-- Fin del contenedor de .grid -->
+    a:hover {  
+      text-decoration: underline;  
+    }  
+  </style>  
+</head>  
+<body>  
 
-  <script>
-    function searchGames() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const games = document.querySelectorAll(".game");
-      games.forEach(game => {
-        const title = game.querySelector(".game-title").textContent.toLowerCase();
-        game.style.display = title.includes(input) ? "block" : "none";
-      });
-    }
-  </script>
+  <h1>GK4 - Juegos</h1>  
 
-</body>
+  <!-- Sección nueva: Créditos y Actualizaciones -->  
+  <div class="info-box">  
+    <h2>Créditos y Actualizaciones</h2>  
+  </div>  
+
+  <div class="search-container">  
+    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />  
+  </div>  
+
+  <div class="grid" id="gameGrid">  
+    <!-- Lista de juegos, igual que antes ... -->  
+    <div class="game">  
+      <a href="Slope-Source-code-main/index.html">  
+        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
+        <div class="game-title">Slope</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="Subway-Surfers/index.html">  
+        <img src="R.png" alt="Subway Surfers" />  
+        <div class="game-title">Subway Surfers</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="BurritoBison-main/index.html">  
+        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />  
+        <div class="game-title">Burrito Bison</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="drive-mad-main/index.html">  
+        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />  
+        <div class="game-title">Drive Mad</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="1v1lol/">  
+        <img src="1v1lol/logo.png" alt="1v1.lol" />  
+        <div class="game-title">1v1.lol</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="bitlife/index.html">  
+        <img src="bitlife/logo.png" alt="Bitlife" />  
+        <div class="game-title">Bitlife</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="driftboss/index.html">  
+        <img src="driftboss/branding/logo1.png" alt="Drift Boss" />  
+        <div class="game-title">Drift Boss</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="happywheels/index.html">  
+        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />  
+        <div class="game-title">Happy Wheels</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="pacman/index.html">  
+        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />  
+        <div class="game-title">Pacman</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="skibidi1v100/index.html">  
+        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />  
+        <div class="game-title">Skibidi 1v100</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="snowrider3d/index.html">  
+        <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />  
+        <div class="game-title">Snow Rider 3D</div>  
+      </a>  
+    </div>  
+    <div class="game">  
+      <a href="volleyrandom/index.html">  
+        <img src="volleyrandom/splash.png" alt="Volley Random" />  
+        <div class="game-title">Volley Random</div>  
+      </a>  
+    </div>  
+  </div> <!-- Cierra .grid -->  
+
+  <script>  
+    function searchGames() {  
+      const input = document.getElementById("searchInput").value.toLowerCase();  
+      const games = document.querySelectorAll(".game");  
+      games.forEach(game => {  
+        const title = game.querySelector(".game-title").textContent.toLowerCase();  
+        game.style.display = title.includes(input) ? "block" : "none";  
+      });  
+    }  
+  </script>  
+
+</body>  
 </html>
