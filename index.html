@@ -41,9 +41,30 @@
       text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #00fff2;  
     }  
 
-    /* Nuevo estilo para la sección de créditos y actualizaciones */  
-    .info-box {  
-      margin: 20px auto;  
+    /* Estilo para el botón neon */  
+    .neon-button {  
+      display: inline-block;  
+      margin: 15px auto;  
+      padding: 8px 15px;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+      font-size: 14px;  
+      color: #fff;  
+      border: 2px solid #fff;  
+      border-radius: 8px;  
+      background: transparent;  
+      cursor: pointer;  
+      box-shadow: 0 0 10px #fff, inset 0 0 10px #fff;  
+      transition: all 0.2s ease;  
+    }  
+    .neon-button:hover {  
+      box-shadow: 0 0 20px #fff, inset 0 0 20px #fff;  
+      background: rgba(255,255,255,0.1);  
+    }  
+
+    /* Cuadro grande de mensaje/neón que aparecerá tras ocultar */  
+    .message-box {  
+      display: none; /* Se muestra solo en modo oculto */  
+      margin: 30px auto;  
       padding: 20px;  
       max-width: 600px;  
       border-radius: 15px;  
@@ -52,31 +73,18 @@
       animation: gradientBorder 3s ease infinite, pulse 2s infinite;  
       box-shadow: 0 0 20px #00fff2aa, inset 0 0 10px #00fff2aa;  
       border: 3px solid transparent;  
-      position: relative;  
       text-align: center;  
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
       color: white;  
-      font-size: 1.5em;  
+      font-size: 1.8em;  
     }  
 
-    .info-box h2 {  
-      margin: 0;  
-      padding: 0;  
-    }  
-
-    /* Animaciones para la caja */  
+    /* Animaciones para el cuadro */  
     @keyframes gradientBorder {  
-      0% {  
-        background-position: 0% 50%;  
-      }  
-      50% {  
-        background-position: 100% 50%;  
-      }  
-      100% {  
-        background-position: 0% 50%;  
-      }  
+      0% { background-position: 0% 50%; }  
+      50% { background-position: 100% 50%; }  
+      100% { background-position: 0% 50%; }  
     }  
-
     @keyframes pulse {  
       0%, 100% {  
         box-shadow: 0 0 20px #00fff2aa, inset 0 0 10px #00fff2aa;  
@@ -86,11 +94,12 @@
       }  
     }  
 
+    /* Estilo del buscador */  
     .search-container {  
       text-align: center;  
       margin-bottom: 30px;  
     }  
-
+    
     input[type="text"] {  
       padding: 12px 20px;  
       width: 70%;  
@@ -98,9 +107,7 @@
       border-radius: 10px;  
       border: none;  
       outline: none;  
-      background: #1c1c1c;  
-      color: white;  
-      box-shadow: 0 0 10px #FFFFFF;  
+      background: #1c1c1c; 
     }  
 
     .grid {  
