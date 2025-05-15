@@ -17,7 +17,6 @@
       position: fixed;
       inset: 0;
       background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
       z-index: -1;
     }
 
@@ -30,13 +29,24 @@
     }
 
     #loginContainer {
-      width: 300px;
-      margin: 30px auto;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px #00ffe1;
-    }
+  width: 400px;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 20px;
+  box-shadow: 0 0 15px #00ffe1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#loginContainer h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ffe1;
+  font-size: 1.8rem;
+}
+
 
     input, button {
       width: 100%;
@@ -131,11 +141,14 @@
   <div class="overlay"></div>
   <h1>CELEX - Juegos</h1>
 
-  <div id="loginContainer">
-    <input type="text" id="username" placeholder="Usuario">
-    <input type="password" id="password" placeholder="Clave">
-    <button onclick="login()">Entrar</button>
-  </div>
+  <!-- Panel de inicio de sesión -->
+<div id="loginContainer">
+  <h2>Iniciar sesión</h2>
+  <input type="text" id="username" placeholder="Usuario">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
+</div>
+
 
   <div id="userPanel" onclick="toggleUserPanel()">U</div>
   <div id="userDropdown"></div>
