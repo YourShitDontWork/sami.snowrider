@@ -4,216 +4,266 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CELEX - Juegos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    body {
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #000, #1a1a1a);
-      color: #fff;
-      min-height: 100vh;
-      background-image: url("super-moon-full-moon-stars-cosmos-clouds-5k-8k-3840x2160-6182.jpg");
+      background: url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      backdrop-filter: blur(4px);
       overflow-x: hidden;
+      color: white;
     }
+
     .overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(8px);
+      background-color: rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
-    header {
+
+    h1 {
       text-align: center;
-      padding: 2rem 1rem;
-      font-size: 2.5rem;
-      color: #00fff2;
-      text-shadow: 0 0 10px #00fff2, 0 0 20px #00fff2;
+      font-weight: 700;
+      font-size: 3rem;
+      color: #00ffe1;
+      text-shadow: 0 0 15px #00ffe1;
+      margin-top: 30px;
     }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 1rem;
+
+    #loginContainer {
+      width: 300px;
+      margin: 30px auto;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffe1;
     }
-    #authContainer, #gameGrid, #menuPanel {
-      display: none;
-    }
-    #authContainer {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2rem;
-      border-radius: 1rem;
-      max-width: 400px;
-      margin: 2rem auto;
-      box-shadow: 0 0 15px #00fff2aa;
-    }
-    input, button {
+
+    #loginContainer input {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 1rem;
+      padding: 10px;
+      margin: 10px 0;
       border: none;
-      border-radius: 0.5rem;
-      font-size: 1rem;
+      border-radius: 5px;
+      background: #1a1a1a;
+      color: white;
     }
-    input {
-      background: #222;
-      color: #fff;
-    }
-    button {
-      background: #00fff2;
-      color: #000;
+
+    #loginContainer button {
+      width: 100%;
+      padding: 10px;
+      background: #00ffe1;
+      border: none;
+      border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background: #00cccc;
-    }
-    #userIcon {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #00fff2;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 1000;
-    }
-    #userInfo {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: rgba(0,0,0,0.85);
-      padding: 1rem;
-      border-radius: 0.5rem;
-      color: #fff;
-      display: none;
-      z-index: 1000;
-    }
-    #menuPanel {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+
     #gameGrid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
+
     .game {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
       overflow: hidden;
-      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s, box-shadow 0.3s;
-      text-align: center;
     }
+
     .game:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px #00fff2aa;
+      box-shadow: 0 0 15px #00ffe1;
     }
+
     .game img {
       width: 100%;
       height: 140px;
       object-fit: cover;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .game-title {
-      padding: 0.5rem;
-      font-size: 1rem;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #00ffe1;
+      font-size: 1.1em;
+    }
+
+    #userPanel {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #00ffe1;
+      color: black;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #userDropdown {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: #111;
+      padding: 10px;
+      border-radius: 10px;
+      display: none;
+      color: white;
     }
   </style>
 </head>
 <body>
   <div class="overlay"></div>
-  <header>CELEX - Juegos</header>
 
-  <div id="authContainer">
-    <input type="text" id="userInput" placeholder="Usuario" />
-    <input type="password" id="keyInput" placeholder="Clave" />
+  <h1>CELEX - Juegos</h1>
+
+  <div id="loginContainer">
+    <input type="text" id="username" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Clave">
     <button onclick="login()">Entrar</button>
-    <div id="loginMessage" style="color:red; margin-top: 1rem;"></div>
   </div>
 
-  <div id="menuPanel" class="container">
-    <h2>Bienvenido</h2>
-    <p>Selecciona un juego:</p>
-  </div>
+  <div id="userPanel" onclick="toggleUserPanel()">U</div>
+  <div id="userDropdown"></div>
 
-  <div id="gameGrid" class="container">
+  <div id="gameGrid" style="display: none;">
     <div class="game">
-      <a href="Slope-Source-code-main/index.html" target="_blank">
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />
+      <a href="games/slope/index.html" target="_blank">
+        <img src="games/slope/icon.png" alt="Slope">
         <div class="game-title">Slope</div>
       </a>
-    </div>
-    <div class="game">
-      <a href="backrooms/index.html" target="_blank">
-        <img src="backrooms/img/icon.png" alt="Backrooms" />
-        <div class="game-title">Backrooms</div>
-      </a>
-    </div>
-    <!-- Agrega más juegos aquí... -->
-  </div>
-
-  <div id="userIcon" title="Usuario">U</div>
-  <div id="userInfo"></div>
+    </div>  
+  <div class="game">  
+    <a href="BurritoBison-main/index.html">  
+      <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />  
+      <div class="game-title">Burrito Bison</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="csgo/index.html">  
+      <img src="csgo/download.jpg" alt="CS:GO" />  
+      <div class="game-title">CS:GO</div>  
+    </a> 
+   </div>  
+  <div class="game">  
+    <a href="BobTheRobber/bob-the-robber.html">  
+      <img src="BobTheRobber/download.jpg" alt="Bob The Robber" />  
+      <div class="game-title">Bob The Robber</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="drive-mad-main/index.html">  
+      <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />  
+      <div class="game-title">Drive Mad</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="WorldHardest/index.html">  
+      <img src="WorldHardest/world.png" alt="World Hardest Game" />  
+      <div class="game-title">World Hardest Game</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="bitlife/index.html">  
+      <img src="bitlife/logo.png" alt="Bitlife" />  
+      <div class="game-title">Bitlife</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="driftboss/index.html">  
+      <img src="driftboss/branding/logo1.png" alt="Drift Boss" />  
+      <div class="game-title">Drift Boss</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="happywheels/index.html">  
+      <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />  
+      <div class="game-title">Happy Wheels</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="pacman/index.html">  
+      <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />  
+      <div class="game-title">Pacman</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="skibidi1v100/index.html">  
+      <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />  
+      <div class="game-title">Skibidi 1v100</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="DogeMiner/index.html">  
+      <img src="DogeMiner/favicon.ico" alt="Doge Miner Tycoon" />  
+      <div class="game-title">Doge Miner Tycoon</div>  
+    </a>  
+   </div>  
+  <div class="game">  
+    <a href="Vex/vex.html">  
+      <img src="Vex7/assets/icon.png" alt="Vex 7" />  
+      <div class="game-title">Vex 7</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="snowrider3d/index.html">  
+      <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />  
+      <div class="game-title">Snow Rider 3D</div>  
+    </a>  
+  </div>  
+  <div class="game">  
+    <a href="volleyrandom/index.html">  
+      <img src="volleyrandom/splash.png" alt="Volley Random" />  
+      <div class="game-title">Volley Random</div>  
+    </a>  
+  </div>  
+</div>  
 
   <script>
-    const usuarios = {
-      "admin": { clave: "dueño", plan: "premium", caducidad: "2025-12-31" },
-      "user1": { clave: "abc123", plan: "gratis", caducidad: "2025-06-15" },
-      "gamer": { clave: "gk42025", plan: "premium", caducidad: "2025-12-01" }
-    };
-
-    let usuarioActual = null;
+    const users = [
+      { username: "admin", password: "1234" },
+      { username: "gamer", password: "abcd" },
+    ];
 
     function login() {
-      const user = document.getElementById("userInput").value.trim();
-      const key = document.getElementById("keyInput").value.trim();
-      const mensaje = document.getElementById("loginMessage");
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
 
-      if (usuarios[user] && usuarios[user].clave === key) {
-        usuarioActual = { ...usuarios[user], nombre: user };
-        document.getElementById("authContainer").style.display = "none";
-        document.getElementById("menuPanel").style.display = "block";
+      const found = users.find(u => u.username === user && u.password === pass);
+
+      if (found) {
+        document.getElementById("loginContainer").style.display = "none";
         document.getElementById("gameGrid").style.display = "grid";
-        document.getElementById("userIcon").style.display = "flex";
-        mensaje.innerText = "";
+        document.getElementById("userDropdown").innerHTML = `<strong>Usuario:</strong> ${found.username}`;
       } else {
-        mensaje.innerText = "Usuario o clave incorrecta.";
+        alert("Credenciales incorrectas");
       }
     }
 
-    document.getElementById("userIcon").onclick = () => {
-      if (!usuarioActual) return;
-      const info = document.getElementById("userInfo");
-      info.innerHTML = `
-        <strong>Usuario:</strong> ${usuarioActual.nombre}<br>
-        <strong>Plan:</strong> ${usuarioActual.plan}<br>
-        <strong>Caducidad:</strong> ${usuarioActual.caducidad}
-      `;
-      info.style.display = info.style.display === "block" ? "none" : "block";
-    };
-
-    document.addEventListener("click", (e) => {
-      const info = document.getElementById("userInfo");
-      const icon = document.getElementById("userIcon");
-      if (!info.contains(e.target) && e.target !== icon) {
-        info.style.display = "none";
-      }
-    });
-
-    window.onload = () => {
-      document.getElementById("authContainer").style.display = "block";
-    };
+    function toggleUserPanel() {
+      const panel = document.getElementById("userDropdown");
+      panel.style.display = panel.style.display === "none" || panel.style.display === "" ? "block" : "none";
+    }
   </script>
 </body>
 </html>
