@@ -2,107 +2,80 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CELEX - Juegos</title>
+  <link href="super-moon-full-moon-stars-cosmos-clouds-5k-8k-3840x2160-6182.jpg" rel="stylesheet" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('game.jpg') no-repeat center center fixed;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
+      overflow-x: hidden;
       color: white;
     }
 
     .overlay {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(8px);
       background-color: rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
 
     h1 {
       text-align: center;
+      font-weight: 700;
       font-size: 3rem;
-      margin-top: 30px;
       color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1;
+      text-shadow: 0 0 15px #00ffe1;
+      margin-top: 30px;
     }
 
+    /* Login centrado y grande */
     #loginContainer {
-  width: 400px;
-  padding: 40px;
-  background: rgba(0, 0, 0, 0.85);
-  border-radius: 20px;
-  box-shadow: 0 0 15px #00ffe1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-#loginContainer h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #00ffe1;
-  font-size: 1.8rem;
-}
-
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
+      width: 400px;
+      margin: 100px auto;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffe1;
+      text-align: center;
     }
 
-    input {
+    #loginContainer input {
+      width: 100%;
+      padding: 15px;
+      margin: 15px 0;
+      border: none;
+      border-radius: 8px;
       background: #1a1a1a;
       color: white;
+      font-size: 1.1em;
     }
 
-    button {
+    #loginContainer button {
+      width: 100%;
+      padding: 15px;
       background: #00ffe1;
-      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.2em;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
 
-    #userPanel {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: #00ffe1;
-      color: black;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    #userDropdown, #userSettings {
-      position: absolute;
-      top: 70px;
-      right: 20px;
-      background: #111;
-      padding: 20px;
-      border-radius: 15px;
-      color: white;
-      display: none;
-      width: 250px;
-      box-shadow: 0 0 10px #00ffe1;
-    }
-
-    #userDropdown p {
-      margin: 5px 0;
+    #loginContainer button:hover {
+      background: #00bfa5;
     }
 
     #gameGrid {
-      display: none;
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 30px;
@@ -115,6 +88,7 @@
       background: rgba(0, 0, 0, 0.6);
       border-radius: 15px;
       overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
@@ -127,204 +101,291 @@
       width: 100%;
       height: 140px;
       object-fit: cover;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .game-title {
       padding: 10px;
       text-align: center;
-      color: #00ffe1;
       font-weight: bold;
+      color: #00ffe1;
+      font-size: 1.1em;
     }
+
+    #userPanel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #00ffe1;
+      color: black;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 50;
+      font-size: 1.4em;
+      user-select: none;
+    }
+
+    #userDropdown {
+      position: fixed;
+      top: 75px;
+      right: 20px;
+      background: #111;
+      padding: 15px 20px;
+      border-radius: 15px;
+      display: none;
+      color: white;
+      width: 220px;
+      box-shadow: 0 0 10px #00ffe1;
+      z-index: 50;
+    }
+
+    #userSettings {
+      position: fixed;
+      top: 160px;
+      right: 20px;
+      width: 320px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffe1;
+      z-index: 50;
+      display: none;
+    }
+
+    #userSettings h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #00ffe1;
+      text-align: center;
+    }
+
+    #userSettings p {
+      margin: 8px 0;
+      font-weight: 600;
+    }
+
+    #userSettings input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px 0;
+      background: #1a1a1a;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    #userSettings button {
+      background: #00ffe1;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1em;
+      transition: background 0.3s ease;
+    }
+
+    #userSettings button:hover {
+      background: #00bfa5;
+    }
+
   </style>
 </head>
 <body>
   <div class="overlay"></div>
+
   <h1>CELEX - Juegos</h1>
 
-  <!-- Panel de inicio de sesión -->
-<div id="loginContainer">
-  <h2>Iniciar sesión</h2>
-  <input type="text" id="username" placeholder="Usuario">
-  <input type="password" id="password" placeholder="Contraseña">
-  <button onclick="login()">Entrar</button>
-</div>
+  <div id="loginContainer">
+    <input type="text" id="username" placeholder="Usuario" autocomplete="username" />
+    <input type="password" id="password" placeholder="Clave" autocomplete="current-password" />
+    <button onclick="login()">Entrar</button>
+  </div>
 
+  <div id="userPanel" onclick="toggleUserPanel()" title="Panel de Usuario" style="display:none;">U</div>
 
-  <div id="userPanel" onclick="toggleUserPanel()">U</div>
   <div id="userDropdown"></div>
-  <div id="userSettings"></div>
 
-  <div id="gameGrid">
-  <div class="game">  
-    <a href="Slope-Source-code-main/index.html">  
-      <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
-      <div class="game-title">Slope</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="backrooms/index.html">  
-      <img src="backrooms/img/icon.png" alt="Backrooms" />  
-      <div class="game-title">Backrooms</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="BurritoBison-main/index.html">  
-      <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />  
-      <div class="game-title">Burrito Bison</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="csgo/index.html">  
-      <img src="csgo/download.jpg" alt="CS:GO" />  
-      <div class="game-title">CS:GO</div>  
-    </a> 
-   </div>  
-  <div class="game">  
-    <a href="BobTheRobber/bob-the-robber.html">  
-      <img src="BobTheRobber/download.jpg" alt="Bob The Robber" />  
-      <div class="game-title">Bob The Robber</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="drive-mad-main/index.html">  
-      <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />  
-      <div class="game-title">Drive Mad</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="WorldHardest/index.html">  
-      <img src="WorldHardest/world.png" alt="World Hardest Game" />  
-      <div class="game-title">World Hardest Game</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="bitlife/index.html">  
-      <img src="bitlife/logo.png" alt="Bitlife" />  
-      <div class="game-title">Bitlife</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="driftboss/index.html">  
-      <img src="driftboss/branding/logo1.png" alt="Drift Boss" />  
-      <div class="game-title">Drift Boss</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="happywheels/index.html">  
-      <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />  
-      <div class="game-title">Happy Wheels</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="pacman/index.html">  
-      <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />  
-      <div class="game-title">Pacman</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="skibidi1v100/index.html">  
-      <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />  
-      <div class="game-title">Skibidi 1v100</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="DogeMiner/index.html">  
-      <img src="DogeMiner/favicon.ico" alt="Doge Miner Tycoon" />  
-      <div class="game-title">Doge Miner Tycoon</div>  
-    </a>  
-   </div>  
-  <div class="game">  
-    <a href="Vex/vex.html">  
-      <img src="Vex7/assets/icon.png" alt="Vex 7" />  
-      <div class="game-title">Vex 7</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="snowrider3d/index.html">  
-      <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />  
-      <div class="game-title">Snow Rider 3D</div>  
-    </a>  
-  </div>  
-  <div class="game">  
-    <a href="volleyrandom/index.html">  
-      <img src="volleyrandom/splash.png" alt="Volley Random" />  
-      <div class="game-title">Volley Random</div>  
-    </a>  
-  </div>  
-</div>  
+  <!-- Panel de configuración del usuario -->
+  <div id="userSettings">
+    <h3>Configuración de Usuario</h3>
+    <p><strong>Usuario actual:</strong> <span id="currentUser"></span></p>
+    <p><strong>Premium:</strong> <span id="isPremium"></span></p>
+    <p><strong>Caduca:</strong> <span id="expiryDate"></span></p>
+    <input type="text" id="newUsername" placeholder="Nuevo usuario" />
+    <input type="password" id="newPassword" placeholder="Nueva contraseña" />
+    <button onclick="updateUser()">Guardar Cambios</button>
+  </div>
 
+  <div id="gameGrid" style="display: none;">
+    <div class="game">
+      <a href="games/slope/index.html" target="_blank">
+        <img src="games/slope/icon.png" alt="Slope" />
+        <div class="game-title">Slope</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="BurritoBison-main/index.html" target="_blank">
+        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />
+        <div class="game-title">Burrito Bison</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="csgo/index.html" target="_blank">
+        <img src="csgo/download.jpg" alt="CS:GO" />
+        <div class="game-title">CS:GO</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="BobTheRobber/bob-the-robber.html" target="_blank">
+        <img src="BobTheRobber/download.jpg" alt="Bob The Robber" />
+        <div class="game-title">Bob The Robber</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="drive-mad-main/index.html" target="_blank">
+        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />
+        <div class="game-title">Drive Mad</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="WorldHardest/index.html" target="_blank">
+        <img src="WorldHardest/world.png" alt="World Hardest Game" />
+        <div class="game-title">World Hardest Game</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="bitlife/index.html" target="_blank">
+        <img src="bitlife/logo.png" alt="Bitlife" />
+        <div class="game-title">Bitlife</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="driftboss/index.html" target="_blank">
+        <img src="driftboss/branding/logo1.png" alt="Drift Boss" />
+        <div class="game-title">Drift Boss</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="happywheels/index.html" target="_blank">
+        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />
+        <div class="game-title">Happy Wheels</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="pacman/index.html" target="_blank">
+        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />
+        <div class="game-title">Pacman</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="skibidi1v100/index.html" target="_blank">
+        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />
+        <div class="game-title">Skibidi 1v100</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="DogeMiner/index.html" target="_blank">
+        <img src="DogeMiner/favicon.ico" alt="Doge Miner Tycoon" />
+        <div class="game-title">Doge Miner Tycoon</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="Vex/vex.html" target="_blank">
+        <img src="Vex7/assets/icon.png" alt="Vex 7" />
+        <div class="game-title">Vex 7</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="snowrider3d/index.html" target="_blank">
+        <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />
+        <div class="game-title">Snow Rider 3D</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="volleyrandom/index.html" target="_blank">
+        <img src="volleyrandom/splash.png" alt="Volley Random" />
+        <div class="game-title">Volley Random</div>
+      </a>
+    </div>
   </div>
 
   <script>
-    const users = [
-      { username: "admin", password: "1234", premium: true, expires: "2025-12-31" },
-      { username: "gamer", password: "abcd", premium: false, expires: "N/A" }
+    // Lista de usuarios, con premium y fecha de caducidad
+    let users = JSON.parse(localStorage.getItem("users")) || [
+      { username: "admin", password: "1234", premium: true, expiry: "2025-12-31" },
+      { username: "gamer", password: "abcd", premium: false, expiry: "-" }
     ];
 
-    let currentUser = null;
+    let loggedUser = null;
+
+    function saveUsers() {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
 
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
 
       const found = users.find(u => u.username === user && u.password === pass);
-
       if (found) {
-        currentUser = found;
+        loggedUser = found;
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("gameGrid").style.display = "grid";
-        showUserInfo();
+        document.getElementById("userPanel").style.display = "flex";
+        document.getElementById("userDropdown").innerHTML = `<strong>${found.username}</strong>`;
       } else {
         alert("Credenciales incorrectas");
       }
     }
 
     function toggleUserPanel() {
-      const panel = document.getElementById("userDropdown");
-      if (panel.style.display === "none" || panel.style.display === "") {
-        panel.style.display = "block";
-        panel.innerHTML = `
-          <p><strong>Usuario:</strong> ${currentUser.username}</p>
-          <p><strong>Premium:</strong> ${currentUser.premium ? "Sí ✅" : "No ❌"}</p>
-          <p><strong>Caduca:</strong> ${currentUser.expires}</p>
-          <button onclick="openSettings()">⚙ Cambiar datos</button>
-        `;
+      const dropdown = document.getElementById("userDropdown");
+      const settings = document.getElementById("userSettings");
+      if (dropdown.style.display === "block") {
+        dropdown.style.display = "none";
+        settings.style.display = "none";
       } else {
-        panel.style.display = "none";
-        document.getElementById("userSettings").style.display = "none";
+        dropdown.style.display = "block";
+        settings.style.display = "block";
+        // Actualizar datos
+        document.getElementById("currentUser").innerText = loggedUser.username;
+        document.getElementById("isPremium").innerText = loggedUser.premium ? "Sí" : "No";
+        document.getElementById("expiryDate").innerText = loggedUser.expiry;
       }
     }
 
-    function showUserInfo() {
-      document.getElementById("userDropdown").innerHTML = `
-        <p><strong>Usuario:</strong> ${currentUser.username}</p>
-        <p><strong>Premium:</strong> ${currentUser.premium ? "Sí ✅" : "No ❌"}</p>
-        <p><strong>Caduca:</strong> ${currentUser.expires}</p>
-        <button onclick="openSettings()">⚙ Cambiar datos</button>
-      `;
-    }
-
-    function openSettings() {
-      const settings = document.getElementById("userSettings");
-      settings.style.display = "block";
-      settings.innerHTML = `
-        <h3>Modificar Usuario</h3>
-        <input type="text" id="newUsername" placeholder="Nuevo usuario" value="${currentUser.username}">
-        <input type="password" id="newPassword" placeholder="Nueva clave">
-        <button onclick="updateUser()">Guardar cambios</button>
-      `;
-    }
-
     function updateUser() {
-      const newUser = document.getElementById("newUsername").value;
-      const newPass = document.getElementById("newPassword").value;
+      const newUsername = document.getElementById("newUsername").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
 
-      if (newUser) currentUser.username = newUser;
-      if (newPass) currentUser.password = newPass;
+      if (!newUsername && !newPassword) {
+        alert("Introduce un nuevo usuario o contraseña para actualizar.");
+        return;
+      }
 
-      alert("Datos actualizados");
-      document.getElementById("userSettings").style.display = "none";
-      showUserInfo();
+      // Verificar si nuevo username ya existe (salvo si es el mismo usuario)
+      if (newUsername && users.some(u => u.username === newUsername && u !== loggedUser)) {
+        alert("El nombre de usuario ya está en uso.");
+        return;
+      }
+
+      if (newUsername) loggedUser.username = newUsername;
+      if (newPassword) loggedUser.password = newPassword;
+
+      saveUsers();
+
+      alert("Usuario actualizado. Debes iniciar sesión de nuevo.");
+      location.reload();
     }
   </script>
 </body>
