@@ -1,16 +1,14 @@
-!DOCTYPE html>  
+<!DOCTYPE html>  
 <html lang="es">  
 <head>  
 <meta charset="UTF-8" />  
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
 <title>CELEX - Juegos</title>  
 <style>  
-  /* Reset general y estilos base */  
   * {  
     box-sizing: border-box;  
   }  
-
-  /* Fondo y efectos */  
+  
   body {  
     margin: 0;  
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
@@ -23,6 +21,7 @@
     position: relative;  
     z-index: 0;  
   }  
+
   body::before {  
     content: "";  
     position: fixed;  
@@ -34,7 +33,6 @@
     z-index: -1;  
   }  
 
-  /* Título principal */  
   h1 {  
     text-align: center;  
     margin: 30px 0 10px 0;  
@@ -43,7 +41,6 @@
     text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #00fff2;  
   }  
 
-  /* Botón de alternar créditos (ejemplo) */  
   #toggleButton {  
     width: 250px;  
     height: 50px;  
@@ -63,7 +60,6 @@
     transition: all 0.3s ease;  
   }  
 
-  /* Sección créditos (opcional) */  
   #creditsSection {  
     display: none;  
     text-align: center;  
@@ -79,7 +75,6 @@
     font-size: 1.2em;  
   }  
 
-  /* Grid de juegos */  
   .grid {  
     display: grid;  
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  
@@ -88,9 +83,9 @@
     max-width: 1200px;  
     margin: auto;  
   }  
-  /* Tarjeta de juego */  
+
   .game {  
-    background: rgba(255,255,255,0.05);  
+    background: rgba(255, 255, 255, 0.05);  
     border-radius: 15px;  
     overflow: hidden;  
     text-align: center;  
@@ -101,10 +96,12 @@
     flex-direction: column;  
     justify-content: center;  
   }  
+
   .game:hover {  
     transform: scale(1.05);  
     box-shadow: 0 0 25px #00fff2aa;  
   }  
+
   .game img {  
     width: 80%;  
     height: 120px;  
@@ -113,105 +110,25 @@
     margin: 0 auto;  
   }  
 
-  /* Título del juego */  
-      /* Título del juego */  
-    .game-title {  
-      font-size: 1em;  
-      padding: 8px;  
-      color: white;  
-      text-shadow: 0 0 5px #00fff2;  
-    }  
+  .game-title {  
+    font-size: 1em;  
+    padding: 8px;  
+    color: white;  
+    text-shadow: 0 0 5px #00fff2;  
+  }  
 
-    /* Enlaces */  
-    a {  
-      color: white;  
-      text-decoration: none;  
-    }  
-    a:hover {  
-      text-decoration: underline;  
-    }  
+  a {  
+    color: white;  
+    text-decoration: none;  
+  }  
 
-    /* Estilos para el panel de usuario y configuraciones */  
-    #userPanel {  
-      position: fixed;  
-      top: 20px; right: 20px;  
-      background-color: #00ffe1;  
-      color: black;  
-      width: 45px; height: 45px;  
-      border-radius: 50%;  
-      display: flex;  
-      align-items: center; justify-content: center;  
-      font-weight: bold; font-size: 1.4em;  
-      cursor: pointer;  
-      z-index: 50;  
-      user-select: none;  
-    }  
-
-    /* Dropdown del usuario (oculto por defecto, se muestra con JS) */  
-    #userDropdown {  
-      position: fixed;  
-      top: 75px; right: 20px;  
-      background: #111;  
-      padding: 15px 20px;  
-      border-radius: 15px;  
-      display: none;  
-      color: white;  
-      width: 220px;  
-      box-shadow: 0 0 10px #00ffe1;  
-      z-index: 50;  
-    }  
-
-    /* Configuración de usuario */  
-    #userSettings {  
-      position: fixed;  
-      top: 160px; right: 20px;  
-      width: 320px;  
-      background: rgba(0,0,0,0.9);  
-      color: white;  
-      padding: 25px;  
-      border-radius: 15px;  
-      box-shadow: 0 0 15px #00ffe1;  
-      z-index: 50;  
-      display: none;  
-    }  
-
-    #userSettings h3 {  
-      margin-top: 0;  
-      margin-bottom: 15px;  
-      color: #00ffe1;  
-      text-align: center;  
-    }  
-    #userSettings p {  
-      margin: 8px 0;  
-      font-weight: 600;  
-    }  
-    #userSettings input {  
-      width: 100%;  
-      padding: 10px;  
-      margin: 10px 0 20px 0;  
-      background: #1a1a1a;  
-      border: none;  
-      color: white;  
-      border-radius: 8px;  
-      font-size: 1em;  
-    }  
-    #userSettings button {  
-      background: #00ffe1;  
-      border: none;  
-      padding: 15px;  
-      border-radius: 8px;  
-      font-weight: bold;  
-      cursor: pointer;  
-      width: 100%;  
-      font-size: 1.1em;  
-      transition: background 0.3s ease;  
-    }  
-    #userSettings button:hover {  
-      background: #00bfa5;  
-    }  
-  </style>  
+  a:hover {  
+    text-decoration: underline;  
+  }  
+</style>  
 </head>  
 <body>  
+ 
 
 <h1>CELEX - Juegos</h1>  
 
