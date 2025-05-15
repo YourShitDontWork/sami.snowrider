@@ -400,4 +400,7 @@ document.addEventListener("click", (e) => {
   if (!userInfo.contains(e.target) && e.target !== document.getElementById("userIcon")) {  
     userInfo.style.display = "none";  
   }  
+   // Debug: mensaje final en consola  
+  console.log("Resultado login:", loginMessage.innerText);  
+};
 });
