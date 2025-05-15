@@ -33,53 +33,6 @@
     z-index: -1;  
   }  
 
-  /* Panel de login */  
-  #loginPanel {  
-    position: fixed;  
-    top: 0; left: 0; right: 0; bottom: 0;  
-    background: rgba(0,0,0,0.7);  
-    display: flex;  
-    justify-content: center;  
-    align-items: center;  
-    z-index: 9999;  
-  }  
-
-  #loginBox {  
-    background: #222;  
-    padding: 30px;  
-    border-radius: 10px;  
-    box-shadow: 0 0 20px #000;  
-    text-align: center;  
-  }  
-
-  #loginBox h2 {  
-    margin-bottom: 15px;  
-  }  
-
-  #loginBox input {  
-    width: 200px;  
-    padding: 10px;  
-    margin: 8px 0;  
-    border-radius: 5px;  
-    border: none;  
-    outline: none;  
-  }  
-
-  #loginBox button {  
-    width: 220px;  
-    padding: 10px;  
-    margin-top: 10px;  
-    background: #00f2f2;  
-    border: none;  
-    border-radius: 5px;  
-    cursor: pointer;  
-    font-weight: bold;  
-  }  
-
-  #loginBox button:hover {  
-    background: #00cccc;  
-  }  
-
   h1 {  
     text-align: center;  
     margin: 30px 0 10px 0;  
@@ -303,18 +256,17 @@
   </div>  
 </div>  
 
-<script> 
-  toggleBtn.onclick = () => {  
-    if (creditsSection.style.display === "none") {  
-      creditsSection.style.display = "block";  
-      gameGrid.style.display = "none";  
-      toggleBtn.innerHTML = "Volver a los Juegos";  
-    } else {  
-      creditsSection.style.display = "none";  
-      gameGrid.style.display = "grid";  
-      toggleBtn.innerHTML = "Ver Actualizaciones y Créditos";  
-    }  
-  };  
-</script>  
-</body>  
+ <script>
+    function searchGames() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const games = document.querySelectorAll(".game");
+      games.forEach(game => {
+        const title = game.querySelector(".game-title").textContent.toLowerCase();
+        game.style.display = title.includes(input) ? "block" : "none";
+      });
+    }
+  </script>
+
+</body>
 </html>
+
