@@ -15,7 +15,7 @@
     padding: 0;  
   }  
   body {  
-    font-family: 'Raleway', 'Montserrat', sans-serif;  
+    font-family: 'Montserrat', 'Raleway', sans-serif;  
     background: linear-gradient(135deg, #000, #1a1a1a);  
     color: #fff;  
     position: relative;  
@@ -39,11 +39,13 @@ h1 {
   text-align: center;  
   padding: 30px 20px 10px 20px;  
   font-size: 3em;  
-  font-family: 'Raleway', sans-serif; /* fuente moderna para encabezado */  
+  font-family: 'Raleway', sans-serif;  
   text-shadow: 0 0 15px #00fff2, 0 0 30px #00fff2;  
   color: #fff;  
+  position: relative;  
 }  
 
+/* Panel de login y bienvenida */  
 #authContainer {  
   max-width: 400px;  
   margin: auto;  
@@ -55,10 +57,79 @@ h1 {
   transition: all 0.3s ease;  
 }  
 
-/* Los demás estilos permanecen iguales, pero el código completo no se repite aquí */  
+/* Input y botones */  
+input[type="text"], input[type="password"] {  
+  width: 100%;  
+  padding: 12px 15px;  
+  margin: 10px 0;  
+  border: none;  
+  border-radius: 8px;  
+  font-family: 'Montserrat', sans-serif;  
+  font-size: 1em;  
+}  
 
+button {  
+  width: 100%;  
+  padding: 12px;  
+  background: #00fff2;  
+  color: #000;  
+  border: none;  
+  border-radius: 8px;  
+  font-weight: 600;  
+  font-family: 'Montserrat', sans-serif;  
+  font-size: 1.1em;  
+  cursor: pointer;  
+  margin-top: 15px;  
+  transition: background 0.3s ease;  
+}  
+button:hover {  
+  background: #00cccc;  
+}  
+
+/* Icono de usuario en esquina superior derecha */  
+#userIcon {  
+  position: fixed;  
+  top: 20px;  
+  right: 20px;  
+  width: 60px;  
+  height: 60px;  
+  background: #00fff2;  
+  border-radius: 50%;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  cursor: pointer;  
+  box-shadow: 0 0 20px #00fff2aa;  
+  font-size: 1.5em;  
+  font-weight: bold;  
+  color: #000;  
+  user-select: none;  
+  transition: all 0.3s ease;  
+}  
+#userIcon:hover {  
+  box-shadow: 0 0 30px #00fff2;  
+}  
+
+/* Contenido de info de usuario, al clicquear icono */  
+#userInfo {  
+  position: fixed;  
+  top: 90px;  
+  right: 20px;  
+  background: rgba(0, 0, 0, 0.8);  
+  padding: 15px;  
+  border-radius: 12px;  
+  display: none;  
+  min-width: 200px;  
+  box-shadow: 0 0 20px #00fff2aa;  
+  font-family: 'Montserrat', sans-serif;  
+  font-size: 0.9em;  
+  color: #fff;  
+  z-index: 999;  
+}  
+
+/* Estilo para la sección de juegos (visible solo si usuario autenticado) */  
 #gameGrid {  
-  display: none; /* oculto hasta login correcto */  
+  display: none; /* Oculto por default, se muestra después del login */  
   max-width: 1200px;  
   margin: 20px auto;  
   padding: 20px;  
@@ -67,12 +138,62 @@ h1 {
   gap: 25px;  
 }  
 
-/* Otros estilos específicos */  
+/* Anime para los juegos */  
+.game {  
+  background: rgba(255,255,255,0.05);  
+  border-radius: 15px;  
+  overflow: hidden;  
+  height: 180px;  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  justify-content: center;  
+  cursor: pointer;  
+  transition: transform 0.2s, box-shadow 0.2s;  
+}  
+.game:hover {  
+  transform: scale(1.05);  
+  box-shadow: 0 0 25px #00fff2aa;  
+}  
+.game img {  
+  width: 80%;  
+  height: 120px;  
+  object-fit: cover;  
+  border-bottom: 2px solid #00fff2;  
+}  
+.game-title {  
+  margin-top: 8px;  
+  font-size: 1em;  
+  color: white;  
+  text-shadow: 0 0 5px #00fff2;  
+}  
+
+/* Search bar opcional si deseas */  
+#searchContainer {  
+  max-width: 600px;  
+  margin: 20px auto;  
+  display: flex;  
+  justify-content: center;  
+}  
+#searchContainer input {  
+  width: 100%;  
+  max-width: 300px;  
+  padding: 10px 15px;  
+  border-radius: 8px;  
+  border: none;  
+  font-family: 'Montserrat', sans-serif;  
+  font-size: 1em;  
+}  
+
+/* Animación suave */  
+.transition {  
+  transition: all 0.3s ease;  
+}  
 </style>  
 </head>  
 <body>  
 
-<h1 style="font-family: 'Raleway', sans-serif;">CELEX - Juegos</h1>  
+<h1>CELEX - Juegos</h1>  
 
 <!-- Panel de login -->  
 <div id="authContainer">  
@@ -91,15 +212,15 @@ h1 {
 
 <!-- Sección de juegos (oculta hasta login correcto) -->  
 <div id="gameGrid">  
-  <!-- Juegos ejemplo -->  
+  <!-- Aquí se añaden los juegos -->  
   <div class="game" onclick="alert('Navegar a Slope')">  
     <a href="Slope-Source-code-main/index.html" target="_blank">  
       <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
       <div class="game-title">Slope</div>  
     </a>  
-  <div>  
-  <div class="game">  
-    <a href="backrooms/index.html">  
+  </div>  
+  <div class="game" onclick="alert('Navegar a Backrooms')">  
+    <a href="backrooms/index.html" target="_blank">  
       <img src="backrooms/img/icon.png" alt="Backrooms" />  
       <div class="game-title">Backrooms</div>  
     </a>  
@@ -189,62 +310,86 @@ h1 {
     </a>  
   </div>  
 </div>  
- 
-  <!-- Añade todos los juegos similares aquí -->  
-</div>  
 
+<!-- JavaScript -->  
 <script>  
-const usuarios = {  
-  "admin": { clave: "1234", plan: "premium", caducidad: "2025-12-31" },  
-  "user1": { clave: "abc123", plan: "gratis", caducidad: "2025-06-15" }  
-};  
+  // Datos de usuarios y claves  
+  const usuarios = {  
+    "admin": {  
+      clave: "1234",  
+      plan: "premium",  
+      caducidad: "2025-12-31"  
+    },  
+    "user1": {  
+      clave: "abc123",  
+      plan: "gratis",  
+      caducidad: "2025-06-15"  
+    }  
+  };  
 
-// Variables  
-let usuarioActual = null;  
+  let usuarioActual = null;  
 
-document.getElementById("loginBtn").onclick = () => {  
-  const user = document.getElementById("userInput").value.trim();  
-  const key = document.getElementById("keyInput").value.trim();  
+  const loginBtn = document.getElementById("loginBtn");  
+  const userInput = document.getElementById("userInput");  
+  const keyInput = document.getElementById("keyInput");  
+  const loginMessage = document.getElementById("loginMessage");  
+  const authContainer = document.getElementById("authContainer");  
+  const gameGrid = document.getElementById("gameGrid");  
+  const userIcon = document.getElementById("userIcon");  
+  const userInfo = document.getElementById("userInfo");  
 
-  if (usuarios[user] && usuarios[user].clave === key) {  
-    usuarioActual = {...usuarios[user], nombre: user};  
-    document.getElementById("authContainer").style.display = "none"; // ocultar login  
-    mostrarJuegos();  
-    mostrarIcono();  
-    document.getElementById("loginMessage").innerText = "";  
-  } else {  
-    document.getElementById("loginMessage").innerText = "Usuario o clave incorrecta.";  
+  // Ocultar juegos al cargar  
+  window.onload = () => {  
+    document.getElementById("gameGrid").style.display = "none";  
   }  
-};  
 
-function mostrarJuegos() {  
-  document.getElementById("gameGrid").style.display = "grid"; // mostrar juegos  
-}  
+  // Función para iniciar sesión  
+  document.getElementById("loginBtn").onclick = () => {  
+    const user = userInput.value.trim();  
+    const key = keyInput.value.trim();  
 
-function mostrarIcono() {  
-  document.getElementById("userIcon").innerHTML = "U";  
-}  
+    if (usuarios[user] && usuarios[user].clave === key) {  
+      usuarioActual = {...usuarios[user], nombre: user};  
+      mostrarJuegos(); // Muestra los juegos solo si login correcto  
+      mostrarIcono();  
+      authContainer.style.display = "none"; // ocultar login  
+      loginMessage.innerText = "";  
+    } else {  
+      loginMessage.innerText = "Usuario o clave incorrecta.";  
+      // Mantener ocultos los juegos en caso de error  
+      document.getElementById("gameGrid").style.display = "none";  
+    }  
+  };  
 
-document.getElementById("userIcon").onclick = () => {  
-  if (!usuarioActual) return;  
-  const {plan, caducidad, nombre} = usuarioActual;  
-  const today = new Date().toISOString().slice(0,10);  
-  document.getElementById("userInfo").innerHTML = `  
-    <strong>Usuario:</strong> ${nombre}<br>  
-    <strong>Plan:</strong> ${plan}<br>  
-    <strong>Cierre plan:</strong> ${caducidad}<br>  
-    <em>Hoy: ${today}</em>  
-  `;  
-  const infoDiv = document.getElementById("userInfo");  
-  infoDiv.style.display = infoDiv.style.display === "block" ? "none" : "block";  
-};  
-
-// Ocultar info si clic fuera  
-document.addEventListener("click", (e) => {  
-  if (!document.getElementById("userInfo").contains(e.target) && e.target !== document.getElementById("userIcon")) {  
-    document.getElementById("userInfo").style.display = "none";  
+  function mostrarJuegos() {  
+    gameGrid.style.display = "grid";  
   }  
-});  
+
+  function mostrarIcono() {  
+    userIcon.innerHTML = "U"; // Puedes usar un icono o imagen  
+  }  
+
+  // Evento click en icono de usuario  
+  document.getElementById("userIcon").onclick = () => {  
+    if (!usuarioActual) return;  
+    // Mostrar info de la caducidad  
+    const {plan, caducidad, nombre} = usuarioActual;  
+    const today = new Date().toISOString().slice(0,10);  
+    userInfo.innerHTML = `  
+      <strong>Usuario:</strong> ${nombre}<br>  
+      <strong>Plan:</strong> ${plan}<br>  
+      <strong>Cierre plan:</strong> ${caducidad}<br>  
+      <em>Hoy: ${today}</em>  
+    `;  
+    userInfo.style.display = userInfo.style.display === "block" ? "none" : "block";  
+  };  
+
+  // Cerrar info si clickea fuera  
+  document.addEventListener("click", (e) => {  
+    if (!userInfo.contains(e.target) && e.target !== document.getElementById("userIcon")) {  
+      userInfo.style.display = "none";  
+    }  
+  });  
 </script>  
 
 </body>  
