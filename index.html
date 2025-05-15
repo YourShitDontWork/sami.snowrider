@@ -316,27 +316,22 @@ button:hover {
   // Datos de usuarios y claves  
 // Define aquí tus usuarios y contraseñas (agrega más si quieres)  
 const usuarios = {  
-  "dueño": {  
-    clave: "1234",  
+  "admin": {  
+    clave: "dueño",  
     plan: "premium",  
     caducidad: "2025-12-31"  
   },  
-  "miembro": {  
+  "user1": {  
     clave: "abc123",  
-    plan: "gratuito",  
+    plan: "gratis",  
     caducidad: "2025-06-15"  
   }  
-  // Añade más usuarios así:  
-  // "nombreUsuario": {  
-  //   clave: "contraseña",  
-  //   plan: "tipo de plan",  
-  //   caducidad: "año-mes-día"  
-  // }  
 };  
 
+// Variable para el usuario actual  
 let usuarioActual = null;  
 
-// Resto de tu código...  
+// Elementos del DOM  
 const loginBtn = document.getElementById("loginBtn");  
 const userInput = document.getElementById("userInput");  
 const keyInput = document.getElementById("keyInput");  
@@ -349,35 +344,43 @@ const userInfo = document.getElementById("userInfo");
 // Ocultar juegos al cargar  
 window.onload = () => {  
   document.getElementById("gameGrid").style.display = "none";  
-}  
+};  
 
-// Función para iniciar sesión  
+// Función de inicio de sesión  
 document.getElementById("loginBtn").onclick = () => {  
   const user = userInput.value.trim();  
   const key = keyInput.value.trim();  
 
-  if (usuarios[user] && usuarios[user].clave === key) {  
-    usuarioActual = { ...usuarios[user], nombre: user };  
-    mostrarJuegos(); // Mostrar juegos después de login correcto  
-    mostrarIcono();  
-    authContainer.style.display = "none"; // Oculta panel login  
-    loginMessage.innerText = "";  
-  } else {  
-    loginMessage.innerText = "Usuario o clave incorrecta.";  
-    // Asegurar que los juegos permanezcan ocultos en caso de error  
-    document.getElementById("gameGrid").style.display = "none";  
-  }  
+  // Consola de depuración  
+  console.log("Usuario ingresado:", user);  
+  console.log("Clave ingresada:", key);  
+
+  if (usuarios[user]) {  
+    console.log("Clave almacenada para", user, ":", usuarios[user].clave);  
+    if (usuarios[user].clave === key) {  
+      // Inicio de sesión correcto  
+      usuarioActual = { ...usuarios[user], nombre: user };  
+      mostrarJuegos(); // Muestra los juegos  
+      mostrarIcono();   // Muestra el icono  
+      authContainer.style.display = "none"; // Oculta formulario  
+      loginMessage.innerText = ""; // Limpia mensaje  
+    } else {  
+      // Clave incorrecta  
+      loginMessage.innerText = "Usuario o clave incorrecta.";  
+      document.getElementById("gameGrid").style.display = "none";  
+    }  
+ 
+  // Mensaje final en consola  
+  console.log("Resultado login:", loginMessage.innerText);  
 };  
 
+// Funciones auxiliares (agrega estas si no las tienes aún)  
 function mostrarJuegos() {  
-  gameGrid.style.display = "grid";  
+  document.getElementById("gameGrid").style.display = "grid";  
 }  
-
-// Función para mostrar icono y info del usuario  
 function mostrarIcono() {  
-  userIcon.innerHTML = "U"; // Aquí puedes poner un ícono SVG o imagen en su lugar  
+  userIcon.innerHTML = "U"; // Puedes poner icono o imagen aquí  
 }  
-
 // Evento click en icono de usuario para mostrar info  
 document.getElementById("userIcon").onclick = () => {  
   if (!usuarioActual) return;  
