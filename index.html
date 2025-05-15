@@ -1,19 +1,18 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CELEX - Juegos</title>
+  <link href="super-moon-full-moon-stars-cosmos-clouds-5k-8k-3840x2160-6182.jpg" rel="stylesheet" />
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Montserrat', sans-serif;
       background: url('game.jpg') no-repeat center center fixed;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
-       overflow-x: hidden;
+      overflow-x: hidden;
       color: white;
     }
 
@@ -23,9 +22,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      inset: 0;
       background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
       z-index: -1;
     }
 
@@ -36,86 +33,57 @@
       color: #00ffe1;
       text-shadow: 0 0 15px #00ffe1;
       margin-top: 30px;
-      color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1;
     }
 
+    /* Login centrado y grande */
     #loginContainer {
-@@ -40,31 +35,64 @@
-      background: rgba(0, 0, 0, 0.8);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #00ffe1;
-      box-shadow: 0 0 10px #00ffe1;
+      width: 400px;
+      margin: 100px auto;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffe1;
+      text-align: center;
     }
 
     #loginContainer input {
-    input, button {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      margin-top: 10px;
+      padding: 15px;
+      margin: 15px 0;
       border: none;
-      border-radius: 5px;
-    }
-
-    input {
+      border-radius: 8px;
       background: #1a1a1a;
       color: white;
+      font-size: 1.1em;
     }
 
     #loginContainer button {
       width: 100%;
-      padding: 10px;
-    button {
+      padding: 15px;
       background: #00ffe1;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.2em;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
 
-    #userPanel {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: #00ffe1;
-      color: black;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    #userDropdown, #userSettings {
-      position: absolute;
-      top: 70px;
-      right: 20px;
-      background: #111;
-      padding: 20px;
-      border-radius: 15px;
-      color: white;
-      display: none;
-      width: 250px;
-      box-shadow: 0 0 10px #00ffe1;
-    }
-
-    #userDropdown p {
-      margin: 5px 0;
+    #loginContainer button:hover {
+      background: #00bfa5;
     }
 
     #gameGrid {
       display: grid;
-      display: none;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 30px;
-@@ -77,7 +105,6 @@
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .game {
       background: rgba(0, 0, 0, 0.6);
       border-radius: 15px;
       overflow: hidden;
@@ -123,7 +91,12 @@
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
-@@ -90,49 +117,18 @@
+    .game:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ffe1;
+    }
+
+    .game img {
       width: 100%;
       height: 140px;
       object-fit: cover;
@@ -139,38 +112,97 @@
     }
 
     #userPanel {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
       background-color: #00ffe1;
       color: black;
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       cursor: pointer;
-      z-index: 10;
+      z-index: 50;
+      font-size: 1.4em;
+      user-select: none;
     }
 
     #userDropdown {
-      position: absolute;
-      top: 70px;
+      position: fixed;
+      top: 75px;
       right: 20px;
       background: #111;
-      padding: 10px;
-      border-radius: 10px;
+      padding: 15px 20px;
+      border-radius: 15px;
       display: none;
       color: white;
+      width: 220px;
+      box-shadow: 0 0 10px #00ffe1;
+      z-index: 50;
     }
+
+    #userSettings {
+      position: fixed;
+      top: 160px;
+      right: 20px;
+      width: 320px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffe1;
+      z-index: 50;
+      display: none;
+    }
+
+    #userSettings h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #00ffe1;
+      text-align: center;
+    }
+
+    #userSettings p {
+      margin: 8px 0;
+      font-weight: 600;
+    }
+
+    #userSettings input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px 0;
+      background: #1a1a1a;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    #userSettings button {
+      background: #00ffe1;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1em;
+      transition: background 0.3s ease;
+    }
+
+    #userSettings button:hover {
+      background: #00bfa5;
+    }
+
   </style>
 </head>
 <body>
   <div class="overlay"></div>
 
-<h1>CELEX - Juegos</h1>  
+  <h1>CELEX - Juegos</h1>
 
   <div id="loginContainer">
     <input type="text" id="username" placeholder="Usuario" autocomplete="username" />
@@ -193,8 +225,7 @@
     <button onclick="updateUser()">Guardar Cambios</button>
   </div>
 
-  <div class="grid" id="gameGrid" style="display: none;">
-   
+  <div id="gameGrid" style="display: none;">
     <div class="game">
       <a href="games/slope/index.html" target="_blank">
         <img src="games/slope/icon.png" alt="Slope" />
@@ -206,6 +237,7 @@
         <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />
         <div class="game-title">Burrito Bison</div>
       </a>
+    </div>
     <div class="game">
       <a href="csgo/index.html" target="_blank">
         <img src="csgo/download.jpg" alt="CS:GO" />
@@ -286,89 +318,74 @@
     </div>
   </div>
 
-  <script>  
-    // Lista de usuarios, con premium y fecha de caducidad  
-    let users = JSON.parse(localStorage.getItem("users")) || [  
-      { username: "admin", password: "1234", premium: true, expiry: "2025-12-31" },  
-      { username: "gamer", password: "1234", premium: false, expiry: "-" },  
-      { username: "alfonso", password: "1234", premium: true, expiry: "2025-12-31" },  
-      { username: "alberto", password: "1234", premium: false, expiry: "-" },  
-      { username: "pablo", password: "1234", premium: false, expiry: "2025-12-31" },  
-      { username: "hugo", password: "1234", premium: false, expiry: "-" },  
-      { username: "jorge", password: "1234", premium: false, expiry: "2025-12-31" },  
-      { username: "ivan", password: "1234", premium: false, expiry: "-" },  
-      { username: "roberto", password: "1234", premium: false, expiry: "2025-12-31" },  
-      { username: "javi", password: "1234", premium: false, expiry: "-" },  
-      { username: "zulmira", password: "1234", premium: false, expiry: "2025-12-31" },  
-      { username: "paula", password: "1234", premium: false, expiry: "-" },  
-      { username: "carmelo", password: "1234", premium: false, expiry: "2025-12-31" },  
-      { username: "rafa", password: "1234", premium: false, expiry: "-" }  
-    ];  
+  <script>
+    // Lista de usuarios, con premium y fecha de caducidad
+    let users = JSON.parse(localStorage.getItem("users")) || [
+      { username: "admin", password: "1234", premium: true, expiry: "2025-12-31" },
+      { username: "gamer", password: "abcd", premium: false, expiry: "-" }
+    ];
 
-    let loggedUser = null;  
+    let loggedUser = null;
 
-    function saveUsers() {  
-      localStorage.setItem("users", JSON.stringify(users));  
-    }  
+    function saveUsers() {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
 
-    function login() {  
-      const user = document.getElementById("username").value.trim();  
-      const pass = document.getElementById("password").value.trim();  
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
 
-      const found = users.find(u => u.username === user && u.password === pass);  
-      if (found) {  
-        loggedUser = found;  
-        // Ocultar formulario de login  
-        document.getElementById("loginContainer").style.display = "none";  
+      const found = users.find(u => u.username === user && u.password === pass);
+      if (found) {
+        loggedUser = found;
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("gameGrid").style.display = "grid";
+        document.getElementById("userPanel").style.display = "flex";
+        document.getElementById("userDropdown").innerHTML = `<strong>${found.username}</strong>`;
+      } else {
+        alert("Credenciales incorrectas");
+      }
+    }
 
-        // Mostrar otros elementos  
-        document.getElementById("gameGrid").style.display = "block";  
-        document.getElementById("userPanel").style.display = "block";  
+    function toggleUserPanel() {
+      const dropdown = document.getElementById("userDropdown");
+      const settings = document.getElementById("userSettings");
+      if (dropdown.style.display === "block") {
+        dropdown.style.display = "none";
+        settings.style.display = "none";
+      } else {
+        dropdown.style.display = "block";
+        settings.style.display = "block";
+        // Actualizar datos
+        document.getElementById("currentUser").innerText = loggedUser.username;
+        document.getElementById("isPremium").innerText = loggedUser.premium ? "Sí" : "No";
+        document.getElementById("expiryDate").innerText = loggedUser.expiry;
+      }
+    }
 
-        // Mostrar nombre de usuario en el dropdown  
-        document.getElementById("userDropdown").innerHTML = `<strong>${found.username}</strong>`;  
-      } else {  
-        alert("Credenciales incorrectas");  
-      }  
-    }  
+    function updateUser() {
+      const newUsername = document.getElementById("newUsername").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
 
-    function toggleUserPanel() {  
-      const dropdown = document.getElementById("userDropdown");  
-      const settings = document.getElementById("userSettings");  
-      if (settings.style.display === "block") {  
-        settings.style.display = "none";  
-      } else {  
-        settings.style.display = "block";  
-        // Actualizar información  
-        document.getElementById("currentUser").innerText = loggedUser.username;  
-        document.getElementById("isPremium").innerText = loggedUser.premium ? "Sí" : "No";  
-        document.getElementById("expiryDate").innerText = loggedUser.expiry;  
-      }  
-    }  
+      if (!newUsername && !newPassword) {
+        alert("Introduce un nuevo usuario o contraseña para actualizar.");
+        return;
+      }
 
-    function updateUser() {  
-      const newUsername = document.getElementById("newUsername").value.trim();  
-      const newPassword = document.getElementById("newPassword").value.trim();  
+      // Verificar si nuevo username ya existe (salvo si es el mismo usuario)
+      if (newUsername && users.some(u => u.username === newUsername && u !== loggedUser)) {
+        alert("El nombre de usuario ya está en uso.");
+        return;
+      }
 
-      if (!newUsername && !newPassword) {  
-        alert("Introduce un nuevo usuario o contraseña para actualizar.");  
-        return;  
-      }  
+      if (newUsername) loggedUser.username = newUsername;
+      if (newPassword) loggedUser.password = newPassword;
 
-      // Verificar si el nuevo username está en uso (considerando que no es el mismo)  
-      if (newUsername && users.some(u => u.username === newUsername && u !== loggedUser)) {  
-        alert("El nombre de usuario ya está en uso.");  
-        return;  
-      }  
+      saveUsers();
 
-      if (newUsername) loggedUser.username = newUsername;  
-      if (newPassword) loggedUser.password = newPassword;  
-
-      saveUsers();  
-
-      alert("Usuario actualizado. Debes iniciar sesión de nuevo.");  
-      location.reload();  
-    }  
-</script>  
-</body>  
-</html> 
+      alert("Usuario actualizado. Debes iniciar sesión de nuevo.");
+      location.reload();
+    }
+  </script>
+</body>
+</html>
