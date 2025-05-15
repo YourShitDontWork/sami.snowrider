@@ -2,36 +2,31 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CELEX - Juegos</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: url('game.jpg') no-repeat center center fixed;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
-       overflow-x: hidden;
       color: white;
     }
 
     .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
       z-index: -1;
     }
 
     h1 {
       text-align: center;
-      font-weight: 700;
       font-size: 3rem;
-      color: #00ffe1;
-      text-shadow: 0 0 15px #00ffe1;
       margin-top: 30px;
+      color: #00ffe1;
+      text-shadow: 0 0 10px #00ffe1;
     }
 
     #loginContainer {
@@ -40,65 +35,26 @@
       background: rgba(0, 0, 0, 0.8);
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 0 15px #00ffe1;
+      box-shadow: 0 0 10px #00ffe1;
     }
 
-    #loginContainer input {
+    input, button {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
+      margin-top: 10px;
       border: none;
       border-radius: 5px;
+    }
+
+    input {
       background: #1a1a1a;
       color: white;
     }
 
-    #loginContainer button {
-      width: 100%;
-      padding: 10px;
+    button {
       background: #00ffe1;
-      border: none;
-      border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
-    }
-
-    #gameGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 30px;
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .game {
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .game:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px #00ffe1;
-    }
-
-    .game img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .game-title {
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-      color: #00ffe1;
-      font-size: 1.1em;
     }
 
     #userPanel {
@@ -118,21 +74,61 @@
       z-index: 10;
     }
 
-    #userDropdown {
+    #userDropdown, #userSettings {
       position: absolute;
       top: 70px;
       right: 20px;
       background: #111;
-      padding: 10px;
-      border-radius: 10px;
-      display: none;
+      padding: 20px;
+      border-radius: 15px;
       color: white;
+      display: none;
+      width: 250px;
+      box-shadow: 0 0 10px #00ffe1;
+    }
+
+    #userDropdown p {
+      margin: 5px 0;
+    }
+
+    #gameGrid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .game {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .game:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ffe1;
+    }
+
+    .game img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .game-title {
+      padding: 10px;
+      text-align: center;
+      color: #00ffe1;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="overlay"></div>
-
   <h1>CELEX - Juegos</h1>
 
   <div id="loginContainer">
@@ -143,10 +139,10 @@
 
   <div id="userPanel" onclick="toggleUserPanel()">U</div>
   <div id="userDropdown"></div>
+  <div id="userSettings"></div>
 
-  <div id="gameGrid" style="display: none;">
-    <!-- todos tus juegos aquí -->
-   <div class="game">  
+  <div id="gameGrid">
+  <div class="game">  
     <a href="Slope-Source-code-main/index.html">  
       <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />  
       <div class="game-title">Slope</div>  
@@ -241,14 +237,18 @@
       <img src="volleyrandom/splash.png" alt="Volley Random" />  
       <div class="game-title">Volley Random</div>  
     </a>  
-  </div>   
   </div>  
+</div>  
+
+  </div>
 
   <script>
     const users = [
-      { username: "admin", password: "1234" },
-      { username: "gamer", password: "abcd" },
+      { username: "admin", password: "1234", premium: true, expires: "2025-12-31" },
+      { username: "gamer", password: "abcd", premium: false, expires: "N/A" }
     ];
+
+    let currentUser = null;
 
     function login() {
       const user = document.getElementById("username").value;
@@ -257,9 +257,10 @@
       const found = users.find(u => u.username === user && u.password === pass);
 
       if (found) {
+        currentUser = found;
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("gameGrid").style.display = "grid";
-        document.getElementById("userDropdown").innerHTML = `<strong>Usuario:</strong> ${found.username}`;
+        showUserInfo();
       } else {
         alert("Credenciales incorrectas");
       }
@@ -267,7 +268,50 @@
 
     function toggleUserPanel() {
       const panel = document.getElementById("userDropdown");
-      panel.style.display = panel.style.display === "none" || panel.style.display === "" ? "block" : "none";
+      if (panel.style.display === "none" || panel.style.display === "") {
+        panel.style.display = "block";
+        panel.innerHTML = `
+          <p><strong>Usuario:</strong> ${currentUser.username}</p>
+          <p><strong>Premium:</strong> ${currentUser.premium ? "Sí ✅" : "No ❌"}</p>
+          <p><strong>Caduca:</strong> ${currentUser.expires}</p>
+          <button onclick="openSettings()">⚙ Cambiar datos</button>
+        `;
+      } else {
+        panel.style.display = "none";
+        document.getElementById("userSettings").style.display = "none";
+      }
+    }
+
+    function showUserInfo() {
+      document.getElementById("userDropdown").innerHTML = `
+        <p><strong>Usuario:</strong> ${currentUser.username}</p>
+        <p><strong>Premium:</strong> ${currentUser.premium ? "Sí ✅" : "No ❌"}</p>
+        <p><strong>Caduca:</strong> ${currentUser.expires}</p>
+        <button onclick="openSettings()">⚙ Cambiar datos</button>
+      `;
+    }
+
+    function openSettings() {
+      const settings = document.getElementById("userSettings");
+      settings.style.display = "block";
+      settings.innerHTML = `
+        <h3>Modificar Usuario</h3>
+        <input type="text" id="newUsername" placeholder="Nuevo usuario" value="${currentUser.username}">
+        <input type="password" id="newPassword" placeholder="Nueva clave">
+        <button onclick="updateUser()">Guardar cambios</button>
+      `;
+    }
+
+    function updateUser() {
+      const newUser = document.getElementById("newUsername").value;
+      const newPass = document.getElementById("newPassword").value;
+
+      if (newUser) currentUser.username = newUser;
+      if (newPass) currentUser.password = newPass;
+
+      alert("Datos actualizados");
+      document.getElementById("userSettings").style.display = "none";
+      showUserInfo();
     }
   </script>
 </body>
