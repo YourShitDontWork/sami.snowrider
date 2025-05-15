@@ -319,86 +319,89 @@
     </div>
   </div>
 
-  <script>
-    // Lista de usuarios, con premium y fecha de caducidad
-    let users = JSON.parse(localStorage.getItem("users")) || [
-      { username: "admin", password: "1234", premium: true, expiry: "2025-12-31" },
-      { username: "gamer", password: "1234", premium: false, expiry: "-" },
-      { username: "alfonso", password: "1234", premium: true, expiry: "2025-12-31" },
-      { username: "alberto", password: "1234", premium: false, expiry: "-" },
-      { username: "pablo", password: "1234", premium: false, expiry: "2025-12-31" },
-      { username: "hugo", password: "1234", premium: false, expiry: "-" },
-      { username: "jorge", password: "1234", premium: false, expiry: "2025-12-31" },
-      { username: "ivan", password: "1234", premium: false, expiry: "-" },
-      { username: "roberto", password: "1234", premium: false, expiry: "2025-12-31" },
-      { username: "javi", password: "1234", premium: false, expiry: "-" },
-      { username: "zulmira", password: "1234", premium: false, expiry: "2025-12-31" },
-      { username: "paula", password: "1234", premium: false, expiry: "-" },
-      { username: "carmelo", password: "1234", premium: false, expiry: "2025-12-31" },
-      { username: "rafa", password: "1234", premium: false, expiry: "-" }
-    ];
+  <script>  
+    // Lista de usuarios, con premium y fecha de caducidad  
+    let users = JSON.parse(localStorage.getItem("users")) || [  
+      { username: "admin", password: "1234", premium: true, expiry: "2025-12-31" },  
+      { username: "gamer", password: "1234", premium: false, expiry: "-" },  
+      { username: "alfonso", password: "1234", premium: true, expiry: "2025-12-31" },  
+      { username: "alberto", password: "1234", premium: false, expiry: "-" },  
+      { username: "pablo", password: "1234", premium: false, expiry: "2025-12-31" },  
+      { username: "hugo", password: "1234", premium: false, expiry: "-" },  
+      { username: "jorge", password: "1234", premium: false, expiry: "2025-12-31" },  
+      { username: "ivan", password: "1234", premium: false, expiry: "-" },  
+      { username: "roberto", password: "1234", premium: false, expiry: "2025-12-31" },  
+      { username: "javi", password: "1234", premium: false, expiry: "-" },  
+      { username: "zulmira", password: "1234", premium: false, expiry: "2025-12-31" },  
+      { username: "paula", password: "1234", premium: false, expiry: "-" },  
+      { username: "carmelo", password: "1234", premium: false, expiry: "2025-12-31" },  
+      { username: "rafa", password: "1234", premium: false, expiry: "-" }  
+    ];  
 
-    let loggedUser = null;
+    let loggedUser = null;  
 
-    function saveUsers() {
-      localStorage.setItem("users", JSON.stringify(users));
-    }
+    function saveUsers() {  
+      localStorage.setItem("users", JSON.stringify(users));  
+    }  
 
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
+    function login() {  
+      const user = document.getElementById("username").value.trim();  
+      const pass = document.getElementById("password").value.trim();  
 
-      const found = users.find(u => u.username === user && u.password === pass);
-      if (found) {
-        loggedUser = found;
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("gameGrid").style.display = "grid";
-        document.getElementById("userPanel").style.display = "flex";
-        document.getElementById("userDropdown").innerHTML = `<strong>${found.username}</strong>`;
-      } else {
-        alert("Credenciales incorrectas");
-      }
-    }
+      const found = users.find(u => u.username === user && u.password === pass);  
+      if (found) {  
+        loggedUser = found;  
+        // Ocultar formulario de login  
+        document.getElementById("loginContainer").style.display = "none";  
 
-    function toggleUserPanel() {
-      const dropdown = document.getElementById("userDropdown");
-      const settings = document.getElementById("userSettings");
-      if (dropdown.style.display === "block") {
-        dropdown.style.display = "none";
-        settings.style.display = "none";
-      } else {
-        dropdown.style.display = "block";
-        settings.style.display = "block";
-        // Actualizar datos
-        document.getElementById("currentUser").innerText = loggedUser.username;
-        document.getElementById("isPremium").innerText = loggedUser.premium ? "Sí" : "No";
-        document.getElementById("expiryDate").innerText = loggedUser.expiry;
-      }
-    }
+        // Mostrar otros elementos  
+        document.getElementById("gameGrid").style.display = "block";  
+        document.getElementById("userPanel").style.display = "block";  
 
-    function updateUser() {
-      const newUsername = document.getElementById("newUsername").value.trim();
-      const newPassword = document.getElementById("newPassword").value.trim();
+        // Mostrar nombre de usuario en el dropdown  
+        document.getElementById("userDropdown").innerHTML = `<strong>${found.username}</strong>`;  
+      } else {  
+        alert("Credenciales incorrectas");  
+      }  
+    }  
 
-      if (!newUsername && !newPassword) {
-        alert("Introduce un nuevo usuario o contraseña para actualizar.");
-        return;
-      }
+    function toggleUserPanel() {  
+      const dropdown = document.getElementById("userDropdown");  
+      const settings = document.getElementById("userSettings");  
+      if (settings.style.display === "block") {  
+        settings.style.display = "none";  
+      } else {  
+        settings.style.display = "block";  
+        // Actualizar información  
+        document.getElementById("currentUser").innerText = loggedUser.username;  
+        document.getElementById("isPremium").innerText = loggedUser.premium ? "Sí" : "No";  
+        document.getElementById("expiryDate").innerText = loggedUser.expiry;  
+      }  
+    }  
 
-      // Verificar si nuevo username ya existe (salvo si es el mismo usuario)
-      if (newUsername && users.some(u => u.username === newUsername && u !== loggedUser)) {
-        alert("El nombre de usuario ya está en uso.");
-        return;
-      }
+    function updateUser() {  
+      const newUsername = document.getElementById("newUsername").value.trim();  
+      const newPassword = document.getElementById("newPassword").value.trim();  
 
-      if (newUsername) loggedUser.username = newUsername;
-      if (newPassword) loggedUser.password = newPassword;
+      if (!newUsername && !newPassword) {  
+        alert("Introduce un nuevo usuario o contraseña para actualizar.");  
+        return;  
+      }  
 
-      saveUsers();
+      // Verificar si el nuevo username está en uso (considerando que no es el mismo)  
+      if (newUsername && users.some(u => u.username === newUsername && u !== loggedUser)) {  
+        alert("El nombre de usuario ya está en uso.");  
+        return;  
+      }  
 
-      alert("Usuario actualizado. Debes iniciar sesión de nuevo.");
-      location.reload();
-    }
-  </script>
-</body>
-</html>
+      if (newUsername) loggedUser.username = newUsername;  
+      if (newPassword) loggedUser.password = newPassword;  
+
+      saveUsers();  
+
+      alert("Usuario actualizado. Debes iniciar sesión de nuevo.");  
+      location.reload();  
+    }  
+</script>  
+</body>  
+</html> 
