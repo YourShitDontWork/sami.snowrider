@@ -4,234 +4,216 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CELEX - Juegos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: white;
+    * {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      box-sizing: border-box;
     }
-    h1 {
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #000, #1a1a1a);
+      color: #fff;
+      min-height: 100vh;
+      background-image: url("super-moon-full-moon-stars-cosmos-clouds-5k-8k-3840x2160-6182.jpg");
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(4px);
+      overflow-x: hidden;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+    header {
       text-align: center;
-      color: #00ffff;
+      padding: 2rem 1rem;
+      font-size: 2.5rem;
+      color: #00fff2;
+      text-shadow: 0 0 10px #00fff2, 0 0 20px #00fff2;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 1rem;
+    }
+    #authContainer, #gameGrid, #menuPanel {
+      display: none;
     }
     #authContainer {
-      max-width: 300px;
-      margin: 40px auto;
-      background: #2e2e2e;
-      padding: 20px;
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 400px;
+      margin: 2rem auto;
+      box-shadow: 0 0 15px #00fff2aa;
     }
     input, button {
       width: 100%;
-      padding: 10px;
-      margin: 5px 0;
+      padding: 0.75rem;
+      margin-top: 1rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 0.5rem;
+      font-size: 1rem;
     }
     input {
-      background-color: #444;
-      color: white;
+      background: #222;
+      color: #fff;
     }
     button {
-      background-color: #00cccc;
-      color: white;
+      background: #00fff2;
+      color: #000;
+      font-weight: bold;
       cursor: pointer;
+    }
+    button:hover {
+      background: #00cccc;
     }
     #userIcon {
       position: fixed;
-      top: 10px;
-      right: 10px;
-      background-color: #00cccc;
-      width: 40px;
-      height: 40px;
+      top: 20px;
+      right: 20px;
+      background: #00fff2;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #000;
       font-weight: bold;
-      color: #fff;
       cursor: pointer;
       z-index: 1000;
     }
     #userInfo {
       position: fixed;
-      top: 60px;
-      right: 10px;
-      background-color: #2e2e2e;
-      padding: 10px;
-      border-radius: 8px;
+      top: 80px;
+      right: 20px;
+      background: rgba(0,0,0,0.85);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: #fff;
       display: none;
       z-index: 1000;
     }
-    #searchContainer {
+    #menuPanel {
       text-align: center;
-      margin: 20px 0;
-    }
-    #searchContainer input {
-      width: 50%;
+      margin-bottom: 2rem;
     }
     #gameGrid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
     }
-    .game-card {
-      background-color: #2e2e2e;
-      border-radius: 8px;
+    .game {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
     }
-    .game-card:hover {
+    .game:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 20px #00fff2aa;
     }
-    .game-card img {
+    .game img {
       width: 100%;
-      height: 150px;
+      height: 140px;
       object-fit: cover;
     }
-    .game-card p {
-      margin: 10px;
-      font-weight: bold;
-      text-align: center;
+    .game-title {
+      padding: 0.5rem;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
+  <div class="overlay"></div>
+  <header>CELEX - Juegos</header>
 
-<h1>CELEX - Juegos</h1>
-
-<!-- Login -->
-<div id="authContainer">
-  <h2 style="text-align:center; margin-bottom:10px;">Iniciar Sesión</h2>
-  <input type="text" id="userInput" placeholder="Usuario" />
-  <input type="password" id="keyInput" placeholder="Clave" />
-  <button id="loginBtn">Entrar</button>
-  <div id="loginMessage" style="margin-top:10px; text-align:center; color:#ff5555;"></div>
-</div>
-
-<!-- Icono de usuario -->
-<div id="userIcon" title="Usuario" style="display:none;"></div>
-
-<!-- Info usuario -->
-<div id="userInfo"></div>
-
-<!-- Panel oculto hasta login -->
-<div id="mainPanel" style="display:none;">
-  <!-- Buscador -->
-  <div id="searchContainer">
-    <input type="text" id="searchInput" placeholder="Buscar juego..." />
+  <div id="authContainer">
+    <input type="text" id="userInput" placeholder="Usuario" />
+    <input type="password" id="keyInput" placeholder="Clave" />
+    <button onclick="login()">Entrar</button>
+    <div id="loginMessage" style="color:red; margin-top: 1rem;"></div>
   </div>
 
-  <!-- Juegos -->
-  <div id="gameGrid">
-    <div class="game-card" onclick="window.open('juegos/juego1/index.html','_blank')">
-      <img src="juegos/juego1/portada.jpg" alt="Juego 1" />
-      <p>Juego 1</p>
-    </div>
-    <div class="game-card" onclick="window.open('juegos/juego2/index.html','_blank')">
-      <img src="juegos/juego2/portada.jpg" alt="Juego 2" />
-      <p>Juego 2</p>
-    </div>
-    <div class="game-card" onclick="window.open('juegos/juego3/index.html','_blank')">
-      <img src="juegos/juego3/portada.jpg" alt="Juego 3" />
-      <p>Juego 3</p>
-    </div>
-    <!-- Agrega más juegos aquí -->
+  <div id="menuPanel" class="container">
+    <h2>Bienvenido</h2>
+    <p>Selecciona un juego:</p>
   </div>
-</div>
 
-<script>
-// Usuarios y claves
-const usuarios = {
-  "admin": {
-    clave: "dueño",
-    plan: "premium",
-    caducidad: "2025-12-31"
-  },
-  "user1": {
-    clave: "abc123",
-    plan: "gratis",
-    caducidad: "2025-06-15"
-  }
-};
+  <div id="gameGrid" class="container">
+    <div class="game">
+      <a href="Slope-Source-code-main/index.html" target="_blank">
+        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />
+        <div class="game-title">Slope</div>
+      </a>
+    </div>
+    <div class="game">
+      <a href="backrooms/index.html" target="_blank">
+        <img src="backrooms/img/icon.png" alt="Backrooms" />
+        <div class="game-title">Backrooms</div>
+      </a>
+    </div>
+    <!-- Agrega más juegos aquí... -->
+  </div>
 
-let usuarioActual = null;
+  <div id="userIcon" title="Usuario">U</div>
+  <div id="userInfo"></div>
 
-const loginBtn = document.getElementById("loginBtn");
-const userInput = document.getElementById("userInput");
-const keyInput = document.getElementById("keyInput");
-const loginMessage = document.getElementById("loginMessage");
-const authContainer = document.getElementById("authContainer");
-const mainPanel = document.getElementById("mainPanel");
-const userIcon = document.getElementById("userIcon");
-const userInfo = document.getElementById("userInfo");
-const searchInput = document.getElementById("searchInput");
-const gameCards = document.querySelectorAll(".game-card");
+  <script>
+    const usuarios = {
+      "admin": { clave: "dueño", plan: "premium", caducidad: "2025-12-31" },
+      "user1": { clave: "abc123", plan: "gratis", caducidad: "2025-06-15" },
+      "gamer": { clave: "gk42025", plan: "premium", caducidad: "2025-12-01" }
+    };
 
-// Ocultar todo al cargar
-window.onload = () => {
-  mainPanel.style.display = "none";
-  userIcon.style.display = "none";
-  userInfo.style.display = "none";
-};
+    let usuarioActual = null;
 
-// Login
-loginBtn.onclick = () => {
-  const user = userInput.value.trim();
-  const key = keyInput.value.trim();
-  if (usuarios[user] && usuarios[user].clave === key) {
-    usuarioActual = { ...usuarios[user], nombre: user };
-    mostrarContenido();
-  } else {
-    loginMessage.innerText = "Usuario o clave incorrecta.";
-    ocultarContenido();
-  }
-};
+    function login() {
+      const user = document.getElementById("userInput").value.trim();
+      const key = document.getElementById("keyInput").value.trim();
+      const mensaje = document.getElementById("loginMessage");
 
-function mostrarContenido() {
-  authContainer.style.display = "none";
-  mainPanel.style.display = "block";
-  userIcon.style.display = "flex";
-  loginMessage.innerText = "";
-  userIcon.innerHTML = usuarioActual.nombre.charAt(0).toUpperCase();
-}
+      if (usuarios[user] && usuarios[user].clave === key) {
+        usuarioActual = { ...usuarios[user], nombre: user };
+        document.getElementById("authContainer").style.display = "none";
+        document.getElementById("menuPanel").style.display = "block";
+        document.getElementById("gameGrid").style.display = "grid";
+        document.getElementById("userIcon").style.display = "flex";
+        mensaje.innerText = "";
+      } else {
+        mensaje.innerText = "Usuario o clave incorrecta.";
+      }
+    }
 
-function ocultarContenido() {
-  mainPanel.style.display = "none";
-  userIcon.style.display = "none";
-}
+    document.getElementById("userIcon").onclick = () => {
+      if (!usuarioActual) return;
+      const info = document.getElementById("userInfo");
+      info.innerHTML = `
+        <strong>Usuario:</strong> ${usuarioActual.nombre}<br>
+        <strong>Plan:</strong> ${usuarioActual.plan}<br>
+        <strong>Caducidad:</strong> ${usuarioActual.caducidad}
+      `;
+      info.style.display = info.style.display === "block" ? "none" : "block";
+    };
 
-// Mostrar info del usuario
-userIcon.onclick = () => {
-  if (!usuarioActual) return;
-  const { plan, caducidad, nombre } = usuarioActual;
-  const today = new Date().toISOString().slice(0, 10);
-  userInfo.innerHTML = `
-    <strong>Usuario:</strong> ${nombre}<br>
-    <strong>Plan:</strong> ${plan}<br>
-    <strong>Cierre plan:</strong> ${caducidad}<br>
-    <em>Hoy: ${today}</em>
-  `;
-  userInfo.style.display = userInfo.style.display === "block" ? "none" : "block";
-};
+    document.addEventListener("click", (e) => {
+      const info = document.getElementById("userInfo");
+      const icon = document.getElementById("userIcon");
+      if (!info.contains(e.target) && e.target !== icon) {
+        info.style.display = "none";
+      }
+    });
 
-document.addEventListener("click", (e) => {
-  if (!userInfo.contains(e.target) && e.target !== userIcon) {
-    userInfo.style.display = "none";
-  }
-});
-
-// Buscador
-searchInput.addEventListener("input", function () {
-  const query = this.value.toLowerCase();
-  document.querySelectorAll(".game-card").forEach(card => {
-    const title = card.querySelector("p").textContent.toLowerCase();
-    card.style.display = title.includes(query) ? "block" : "none";
-  });
-});
-</script>
+    window.onload = () => {
+      document.getElementById("authContainer").style.display = "block";
+    };
+  </script>
 </body>
 </html>
