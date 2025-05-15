@@ -314,83 +314,87 @@ button:hover {
 <!-- JavaScript -->  
 <script>  
   // Datos de usuarios y claves  
-  const usuarios = {  
-    "admin": {  
-      clave: "1234",  
-      plan: "premium",  
-      caducidad: "2025-12-31"  
-    },  
-    "user1": {  
-      clave: "abc123",  
-      plan: "gratis",  
-      caducidad: "2025-06-15"  
-    }  
-  };  
+// Define aquí tus usuarios y contraseñas (agrega más si quieres)  
+const usuarios = {  
+  "dueño": {  
+    clave: "1234",  
+    plan: "premium",  
+    caducidad: "2025-12-31"  
+  },  
+  "miembro": {  
+    clave: "abc123",  
+    plan: "gratuito",  
+    caducidad: "2025-06-15"  
+  }  
+  // Añade más usuarios así:  
+  // "nombreUsuario": {  
+  //   clave: "contraseña",  
+  //   plan: "tipo de plan",  
+  //   caducidad: "año-mes-día"  
+  // }  
+};  
 
-  let usuarioActual = null;  
+let usuarioActual = null;  
 
-  const loginBtn = document.getElementById("loginBtn");  
-  const userInput = document.getElementById("userInput");  
-  const keyInput = document.getElementById("keyInput");  
-  const loginMessage = document.getElementById("loginMessage");  
-  const authContainer = document.getElementById("authContainer");  
-  const gameGrid = document.getElementById("gameGrid");  
-  const userIcon = document.getElementById("userIcon");  
-  const userInfo = document.getElementById("userInfo");  
+// Resto de tu código...  
+const loginBtn = document.getElementById("loginBtn");  
+const userInput = document.getElementById("userInput");  
+const keyInput = document.getElementById("keyInput");  
+const loginMessage = document.getElementById("loginMessage");  
+const authContainer = document.getElementById("authContainer");  
+const gameGrid = document.getElementById("gameGrid");  
+const userIcon = document.getElementById("userIcon");  
+const userInfo = document.getElementById("userInfo");  
 
-  // Ocultar juegos al cargar  
-  window.onload = () => {  
+// Ocultar juegos al cargar  
+window.onload = () => {  
+  document.getElementById("gameGrid").style.display = "none";  
+}  
+
+// Función para iniciar sesión  
+document.getElementById("loginBtn").onclick = () => {  
+  const user = userInput.value.trim();  
+  const key = keyInput.value.trim();  
+
+  if (usuarios[user] && usuarios[user].clave === key) {  
+    usuarioActual = { ...usuarios[user], nombre: user };  
+    mostrarJuegos(); // Mostrar juegos después de login correcto  
+    mostrarIcono();  
+    authContainer.style.display = "none"; // Oculta panel login  
+    loginMessage.innerText = "";  
+  } else {  
+    loginMessage.innerText = "Usuario o clave incorrecta.";  
+    // Asegurar que los juegos permanezcan ocultos en caso de error  
     document.getElementById("gameGrid").style.display = "none";  
   }  
+};  
 
-  // Función para iniciar sesión  
-  document.getElementById("loginBtn").onclick = () => {  
-    const user = userInput.value.trim();  
-    const key = keyInput.value.trim();  
+function mostrarJuegos() {  
+  gameGrid.style.display = "grid";  
+}  
 
-    if (usuarios[user] && usuarios[user].clave === key) {  
-      usuarioActual = {...usuarios[user], nombre: user};  
-      mostrarJuegos(); // Muestra los juegos solo si login correcto  
-      mostrarIcono();  
-      authContainer.style.display = "none"; // ocultar login  
-      loginMessage.innerText = "";  
-    } else {  
-      loginMessage.innerText = "Usuario o clave incorrecta.";  
-      // Mantener ocultos los juegos en caso de error  
-      document.getElementById("gameGrid").style.display = "none";  
-    }  
-  };  
+// Función para mostrar icono y info del usuario  
+function mostrarIcono() {  
+  userIcon.innerHTML = "U"; // Aquí puedes poner un ícono SVG o imagen en su lugar  
+}  
 
-  function mostrarJuegos() {  
-    gameGrid.style.display = "grid";  
+// Evento click en icono de usuario para mostrar info  
+document.getElementById("userIcon").onclick = () => {  
+  if (!usuarioActual) return;  
+  const { plan, caducidad, nombre } = usuarioActual;  
+  const today = new Date().toISOString().slice(0, 10);  
+  userInfo.innerHTML = `  
+    <strong>Usuario:</strong> ${nombre}<br>  
+    <strong>Plan:</strong> ${plan}<br>  
+    <strong>Cierre plan:</strong> ${caducidad}<br>  
+    <em>Hoy: ${today}</em>  
+  `;  
+  userInfo.style.display = userInfo.style.display === "block" ? "none" : "block";  
+};  
+
+// Cerrar info si clickea fuera  
+document.addEventListener("click", (e) => {  
+  if (!userInfo.contains(e.target) && e.target !== document.getElementById("userIcon")) {  
+    userInfo.style.display = "none";  
   }  
-
-  function mostrarIcono() {  
-    userIcon.innerHTML = "U"; // Puedes usar un icono o imagen  
-  }  
-
-  // Evento click en icono de usuario  
-  document.getElementById("userIcon").onclick = () => {  
-    if (!usuarioActual) return;  
-    // Mostrar info de la caducidad  
-    const {plan, caducidad, nombre} = usuarioActual;  
-    const today = new Date().toISOString().slice(0,10);  
-    userInfo.innerHTML = `  
-      <strong>Usuario:</strong> ${nombre}<br>  
-      <strong>Plan:</strong> ${plan}<br>  
-      <strong>Cierre plan:</strong> ${caducidad}<br>  
-      <em>Hoy: ${today}</em>  
-    `;  
-    userInfo.style.display = userInfo.style.display === "block" ? "none" : "block";  
-  };  
-
-  // Cerrar info si clickea fuera  
-  document.addEventListener("click", (e) => {  
-    if (!userInfo.contains(e.target) && e.target !== document.getElementById("userIcon")) {  
-      userInfo.style.display = "none";  
-    }  
-  });  
-</script>  
-
-</body>  
-</html>
+});
