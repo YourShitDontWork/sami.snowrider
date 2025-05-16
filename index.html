@@ -184,15 +184,11 @@
     <p><strong>Correo:</strong> <span id="userEmail">-</span></p>
     <p><strong>Premium:</strong> <span id="userPremium">No</span></p>
     <p><strong>Caduca:</strong> <span id="userExpire">-</span></p>
-    <p><strong>Registrado:</strong> <span id="userRegistered">-</span></p>
+    <p><strong>Registro:</strong> <span id="userRegistered">-</span></p>
     <button onclick="logout()" style="margin-top: 10px; padding: 10px; background: #ff4c4c; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Cerrar sesión</button>
   </div>
 
   <div id="gameGrid" style="display:none">
-    <div class="game" onclick="playGame('burrito-bison/index.html')">
-      <img src="img/burrito.jpg" alt="Burrito Bison">
-      <div class="game-title">Burrito Bison</div>
-    </div>
     <div class="game">
       <a href="Slope-Source-code-main/index.html">
         <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
@@ -277,14 +273,9 @@
       register.style.display = register.style.display === 'none' ? 'block' : 'none';
     }
 
-    document.getElementById('userPanel').addEventListener('click', () => {
-      const dropdown = document.getElementById('userDropdown');
-      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    });
-
     function getTodayDate() {
-      const date = new Date();
-      return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+      const today = new Date();
+      return today.toLocaleDateString('es-ES');
     }
 
     function register() {
@@ -297,20 +288,22 @@
         alert('Completa todos los campos.');
         return;
       }
+
       if (pass !== repeat) {
         alert('Las contraseñas no coinciden.');
         return;
       }
 
       let users = JSON.parse(localStorage.getItem('users') || '{}');
+
       if (users[email]) {
         alert('El usuario ya existe.');
         return;
       }
 
       users[email] = {
-        password: pass,
         username: username,
+        password: pass,
         premium: true,
         expire: '31/12/2025',
         registered: getTodayDate(),
@@ -325,7 +318,7 @@
     function login() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
 
       if (!users[email] || users[email].password !== password) {
         alert('Credenciales incorrectas.');
@@ -335,13 +328,12 @@
       const user = users[email];
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('username', email);
-
       document.getElementById('loginContainer').style.display = 'none';
       document.getElementById('registerContainer').style.display = 'none';
       document.getElementById('gameGrid').style.display = 'grid';
       document.getElementById('userPanel').style.display = 'flex';
 
-      document.getElementById('userName').textContent = user.username || '-';
+      document.getElementById('userName').textContent = user.username;
       document.getElementById('userEmail').textContent = email;
       document.getElementById('userPremium').textContent = user.premium ? 'Sí' : 'No';
       document.getElementById('userExpire').textContent = user.expire || '-';
@@ -369,26 +361,29 @@
       window.open(url, '_blank');
     }
 
+    document.getElementById('userPanel').addEventListener('click', () => {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    });
+
     window.onload = () => {
       if (localStorage.getItem('loggedIn') === 'true') {
         const email = localStorage.getItem('username');
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         const user = users[email];
 
-        if (!user) return;
-
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('registerContainer').style.display = 'none';
         document.getElementById('gameGrid').style.display = 'grid';
         document.getElementById('userPanel').style.display = 'flex';
 
-        document.getElementById('userName').textContent = user.username || '-';
+        document.getElementById('userName').textContent = user.username;
         document.getElementById('userEmail').textContent = email;
         document.getElementById('userPremium').textContent = user.premium ? 'Sí' : 'No';
         document.getElementById('userExpire').textContent = user.expire || '-';
         document.getElementById('userRegistered').textContent = user.registered || '-';
       }
-    }
+    };
   </script>
 </body>
 </html>
