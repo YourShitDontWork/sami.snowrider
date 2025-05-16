@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CELEX - Juegos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>6u
+  <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;600&display=swap" rel="stylesheet">
+  <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Amiko', sans-serif;
+      font-weight: 400;
       background: url('game.jpg') no-repeat center center fixed;
       background-size: cover;
       overflow-x: hidden;
@@ -28,7 +29,7 @@
 
     h1 {
       text-align: center;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 3rem;
       color: #00ffe1;
       text-shadow: 0 0 15px #00ffe1;
@@ -43,9 +44,10 @@
       border-radius: 20px;
       box-shadow: 0 0 20px #00ffe1;
       text-align: center;
+      font-weight: 600;
     }
 
-    #loginContainer input, #registerContainer input {
+    input {
       width: 100%;
       padding: 15px;
       margin: 15px 0;
@@ -54,23 +56,27 @@
       background: #1a1a1a;
       color: white;
       font-size: 1.1em;
+      font-weight: 600;
     }
 
-    #loginContainer button, #registerContainer button, .dropdown-btn {
+    button {
       width: 100%;
       padding: 15px;
       background: #00ffe1;
       border: none;
       border-radius: 8px;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 1.2em;
       cursor: pointer;
       transition: background 0.3s ease;
-      margin-top: 10px;
     }
 
-    #loginContainer button:hover, #registerContainer button:hover, .dropdown-btn:hover {
+    button:hover {
       background: #00bfa5;
+    }
+
+    p, a {
+      font-weight: 600;
     }
 
     #gameGrid {
@@ -106,7 +112,7 @@
     .game-title {
       padding: 10px;
       text-align: center;
-      font-weight: bold;
+      font-weight: 600;
       color: #00ffe1;
       font-size: 1.1em;
     }
@@ -123,7 +129,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       z-index: 50;
       font-size: 1.4em;
@@ -139,9 +145,10 @@
       border-radius: 15px;
       display: none;
       color: white;
-      width: 250px;
+      width: 220px;
       box-shadow: 0 0 10px #00ffe1;
       z-index: 50;
+      font-weight: 600;
     }
 
     #registerContainer {
@@ -175,9 +182,6 @@
     <p><strong>Usuario:</strong> <span id="userName">-</span></p>
     <p><strong>Premium:</strong> <span id="userPremium">No</span></p>
     <p><strong>Caduca:</strong> <span id="userExpire">-</span></p>
-    <button class="dropdown-btn" onclick="changeUsername()">Cambiar nombre</button>
-    <button class="dropdown-btn" onclick="changePassword()">Cambiar contraseña</button>
-    <button class="dropdown-btn" onclick="logout()">Cerrar sesión</button>
   </div>
 
   <div id="gameGrid" style="display:none">
@@ -274,10 +278,13 @@
       const email = document.getElementById('regEmail').value;
       const pass = document.getElementById('regPass').value;
       const repeat = document.getElementById('regRepeat').value;
+
       if (!email || !pass || !repeat) return alert('Completa todos los campos.');
       if (pass !== repeat) return alert('Las contraseñas no coinciden.');
+
       const users = JSON.parse(localStorage.getItem('users') || '{}');
       if (users[email]) return alert('El usuario ya existe.');
+
       users[email] = { password: pass, premium: true, expire: '31/12/2025' };
       localStorage.setItem('users', JSON.stringify(users));
       alert('Registro exitoso. Ahora puedes iniciar sesión.');
@@ -288,10 +295,12 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const users = JSON.parse(localStorage.getItem('users') || '{}');
+
       if (!users[email] || users[email].password !== password) {
         alert('Credenciales incorrectas.');
         return;
       }
+
       const user = users[email];
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('username', email);
@@ -304,36 +313,6 @@
       document.getElementById('userExpire').textContent = user.expire || '-';
     }
 
-    function logout() {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('username');
-      location.reload();
-    }
-
-    function changeUsername() {
-      const oldEmail = localStorage.getItem('username');
-      const newEmail = prompt('Nuevo correo electrónico:');
-      if (!newEmail) return;
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[newEmail]) return alert('Este correo ya está registrado.');
-      users[newEmail] = users[oldEmail];
-      delete users[oldEmail];
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('username', newEmail);
-      alert('Correo cambiado correctamente.');
-      location.reload();
-    }
-
-    function changePassword() {
-      const email = localStorage.getItem('username');
-      const newPass = prompt('Nueva contraseña:');
-      if (!newPass) return;
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      users[email].password = newPass;
-      localStorage.setItem('users', JSON.stringify(users));
-      alert('Contraseña actualizada.');
-    }
-
     function playGame(url) {
       window.open(url, '_blank');
     }
@@ -343,6 +322,7 @@
         const email = localStorage.getItem('username');
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         const user = users[email];
+
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('registerContainer').style.display = 'none';
         document.getElementById('gameGrid').style.display = 'grid';
