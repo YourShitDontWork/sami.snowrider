@@ -19,7 +19,7 @@
     h1 {
       font-size: 3rem;
       font-weight: 900;
-      color: #0ff; /* azul neón */
+      color: #0ff;
       text-shadow:
         0 0 5px #0ff,
         0 0 10px #0ff,
@@ -246,7 +246,7 @@
       localStorage.removeItem('loggedUser');
     }
 
-    // Mostrar mensaje (en rojo)
+    // Mostrar mensaje (en rojo o verde)
     function showMessage(msg, isError = true) {
       message.style.color = isError ? '#f33' : '#0f0';
       message.textContent = msg;
@@ -268,6 +268,10 @@
       loadUserInfo(username);
       loadGames();
       clearMessage();
+
+      // Limpiar campos login
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
     }
 
     // Mostrar formularios login y registro
@@ -290,7 +294,7 @@
       }
     }
 
-    // Cargar juegos ejemplo
+    // Juegos de ejemplo
     const games = [
       {name: "Burrito Bison", url: "#"},
       {name: "Super Mario", url: "#"},
@@ -310,93 +314,101 @@
         const div = document.createElement('div');
         div.className = 'gameCard';
         div.textContent = game.name;
-        div.onclick = () => {
-          alert(`¡Has seleccionado el juego: ${game.name}!`);
-          // Aquí puedes abrir el juego en un iframe o en otra página
-        };
+        div.title = "Haz clic para jugar";
+        div.onclick = () => alert(`Aquí abrirías el juego: ${game.name}`);
         gameGrid.appendChild(div);
       });
     }
 
-    // Al escribir en buscador filtra juegos
-    searchGames.addEventListener('input', () => {
-      loadGames(searchGames.value);
-    });
-
-    // Login
-    loginForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const user = document.getElementById('loginUser').value.trim();
-      const pass = document.getElementById('loginPass').value;
-
-      const users = getUsers();
-      if(!user || !pass){
-        showMessage('Por favor, completa todos los campos.');
-        return;
-      }
-      if(users[user] && users[user].pass === pass){
-        setLoggedUser(user);
-        showUserPanel(user);
-      } else {
-        showMessage('Usuario o contraseña incorrectos.');
-      }
-    });
-
-    // Registro
+    // Eventos formulario registro
     registerForm.addEventListener('submit', e => {
       e.preventDefault();
-      const user = document.getElementById('registerUser').value.trim();
-      const pass = document.getElementById('registerPass').value;
-      const pass2 = document.getElementById('registerPass2').value;
 
-      if(!user || !pass || !pass2){
-        showMessage('Por favor, completa todos los campos.');
-        return;
-      }
+      const username = document.getElementById('registerUser').value.trim();
+      const pass1 = document.getElementById('registerPass').value.trim();
+      const pass2 = document.getElementById('registerPass2').value.trim();
 
-      if(pass !== pass2){
+      if (pass1 !== pass2) {
         showMessage('Las contraseñas no coinciden.');
         return;
       }
 
+      if (username.length < 3) {
+        showMessage('El usuario debe tener al menos 3 caracteres.');
+        return;
+      }
+
+      if (pass1.length < 4) {
+        showMessage('La contraseña debe tener al menos 4 caracteres.');
+        return;
+      }
+
       const users = getUsers();
-      if(users[user]){
+
+      if (users[username]) {
         showMessage('El usuario ya existe.');
         return;
       }
 
-      // Guardar nuevo usuario con fecha actual
-      const date = new Date().toLocaleDateString();
-      users[user] = { pass, date };
+      // Guardar usuario
+      const fechaRegistro = new Date().toLocaleDateString();
+      users[username] = { pass: pass1, date: fechaRegistro };
       setUsers(users);
 
-      showMessage('Usuario registrado con éxito. Ya puedes iniciar sesión.', false);
+      showMessage('Registro exitoso. Ya puedes iniciar sesión.', false);
+
+      // Limpiar formulario registro
       registerForm.reset();
     });
 
-    // Mostrar/Ocultar info usuario al hacer clic en panel
-    userPanel.addEventListener('click', e => {
-      e.stopPropagation(); // Evita que el clic cierre inmediatamente
-      userInfo.style.display = userInfo.style.display === 'block' ? 'none' : 'block';
+    // Eventos formulario login
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const username = document.getElementById('loginUser').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
+
+      const users = getUsers();
+
+      if (!users[username]) {
+        showMessage('Credenciales incorrectas.');
+        return;
+      }
+
+      if (users[username].pass !== password) {
+        showMessage('Credenciales incorrectas.');
+        return;
+      }
+
+      // Login exitoso
+      setLoggedUser(username);
+      showUserPanel(username);
     });
 
-    // Cerrar info usuario si clic fuera de panel o info
-    document.body.addEventListener('click', () => {
-      if(userInfo.style.display === 'block') {
+    // Mostrar panel info usuario al hacer clic en userPanel
+    userPanel.addEventListener('click', () => {
+      if (userInfo.style.display === 'none') {
+        userInfo.style.display = 'block';
+      } else {
         userInfo.style.display = 'none';
       }
     });
 
-    // Botón cerrar sesión
+    // Logout
     logoutBtn.addEventListener('click', () => {
       clearLoggedUser();
       showLogin();
     });
 
-    // Al cargar la página, verificar si ya hay usuario logueado
+    // Buscador juegos
+    searchGames.addEventListener('input', e => {
+      loadGames(e.target.value);
+    });
+
+    // Al cargar la página, revisar si hay usuario logueado
     window.addEventListener('load', () => {
       const logged = getLoggedUser();
-      if(logged){
+      if (logged) {
         showUserPanel(logged);
       } else {
         showLogin();
@@ -404,5 +416,6 @@
     });
 
   </script>
+
 </body>
 </html>
