@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CELEX - Juegos</title>
-  <link href="super-moon-full-moon-stars-cosmos-clouds-5k-8k-3840x2160-6182.jpg" rel="stylesheet" />
-  <style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>6u
     body {
       margin: 0;
       padding: 0;
@@ -56,7 +56,7 @@
       font-size: 1.1em;
     }
 
-    #loginContainer button, #registerContainer button {
+    #loginContainer button, #registerContainer button, .dropdown-btn {
       width: 100%;
       padding: 15px;
       background: #00ffe1;
@@ -66,9 +66,10 @@
       font-size: 1.2em;
       cursor: pointer;
       transition: background 0.3s ease;
+      margin-top: 10px;
     }
 
-    #loginContainer button:hover, #registerContainer button:hover {
+    #loginContainer button:hover, #registerContainer button:hover, .dropdown-btn:hover {
       background: #00bfa5;
     }
 
@@ -138,7 +139,7 @@
       border-radius: 15px;
       display: none;
       color: white;
-      width: 220px;
+      width: 250px;
       box-shadow: 0 0 10px #00ffe1;
       z-index: 50;
     }
@@ -174,6 +175,9 @@
     <p><strong>Usuario:</strong> <span id="userName">-</span></p>
     <p><strong>Premium:</strong> <span id="userPremium">No</span></p>
     <p><strong>Caduca:</strong> <span id="userExpire">-</span></p>
+    <button class="dropdown-btn" onclick="changeUsername()">Cambiar nombre</button>
+    <button class="dropdown-btn" onclick="changePassword()">Cambiar contraseña</button>
+    <button class="dropdown-btn" onclick="logout()">Cerrar sesión</button>
   </div>
 
   <div id="gameGrid" style="display:none">
@@ -270,13 +274,10 @@
       const email = document.getElementById('regEmail').value;
       const pass = document.getElementById('regPass').value;
       const repeat = document.getElementById('regRepeat').value;
-
       if (!email || !pass || !repeat) return alert('Completa todos los campos.');
       if (pass !== repeat) return alert('Las contraseñas no coinciden.');
-
       const users = JSON.parse(localStorage.getItem('users') || '{}');
       if (users[email]) return alert('El usuario ya existe.');
-
       users[email] = { password: pass, premium: true, expire: '31/12/2025' };
       localStorage.setItem('users', JSON.stringify(users));
       alert('Registro exitoso. Ahora puedes iniciar sesión.');
@@ -287,12 +288,10 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const users = JSON.parse(localStorage.getItem('users') || '{}');
-
       if (!users[email] || users[email].password !== password) {
         alert('Credenciales incorrectas.');
         return;
       }
-
       const user = users[email];
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('username', email);
@@ -305,6 +304,36 @@
       document.getElementById('userExpire').textContent = user.expire || '-';
     }
 
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('username');
+      location.reload();
+    }
+
+    function changeUsername() {
+      const oldEmail = localStorage.getItem('username');
+      const newEmail = prompt('Nuevo correo electrónico:');
+      if (!newEmail) return;
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (users[newEmail]) return alert('Este correo ya está registrado.');
+      users[newEmail] = users[oldEmail];
+      delete users[oldEmail];
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('username', newEmail);
+      alert('Correo cambiado correctamente.');
+      location.reload();
+    }
+
+    function changePassword() {
+      const email = localStorage.getItem('username');
+      const newPass = prompt('Nueva contraseña:');
+      if (!newPass) return;
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+      users[email].password = newPass;
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Contraseña actualizada.');
+    }
+
     function playGame(url) {
       window.open(url, '_blank');
     }
@@ -314,7 +343,6 @@
         const email = localStorage.getItem('username');
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         const user = users[email];
-
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('registerContainer').style.display = 'none';
         document.getElementById('gameGrid').style.display = 'grid';
