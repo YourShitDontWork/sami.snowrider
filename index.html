@@ -7,9 +7,9 @@
   <style>
     * {
       box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
@@ -186,11 +186,12 @@
       <img src="https://via.placeholder.com/200x150" alt="Juego 2">
       <div class="game-title">Juego 2</div>
     </div>
-    <!-- Puedes agregar más juegos aquí -->
   </div>
 
   <script>
-    const users = JSON.parse(localStorage.getItem('users')) || {};
+    function showMessage(msg) {
+      document.getElementById('authMessage').textContent = msg;
+    }
 
     function register() {
       const username = document.getElementById('username').value.trim();
@@ -204,6 +205,8 @@
       if (password !== repeatPassword) {
         return showMessage('Las contraseñas no coinciden');
       }
+
+      let users = JSON.parse(localStorage.getItem('users')) || {};
 
       if (users[username]) {
         return showMessage('El usuario ya existe');
@@ -219,7 +222,7 @@
 
       users[username] = userData;
       localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('loggedInUser', JSON.stringify(userData));
+      localStorage.setItem('loggedInUser', username);
       showLoggedInUI(userData);
     }
 
@@ -227,17 +230,15 @@
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
 
+      let users = JSON.parse(localStorage.getItem('users')) || {};
       const user = users[username];
+
       if (!user || user.password !== password) {
         return showMessage('Credenciales incorrectas');
       }
 
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      localStorage.setItem('loggedInUser', username);
       showLoggedInUI(user);
-    }
-
-    function showMessage(msg) {
-      document.getElementById('authMessage').textContent = msg;
     }
 
     function showLoggedInUI(user) {
@@ -269,13 +270,13 @@
       });
     }
 
-    // Cargar sesión automáticamente si existe
+    // Al cargar la página, mostrar UI si ya hay sesión
     window.onload = function() {
-      const user = JSON.parse(localStorage.getItem('loggedInUser'));
-      if (user) {
-        showLoggedInUI(user);
+      const username = localStorage.getItem('loggedInUser');
+      const users = JSON.parse(localStorage.getItem('users')) || {};
+      if (username && users[username]) {
+        showLoggedInUI(users[username]);
       }
-
       generateSnow();
     }
 
