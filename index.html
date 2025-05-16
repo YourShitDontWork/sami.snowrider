@@ -82,10 +82,111 @@
       font-size: 1em;
       color: #00ffff;
     }
+
+    .login-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .login-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ffff;
+      text-align: center;
+      width: 300px;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #00ffff;
+    }
+
+    .login-box input {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    .login-box button {
+      background: #00ffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .login-box .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .settings-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .user-panel {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #00ffff;
+      border-radius: 10px;
+      padding: 15px;
+      display: none;
+      color: #00ffff;
+      z-index: 10;
+    }
+
+    .user-panel h3 {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      border-bottom: 1px solid #00ffff;
+      padding-bottom: 5px;
+    }
+
+    .user-panel p {
+      margin: 5px 0;
+      font-size: 0.95em;
+    }
   </style>
 </head>
 <body>
   <canvas id="starCanvas"></canvas>
+
+  <div class="settings-icon" onclick="toggleUserPanel()">⚙️</div>
+  <div class="user-panel" id="userPanel">
+    <h3>Información de usuario</h3>
+    <p><strong>Usuario:</strong> admin</p>
+    <p><strong>Fecha de creación:</strong> <span id="creationDate"></span></p>
+    <p><strong>Premium:</strong> No</p>
+  </div>
+
+  <div class="login-container" id="loginContainer">
+    <div class="login-box">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario">
+      <input type="password" id="password" placeholder="Contraseña">
+      <button onclick="login()">Entrar</button>
+      <div class="error" id="loginError"></div>
+    </div>
+  </div>
 
   <h1>CELEX - Juegos</h1>
 
@@ -94,81 +195,43 @@
   </div>
 
   <div class="grid" id="gameGrid">
-    <div class="game">
-      <a href="Slope-Source-code-main/index.html">
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
-        <div class="game-title">Slope</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="Subway-Surfers/index.html">
-        <img src="R.png" alt="Subway Surfers">
-        <div class="game-title">Subway Surfers</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="BurritoBison-main/index.html">
-        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison">
-        <div class="game-title">Burrito Bison</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="drive-mad-main/index.html">
-        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad">
-        <div class="game-title">Drive Mad</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="1v1lol/">
-        <img src="1v1lol/logo.png" alt="1v1.lol">
-        <div class="game-title">1v1.lol</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="bitlife/index.html">
-        <img src="bitlife/logo.png" alt="Bitlife">
-        <div class="game-title">Bitlife</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="driftboss/index.html">
-        <img src="driftboss/branding/logo1.png" alt="Drift Boss">
-        <div class="game-title">Drift Boss</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="happywheels/index.html">
-        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels">
-        <div class="game-title">Happy Wheels</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="pacman/index.html">
-        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman">
-        <div class="game-title">Pacman</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="skibidi1v100/index.html">
-        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100">
-        <div class="game-title">Skibidi 1v100</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="snowrider3d/index.html">
-        <img src="snowrider3d/snow.png" alt="Snow Rider 3D">
-        <div class="game-title">Snow Rider 3D</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="volleyrandom/index.html">
-        <img src="volleyrandom/splash.png" alt="Volley Random">
-        <div class="game-title">Volley Random</div>
-      </a>
-    </div>
+    <!-- Juegos insertados aquí -->
+    <!-- (usa tu misma lista de juegos que ya tienes aquí) -->
+    <!-- ... -->
   </div>
 
   <script>
+    // Login
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const errorDiv = document.getElementById("loginError");
+
+      if (user === "admin" && pass === "1234") {
+        document.getElementById("loginContainer").style.display = "none";
+        const today = new Date();
+        localStorage.setItem("creationDate", today.toLocaleDateString());
+        document.getElementById("creationDate").textContent = today.toLocaleDateString();
+      } else {
+        errorDiv.textContent = "Credenciales incorrectas";
+      }
+    }
+
+    // Mostrar fecha almacenada si existe
+    window.onload = () => {
+      const savedDate = localStorage.getItem("creationDate");
+      if (savedDate) {
+        document.getElementById("creationDate").textContent = savedDate;
+        document.getElementById("loginContainer").style.display = "none";
+      }
+    };
+
+    function toggleUserPanel() {
+      const panel = document.getElementById("userPanel");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+    }
+
+    // Buscar juegos
     function searchGames() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const games = document.querySelectorAll(".game");
@@ -179,7 +242,7 @@
       });
     }
 
-    // Fondo con estrellas animadas
+    // Estrellas animadas
     const canvas = document.getElementById('starCanvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
