@@ -1,234 +1,263 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>CELEX - Juegos</title>
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: #0f0c29;
+      color: white;
       overflow-x: hidden;
+    }
+
+    /* Fondo animado de estrellas */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(white 1px, transparent 1px);
+      background-size: 20px 20px;
+      animation: stars 100s linear infinite;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    @keyframes stars {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100px, -100px);
+      }
     }
 
     h1 {
       text-align: center;
       font-size: 3em;
-      margin-top: 30px;
-      color: #00f0ff;
-      text-shadow: 0 0 15px #00f0ff;
+      color: #0ff;
+      text-shadow: 0 0 15px #0ff;
+      margin: 40px 0 20px;
     }
 
-    .auth-container {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 30px;
-    }
-
-    .auth-box {
-      background-color: #1e1e2f;
-      padding: 30px;
+    .login-panel, .register-panel, .user-panel {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      width: 320px;
-      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+      width: 300px;
+      margin: 20px auto;
+      display: none;
     }
 
-    .auth-box input {
-      width: 90%;
-      padding: 12px;
+    .login-panel.active,
+    .register-panel.active,
+    .user-panel.active {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
       margin: 10px 0;
       border: none;
       border-radius: 5px;
-      background: #333;
-      color: #fff;
-      font-size: 1em;
     }
 
-    .auth-box button {
-      width: 95%;
-      padding: 12px;
-      background: #00f0ff;
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #0ff;
       border: none;
       border-radius: 5px;
-      color: #000;
+      color: black;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s ease;
     }
 
-    .auth-box button:hover {
-      background: #00bcd4;
-    }
-
-    .toggle {
-      color: #aaa;
-      font-size: 0.9em;
-      margin-top: 15px;
-      cursor: pointer;
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 20px;
     }
 
     .user-icon {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      font-size: 30px;
       cursor: pointer;
+      font-size: 24px;
+      margin-left: 20px;
     }
 
-    .user-panel {
-      position: fixed;
-      top: 80px;
-      right: 50%;
-      transform: translateX(50%);
-      background: #1e1e2f;
+    .game-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
       padding: 20px;
-      border-radius: 10px;
-      display: none;
-      width: 300px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      text-align: center;
-      z-index: 10;
+      max-width: 1000px;
+      margin: auto;
     }
 
-    .user-panel p {
-      margin: 10px 0;
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,255,255,0.2);
+      text-align: center;
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 10px;
     }
 
     .logout {
       margin-top: 10px;
-      background: #ff5e57;
+      background: crimson;
       color: white;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      border: none;
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
+  <div class="top-bar">
+    <div class="user-icon" onclick="toggleUserPanel()">👤</div>
+  </div>
 
   <h1>CELEX - Juegos</h1>
 
-  <div class="auth-container">
-    <div class="auth-box" id="auth-box">
-      <input type="text" id="username" placeholder="Nombre de usuario" />
-      <input type="password" id="password" placeholder="Contraseña" />
-      <input type="password" id="confirm-password" placeholder="Repetir contraseña" style="display:none;" />
-      <button onclick="handleAuth()">Iniciar sesión</button>
-      <div class="toggle" onclick="toggleMode()">¿No tienes cuenta? Regístrate</div>
-    </div>
+  <div class="login-panel" id="loginPanel">
+    <h2>Iniciar Sesión</h2>
+    <input type="text" id="loginUsername" placeholder="Usuario">
+    <input type="password" id="loginPassword" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <p style="margin-top:10px; text-align:center;">¿No tienes cuenta? <a href="#" onclick="showRegister()">Regístrate</a></p>
   </div>
 
-  <div class="user-icon" onclick="toggleUserPanel()">👤</div>
+  <div class="register-panel" id="registerPanel">
+    <h2>Registrarse</h2>
+    <input type="text" id="registerUsername" placeholder="Usuario">
+    <input type="password" id="registerPassword" placeholder="Contraseña">
+    <input type="password" id="confirmPassword" placeholder="Confirmar Contraseña">
+    <button onclick="register()">Crear cuenta</button>
+    <p style="margin-top:10px; text-align:center;">¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar sesión</a></p>
+  </div>
 
-  <div class="user-panel" id="user-panel">
-    <p id="user-info">Usuario: </p>
-    <p id="register-date">Fecha de registro: </p>
+  <div class="user-panel hidden" id="userPanel">
+    <h2>Bienvenido, <span id="currentUser"></span></h2>
+    <p>Fecha de registro: <span id="registerDate"></span></p>
     <button class="logout" onclick="logout()">Cerrar sesión</button>
   </div>
 
+  <div class="game-gallery" id="gameGallery" style="display:none;">
+    <!-- Aquí puedes añadir juegos -->
+    <div class="game-card">
+      <img src="https://via.placeholder.com/150" alt="Juego 1">
+      <p>Juego 1</p>
+    </div>
+    <div class="game-card">
+      <img src="https://via.placeholder.com/150" alt="Juego 2">
+      <p>Juego 2</p>
+    </div>
+    <!-- Añade más tarjetas aquí -->
+  </div>
+
   <script>
-    let isRegisterMode = false;
+    let userPanelVisible = false;
 
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirm-password");
-    const authBox = document.getElementById("auth-box");
-    const userPanel = document.getElementById("user-panel");
-
-    function toggleMode() {
-      isRegisterMode = !isRegisterMode;
-      confirmPasswordInput.style.display = isRegisterMode ? "inline-block" : "none";
-      authBox.querySelector("button").textContent = isRegisterMode ? "Registrarse" : "Iniciar sesión";
-      document.querySelector(".toggle").textContent = isRegisterMode ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate";
+    function toggleUserPanel() {
+      userPanelVisible = !userPanelVisible;
+      document.getElementById('userPanel').classList.toggle('hidden', !userPanelVisible);
     }
 
-    function handleAuth() {
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
+    function showLogin() {
+      document.getElementById('loginPanel').classList.add('active');
+      document.getElementById('registerPanel').classList.remove('active');
+    }
 
-      if (!username || !password || (isRegisterMode && !confirmPassword)) {
-        alert("Por favor, completa todos los campos.");
+    function showRegister() {
+      document.getElementById('registerPanel').classList.add('active');
+      document.getElementById('loginPanel').classList.remove('active');
+    }
+
+    function register() {
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (users[username]) {
+        alert('El nombre de usuario ya existe.');
         return;
       }
 
-      if (isRegisterMode) {
-        if (password !== confirmPassword) {
-          alert("Las contraseñas no coinciden.");
-          return;
-        }
-
-        const existingUser = localStorage.getItem(`user_${username}`);
-        if (existingUser) {
-          alert("Este nombre de usuario ya está en uso.");
-          return;
-        }
-
-        const userData = {
-          username,
-          password,
-          registerDate: new Date().toLocaleDateString()
-        };
-
-        localStorage.setItem(`user_${username}`, JSON.stringify(userData));
-        alert("¡Registro exitoso!");
-        toggleMode();
-      } else {
-        const storedData = localStorage.getItem(`user_${username}`);
-        if (!storedData) {
-          alert("Usuario no encontrado.");
-          return;
-        }
-
-        const userData = JSON.parse(storedData);
-        if (userData.password !== password) {
-          alert("Contraseña incorrecta.");
-          return;
-        }
-
-        localStorage.setItem("loggedInUser", username);
-        showUserPanel();
-        authBox.style.display = "none";
+      if (password !== confirm) {
+        alert('Las contraseñas no coinciden.');
+        return;
       }
+
+      users[username] = {
+        password: password,
+        registerDate: new Date().toLocaleDateString()
+      };
+
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Cuenta creada exitosamente.');
+      showLogin();
     }
 
-    function showUserPanel() {
-      const username = localStorage.getItem("loggedInUser");
-      const storedData = localStorage.getItem(`user_${username}`);
-      if (!storedData) return;
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
 
-      const userData = JSON.parse(storedData);
-      document.getElementById("user-info").textContent = `Usuario: ${userData.username}`;
-      document.getElementById("register-date").textContent = `Fecha de registro: ${userData.registerDate}`;
-      userPanel.style.display = "block";
-    }
-
-    function toggleUserPanel() {
-      if (!localStorage.getItem("loggedInUser")) return;
-      userPanel.style.display = userPanel.style.display === "block" ? "none" : "block";
+      if (users[username] && users[username].password === password) {
+        localStorage.setItem('loggedInUser', username);
+        updateUserUI();
+      } else {
+        alert('Credenciales incorrectas.');
+      }
     }
 
     function logout() {
-      localStorage.removeItem("loggedInUser");
-      userPanel.style.display = "none";
-      authBox.style.display = "block";
+      localStorage.removeItem('loggedInUser');
+      location.reload();
     }
 
-    // Mostrar panel automáticamente si ya está logueado
+    function updateUserUI() {
+      const username = localStorage.getItem('loggedInUser');
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (username && users[username]) {
+        document.getElementById('loginPanel').classList.remove('active');
+        document.getElementById('registerPanel').classList.remove('active');
+        document.getElementById('userPanel').classList.remove('hidden');
+        document.getElementById('gameGallery').style.display = 'grid';
+        document.getElementById('currentUser').innerText = username;
+        document.getElementById('registerDate').innerText = users[username].registerDate;
+      }
+    }
+
+    // Auto login UI update
     window.onload = () => {
-      if (localStorage.getItem("loggedInUser")) {
-        authBox.style.display = "none";
-        showUserPanel();
+      const loggedUser = localStorage.getItem('loggedInUser');
+      if (loggedUser) {
+        updateUserUI();
+      } else {
+        showLogin();
       }
     };
   </script>
-
 </body>
 </html>
