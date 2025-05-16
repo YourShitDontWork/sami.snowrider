@@ -6,307 +6,326 @@
   <title>CELEX - Juegos</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet" />
   <style>
-    /* Fuente y resets */
+    /* Reset y base */
     * {
       box-sizing: border-box;
     }
     body, html {
       margin: 0; padding: 0; height: 100%;
       font-family: 'Montserrat', sans-serif;
-      background: #000;
-      color: #eee;
-      overflow-x: hidden;
-    }
-
-    /* Fondo animado nieve */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
       background: black;
-      z-index: -2;
-    }
-    .snowflake {
-      position: fixed;
-      top: -10px;
-      color: #fff;
+      color: white;
+      overflow-x: hidden;
       user-select: none;
-      z-index: -1;
-      font-size: 1em;
-      opacity: 0.8;
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-    @keyframes fall {
-      0% { transform: translateY(0) translateX(0); }
-      100% { transform: translateY(100vh) translateX(20px); }
     }
 
-    /* Contenedor general */
+    /* Fondo copitos de nieve (canvas) */
+    #snow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Contenedor central */
     .container {
-      max-width: 900px;
+      position: relative;
+      max-width: 960px;
       margin: 0 auto;
       padding: 20px;
+      z-index: 10;
     }
 
-    /* Titulo neón centrado */
+    /* Título principal */
     h1 {
+      font-size: 3.5rem;
       font-weight: 700;
-      font-size: 3rem;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       color: #0ff;
       text-shadow:
         0 0 5px #0ff,
         0 0 10px #0ff,
         0 0 20px #0ff,
         0 0 40px #0ff;
-      user-select: none;
     }
 
-    /* Panel usuario superior derecho */
-    #userPanel {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      display: none;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      background: rgba(0, 255, 255, 0.1);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      color: #0ff;
-      user-select: none;
-      z-index: 100;
-    }
-    #userPanel:hover {
-      background: rgba(0, 255, 255, 0.3);
-    }
-    #userIcon {
-      font-size: 1.3rem;
-      user-select: none;
-    }
+    /* Login / Registro */
 
-    /* Ventana info usuario */
-    #userInfo {
-      position: fixed;
-      top: 60px;
-      right: 20px;
-      background: #111;
-      border: 2px solid #0ff;
-      padding: 12px 18px;
-      border-radius: 10px;
-      display: none;
-      width: 240px;
-      color: #0ff;
-      font-size: 0.9rem;
-      user-select: none;
-      z-index: 110;
-    }
-    #userInfo b {
-      display: inline-block;
-      width: 100px;
-      color: #0ff;
-    }
-    #logoutBtn {
-      margin-top: 12px;
-      background: #0ff;
-      border: none;
-      color: #000;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      user-select: none;
-    }
-    #logoutBtn:hover {
-      background: #0cc;
-    }
-
-    /* Formulario Login / Registro */
-    .form-container {
-      max-width: 350px;
-      margin: 0 auto 40px auto;
-      background: #111;
+    .auth-container {
+      max-width: 380px;
+      margin: 0 auto 50px auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px;
       border-radius: 12px;
-      padding: 25px 30px;
-      box-shadow: 0 0 20px #0ff;
+      box-shadow:
+        0 0 10px rgba(0, 255, 255, 0.4);
+      transition: all 0.3s ease;
     }
-    .form-container h2 {
+
+    .auth-container h2 {
       text-align: center;
       margin-bottom: 20px;
-      color: #0ff;
       font-weight: 700;
-      user-select: none;
+      font-size: 1.8rem;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
     }
+
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
       color: #0ff;
-      user-select: none;
     }
-    input[type="text"], input[type="password"] {
+
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 18px;
-      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
       border: none;
+      border-radius: 8px;
       font-size: 1rem;
       outline: none;
-      background: #222;
-      color: #eee;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      box-shadow:
+        inset 0 0 8px rgba(0,255,255,0.3);
+      transition: background 0.3s ease;
     }
-    input::placeholder {
-      color: #777;
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      background: rgba(0,255,255,0.15);
     }
+
     button {
       width: 100%;
       padding: 12px 0;
-      font-weight: 700;
-      font-size: 1rem;
       border: none;
       border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
       background: #0ff;
       color: #000;
       cursor: pointer;
-      user-select: none;
-      transition: background 0.3s ease;
+      box-shadow:
+        0 0 15px #0ff;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     button:hover {
       background: #0cc;
+      color: #fff;
     }
-    .toggle-link {
-      margin-top: 14px;
+
+    /* Cambiar entre login y registro */
+    .switch-auth {
       text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
       color: #0ff;
       cursor: pointer;
       user-select: none;
     }
-    .toggle-link:hover {
+    .switch-auth:hover {
       text-decoration: underline;
     }
-    .hidden {
+
+    /* Sección juegos + búsqueda */
+    #searchSection {
       display: none;
+      margin-bottom: 30px;
     }
 
-    /* Buscador */
-    #searchGamesContainer {
-      max-width: 900px;
-      margin: 0 auto 25px auto;
-      display: none;
+    .search-container {
+      text-align: center;
+      margin-bottom: 25px;
     }
+
     #searchInput {
-      width: 100%;
-      padding: 10px 14px;
-      font-size: 1rem;
-      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      padding: 12px 16px;
+      border-radius: 12px;
       border: none;
-      background: #222;
-      color: #eee;
+      font-size: 1.1rem;
       outline: none;
-      user-select: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      box-shadow:
+        inset 0 0 10px rgba(0,255,255,0.3);
+      transition: background 0.3s ease;
     }
     #searchInput::placeholder {
-      color: #777;
+      color: #a0f0f0;
+    }
+    #searchInput:focus {
+      background: rgba(0,255,255,0.15);
     }
 
     /* Grid de juegos */
-    #gameGrid {
+    .grid {
       display: none;
-      max-width: 900px;
-      margin: 0 auto 60px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+      grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
       gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
     }
+
     .game {
-      background: #111;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #0ff;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
       overflow: hidden;
-      user-select: none;
-      transition: transform 0.2s ease;
+      box-shadow:
+        0 0 15px rgba(0, 255, 255, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 15px;
+      text-align: center;
     }
     .game:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 25px #0ff;
+      box-shadow:
+        0 0 25px rgba(0, 255, 255, 0.7);
     }
+
     .game img {
       width: 100%;
-      height: 100px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      background: #000;
+      height: 110px;
+      object-fit: cover;
+      border-bottom: 2px solid #0ff;
+      user-select: none;
     }
     .game-title {
-      text-align: center;
-      font-weight: 700;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 12px 8px;
       color: #0ff;
+      user-select: none;
+    }
+
+    .game a {
+      color: inherit;
+      text-decoration: none;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Icono usuario arriba a la derecha */
+    #userIcon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      background: #0ff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 15px #0ff;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    #userIcon:hover {
+      background: #0cc;
+    }
+    #userIcon svg {
+      width: 26px;
+      height: 26px;
+      fill: black;
+    }
+
+    /* Ventana info usuario */
+    #userPopup {
+      position: fixed;
+      top: 75px;
+      right: 20px;
+      background: rgba(0, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      width: 230px;
+      box-shadow: 0 0 20px #0ff;
+      color: white;
+      font-weight: 600;
       font-size: 1rem;
+      display: none;
+      z-index: 1100;
+      user-select: none;
+    }
+    #userPopup button {
+      margin-top: 15px;
+      background: #0ff;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      width: 100%;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow:
+        0 0 10px #0ff;
+      transition: background 0.3s ease;
+    }
+    #userPopup button:hover {
+      background: #0cc;
+      color: white;
+    }
+    #userPopup div {
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
-  <!-- Fondo copitos de nieve (lo genero con JS abajo) -->
+
+<canvas id="snow"></canvas>
+
+<div class="container">
 
   <h1>CELEX - Juegos</h1>
 
-  <!-- Panel usuario arriba derecha -->
-  <div id="userPanel" onclick="toggleUserInfo()">
-    <span id="displayUser"></span>
-    <span id="userIcon">👤</span>
-  </div>
-
-  <!-- Ventana info usuario -->
-  <div id="userInfo">
-    <div><b>Usuario:</b> <span id="infoUser"></span></div>
-    <div><b>Registrado:</b> <span id="infoRegistered"></span></div>
-    <div><b>Premium:</b> <span id="infoPremium"></span></div>
-    <div><b>Expira:</b> <span id="infoExpire"></span></div>
-    <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
-  </div>
-
-  <!-- Formularios Login y Registro -->
-  <div id="loginContainer" class="form-container">
+  <!-- Login -->
+  <div id="loginContainer" class="auth-container active">
     <h2>Iniciar Sesión</h2>
     <label for="loginUser">Usuario</label>
-    <input type="text" id="loginUser" placeholder="Usuario" autocomplete="off" />
+    <input type="text" id="loginUser" placeholder="Introduce tu usuario" autocomplete="off" />
     <label for="loginPassword">Contraseña</label>
-    <input type="password" id="loginPassword" placeholder="Contraseña" autocomplete="off" />
-    <button onclick="login()">Iniciar Sesión</button>
-    <div class="toggle-link" onclick="showRegister()">¿No tienes cuenta? Regístrate</div>
+    <input type="password" id="loginPassword" placeholder="Introduce tu contraseña" autocomplete="off" />
+    <button onclick="login()">Entrar</button>
+    <div class="switch-auth" onclick="switchAuth('register')">¿No tienes cuenta? Regístrate</div>
   </div>
 
-  <div id="registerContainer" class="form-container hidden">
-    <h2>Registro</h2>
-    <label for="regUser">Usuario</label>
-    <input type="text" id="regUser" placeholder="Usuario" autocomplete="off" />
-    <label for="regPass">Contraseña</label>
-    <input type="password" id="regPass" placeholder="Contraseña" autocomplete="off" />
-    <label for="regRepeat">Repetir Contraseña</label>
-    <input type="password" id="regRepeat" placeholder="Repetir Contraseña" autocomplete="off" />
-    <button onclick="register()">Registrarse</button>
-    <div class="toggle-link" onclick="showLogin()">¿Ya tienes cuenta? Inicia sesión</div>
+  <!-- Registro -->
+  <div id="registerContainer" class="auth-container" style="display:none;">
+    <h2>Registrarse</h2>
+    <label for="registerUser">Usuario</label>
+    <input type="text" id="registerUser" placeholder="Elige un usuario" autocomplete="off" />
+    <label for="registerPassword">Contraseña</label>
+    <input type="password" id="registerPassword" placeholder="Elige una contraseña" autocomplete="off" />
+    <label for="registerPassword2">Repite la contraseña</label>
+    <input type="password" id="registerPassword2" placeholder="Repite la contraseña" autocomplete="off" />
+    <button onclick="register()">Registrar</button>
+    <div class="switch-auth" onclick="switchAuth('login')">¿Ya tienes cuenta? Inicia sesión</div>
   </div>
 
-  <!-- Buscador de juegos -->
-  <div id="searchGamesContainer">
-    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />
+  <!-- Buscador -->
+  <div id="searchSection" style="display:none;">
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />
+    </div>
   </div>
 
-  <!-- Grid de juegos -->
-  <div id="gameGrid">
+  <!-- Grid Juegos -->
+  <div class="grid" id="gameGrid" style="display:none;">
     <div class="game">
       <a href="Slope-Source-code-main/index.html" target="_blank" rel="noopener noreferrer">
         <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />
@@ -381,201 +400,255 @@
     </div>
   </div>
 
-  <script>
-    // Generar nieve animada
-    const snowCount = 60;
-    for(let i=0; i<snowCount; i++) {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.textContent = '❄';
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.animationDuration = (5 + Math.random() * 10) + 's';
-      snowflake.style.fontSize = (10 + Math.random() * 20) + 'px';
-      snowflake.style.opacity = Math.random();
-      snowflake.style.animationDelay = (Math.random() * 10) + 's';
-      document.body.appendChild(snowflake);
+</div>
+
+<!-- Icono Usuario -->
+<div id="userIcon" onclick="toggleUserPopup()" title="Información del usuario" aria-label="Información del usuario">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+    <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.9 1.7-9.9 5v2.7h19.8v-2.7c0-3.3-6.6-5-9.9-5z"/>
+  </svg>
+</div>
+
+<!-- Ventana info usuario -->
+<div id="userPopup" role="dialog" aria-modal="true" aria-labelledby="infoUser">
+  <div><strong>Usuario:</strong> <span id="infoUser"></span></div>
+  <div><strong>Registrado el:</strong> <span id="infoRegistered"></span></div>
+  <button onclick="logout()">Cerrar sesión</button>
+</div>
+
+<script>
+  // Cambiar entre login y registro
+  function switchAuth(type) {
+    const loginC = document.getElementById('loginContainer');
+    const registerC = document.getElementById('registerContainer');
+    if (type === 'login') {
+      loginC.style.display = 'block';
+      registerC.style.display = 'none';
+    } else {
+      loginC.style.display = 'none';
+      registerC.style.display = 'block';
+    }
+  }
+
+  // Registro
+  function register() {
+    const username = document.getElementById('registerUser').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const password2 = document.getElementById('registerPassword2').value;
+
+    if (!username) {
+      alert('El usuario no puede estar vacío.');
+      return;
+    }
+    if (password.length < 4) {
+      alert('La contraseña debe tener al menos 4 caracteres.');
+      return;
+    }
+    if (password !== password2) {
+      alert('Las contraseñas no coinciden.');
+      return;
     }
 
-    // Elementos UI
-    const loginContainer = document.getElementById('loginContainer');
-    const registerContainer = document.getElementById('registerContainer');
-    const userPanel = document.getElementById('userPanel');
-    const displayUser = document.getElementById('displayUser');
-    const userInfo = document.getElementById('userInfo');
-    const infoUser = document.getElementById('infoUser');
-    const infoRegistered = document.getElementById('infoRegistered');
-    const infoPremium = document.getElementById('infoPremium');
-    const infoExpire = document.getElementById('infoExpire');
-    const searchGamesContainer = document.getElementById('searchGamesContainer');
-    const gameGrid = document.getElementById('gameGrid');
-    const searchInput = document.getElementById('searchInput');
+    // Cargar usuarios almacenados
+    let users = JSON.parse(localStorage.getItem('users') || '{}');
 
-    // Guardar usuarios en localStorage:
-    // Estructura localStorage "users":
-    // {
-    //   "usuario1": {password:"hash", registered:"fecha", premium:false, expire:"fecha"},
-    //   "usuario2": {...}
-    // }
-    // En "sessionStorage" guardamos el usuario logueado: sessionStorage.setItem('currentUser', usuario);
-
-    // Para simplicidad, contraseña se guarda en texto plano (no recomendable en real)
-
-    function loadUsers() {
-      const raw = localStorage.getItem('users');
-      return raw ? JSON.parse(raw) : {};
-    }
-    function saveUsers(users) {
-      localStorage.setItem('users', JSON.stringify(users));
+    // Comprobar duplicado (ignorando mayúsculas)
+    const exists = Object.keys(users).some(u => u.toLowerCase() === username.toLowerCase());
+    if (exists) {
+      alert('El usuario ya existe, elige otro.');
+      return;
     }
 
-    function showRegister() {
-      loginContainer.classList.add('hidden');
-      registerContainer.classList.remove('hidden');
-      clearInputs();
-    }
-    function showLogin() {
-      registerContainer.classList.add('hidden');
-      loginContainer.classList.remove('hidden');
-      clearInputs();
-    }
-    function clearInputs() {
-      document.querySelectorAll('input').forEach(i => i.value = '');
-    }
-
-    // Registro
-    function register() {
-      const user = document.getElementById('regUser').value.trim();
-      const pass = document.getElementById('regPass').value;
-      const passRepeat = document.getElementById('regRepeat').value;
-
-      if(user === '' || pass === '' || passRepeat === '') {
-        alert('Por favor completa todos los campos.');
-        return;
-      }
-      if(pass !== passRepeat) {
-        alert('Las contraseñas no coinciden.');
-        return;
-      }
-
-      const users = loadUsers();
-      if(users[user]) {
-        alert('El nombre de usuario ya existe.');
-        return;
-      }
-
-      // Crear nuevo usuario
-      users[user] = {
-        password: pass,
-        registered: new Date().toISOString(),
-        premium: false,
-        expire: null
-      };
-      saveUsers(users);
-      alert('Registro exitoso. Ahora inicia sesión.');
-      showLogin();
-    }
-
-    // Inicio sesión
-    function login() {
-      const user = document.getElementById('loginUser').value.trim();
-      const pass = document.getElementById('loginPassword').value;
-      if(user === '' || pass === '') {
-        alert('Por favor completa todos los campos.');
-        return;
-      }
-
-      const users = loadUsers();
-      if(!users[user]) {
-        alert('Usuario no encontrado.');
-        return;
-      }
-      if(users[user].password !== pass) {
-        alert('Contraseña incorrecta.');
-        return;
-      }
-
-      // Login correcto
-      sessionStorage.setItem('currentUser', user);
-      showUserPanel();
-      clearInputs();
-      showGames();
-    }
-
-    // Mostrar juegos y UI usuario
-    function showGames() {
-      loginContainer.style.display = 'none';
-      registerContainer.style.display = 'none';
-      searchGamesContainer.style.display = 'block';
-      gameGrid.style.display = 'grid';
-    }
-
-    function showUserPanel() {
-      const user = sessionStorage.getItem('currentUser');
-      if(!user) {
-        userPanel.style.display = 'none';
-        userInfo.style.display = 'none';
-        searchGamesContainer.style.display = 'none';
-        gameGrid.style.display = 'none';
-        loginContainer.style.display = 'block';
-        registerContainer.style.display = 'none';
-        return;
-      }
-      userPanel.style.display = 'flex';
-      displayUser.textContent = user;
-
-      // Mostrar info usuario en ventana
-      const users = loadUsers();
-      const data = users[user];
-
-      infoUser.textContent = user;
-      infoRegistered.textContent = new Date(data.registered).toLocaleDateString();
-      infoPremium.textContent = data.premium ? 'Sí' : 'No';
-      infoExpire.textContent = data.expire ? new Date(data.expire).toLocaleDateString() : '-';
-
-      showGames();
-    }
-
-    // Toggle ventana info usuario
-    function toggleUserInfo() {
-      if(userInfo.style.display === 'block') {
-        userInfo.style.display = 'none';
-      } else {
-        userInfo.style.display = 'block';
-      }
-    }
-
-    // Cerrar sesión
-    function logout() {
-      sessionStorage.removeItem('currentUser');
-      userInfo.style.display = 'none';
-      userPanel.style.display = 'none';
-      gameGrid.style.display = 'none';
-      searchGamesContainer.style.display = 'none';
-      loginContainer.style.display = 'block';
-      registerContainer.style.display = 'none';
-      clearInputs();
-    }
-
-    // Buscar juegos (filtra por texto)
-    function searchGames() {
-      const term = searchInput.value.toLowerCase();
-      const games = gameGrid.querySelectorAll('.game');
-      games.forEach(game => {
-        const title = game.querySelector('.game-title').textContent.toLowerCase();
-        if(title.includes(term)) {
-          game.style.display = 'flex';
-        } else {
-          game.style.display = 'none';
-        }
-      });
-    }
-
-    // Al cargar la página detecta si hay usuario logueado
-    window.onload = () => {
-      if(sessionStorage.getItem('currentUser')) {
-        showUserPanel();
-      }
+    // Guardar nuevo usuario con fecha registro
+    users[username] = {
+      password: password,
+      registered: new Date().toISOString()
     };
-  </script>
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Registro exitoso. Ahora inicia sesión.');
+    switchAuth('login');
+
+    // Limpiar inputs
+    document.getElementById('registerUser').value = '';
+    document.getElementById('registerPassword').value = '';
+    document.getElementById('registerPassword2').value = '';
+  }
+
+  // Login
+  function login() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!username) {
+      alert('Introduce tu usuario.');
+      return;
+    }
+    if (!password) {
+      alert('Introduce tu contraseña.');
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users') || '{}');
+
+    // Buscar usuario ignorando mayúsculas
+    let matchedUser = null;
+    for (const user in users) {
+      if (user.toLowerCase() === username.toLowerCase()) {
+        matchedUser = user;
+        break;
+      }
+    }
+
+    if (!matchedUser) {
+      alert('Usuario no encontrado.');
+      return;
+    }
+
+    if (users[matchedUser].password !== password) {
+      alert('Contraseña incorrecta.');
+      return;
+    }
+
+    // Guardar sesión en localStorage
+    localStorage.setItem('currentUser', matchedUser);
+    localStorage.setItem('currentUserRegistered', users[matchedUser].registered);
+
+    onLoginSuccess(matchedUser, users[matchedUser].registered);
+  }
+
+  // Al iniciar sesión correctamente
+  function onLoginSuccess(user, registered) {
+    // Ocultar login/registro
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('registerContainer').style.display = 'none';
+
+    // Mostrar buscador y juegos
+    document.getElementById('searchSection').style.display = 'block';
+    document.getElementById('gameGrid').style.display = 'grid';
+
+    // Mostrar icono usuario
+    const icon = document.getElementById('userIcon');
+    icon.style.display = 'flex';
+
+    // Guardar datos en el icono para mostrar info
+    icon.dataset.user = user;
+    icon.dataset.registered = registered;
+
+    // Actualizar popup info usuario
+    document.getElementById('infoUser').textContent = user;
+    document.getElementById('infoRegistered').textContent = new Date(registered).toLocaleDateString();
+
+    // Limpiar campos login
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPassword').value = '';
+  }
+
+  // Comprobar si ya está logueado al cargar la página
+  window.onload = function() {
+    let currentUser = localStorage.getItem('currentUser');
+    let currentUserRegistered = localStorage.getItem('currentUserRegistered');
+    if (currentUser && currentUserRegistered) {
+      onLoginSuccess(currentUser, currentUserRegistered);
+    }
+    // Iniciar animación fondo nieve
+    startSnow();
+  }
+
+  // Cerrar sesión
+  function logout() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserRegistered');
+
+    // Ocultar panel juegos y buscador
+    document.getElementById('searchSection').style.display = 'none';
+    document.getElementById('gameGrid').style.display = 'none';
+
+    // Ocultar icono y popup usuario
+    document.getElementById('userIcon').style.display = 'none';
+    document.getElementById('userPopup').style.display = 'none';
+
+    // Mostrar login
+    switchAuth('login');
+    document.getElementById('loginContainer').style.display = 'block';
+  }
+
+  // Mostrar/Ocultar popup info usuario
+  function toggleUserPopup() {
+    const popup = document.getElementById('userPopup');
+    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+  }
+
+  // Filtrar juegos por búsqueda
+  function searchGames() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const games = document.querySelectorAll('.game');
+    games.forEach(game => {
+      const title = game.querySelector('.game-title').textContent.toLowerCase();
+      game.style.display = title.includes(search) ? 'flex' : 'none';
+    });
+  }
+
+
+  /* Fondo animado copitos de nieve */
+  function startSnow() {
+    const canvas = document.getElementById('snow');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    class Snowflake {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = 1 + Math.random() * 3;
+        this.speed = 0.5 + Math.random() * 1.5;
+        this.wind = Math.random() * 1 - 0.5;
+      }
+      update() {
+        this.y += this.speed;
+        this.x += this.wind;
+        if (this.y > height) this.reset();
+        if (this.x > width) this.x = 0;
+        if (this.x < 0) this.x = width;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fill();
+      }
+    }
+
+    let flakes = [];
+    const flakesCount = 150;
+    for (let i = 0; i < flakesCount; i++) {
+      flakes.push(new Snowflake());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      flakes.forEach(flake => {
+        flake.update();
+        flake.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    animate();
+  }
+</script>
 </body>
 </html>
