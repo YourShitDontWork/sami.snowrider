@@ -2,652 +2,239 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CELEX - Juegos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet" />
   <style>
-    /* Reset y base */
-    * {
-      box-sizing: border-box;
-    }
-    body, html {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Montserrat', sans-serif;
-      background: black;
-      color: white;
-      overflow-x: hidden;
-      user-select: none;
-    }
-
-    /* Fondo copitos de nieve (canvas) */
-    #snow {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Contenedor central */
-    .container {
-      position: relative;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 20px;
-      z-index: 10;
-    }
-
-    /* Título principal */
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 40px;
-      color: #0ff;
-      text-shadow:
-        0 0 5px #0ff,
-        0 0 10px #0ff,
-        0 0 20px #0ff,
-        0 0 40px #0ff;
-    }
-
-    /* Login / Registro */
-
-    .auth-container {
-      max-width: 380px;
-      margin: 0 auto 50px auto;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow:
-        0 0 10px rgba(0, 255, 255, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    .auth-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: #0ff;
-      text-shadow: 0 0 5px #0ff;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #0ff;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px 14px;
-      margin-bottom: 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      box-shadow:
-        inset 0 0 8px rgba(0,255,255,0.3);
-      transition: background 0.3s ease;
-    }
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      background: rgba(0,255,255,0.15);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px 0;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      background: #0ff;
-      color: #000;
-      cursor: pointer;
-      box-shadow:
-        0 0 15px #0ff;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    button:hover {
-      background: #0cc;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #fff;
     }
 
-    /* Cambiar entre login y registro */
-    .switch-auth {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 0.9rem;
-      color: #0ff;
-      cursor: pointer;
-      user-select: none;
-    }
-    .switch-auth:hover {
-      text-decoration: underline;
+    .login-container, .search-container, .grid {
+      display: none;
     }
 
-    /* Sección juegos + búsqueda */
-    #searchSection {
-      display: none;
-      margin-bottom: 30px;
+    .login-container.active,
+    .game-panel.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 320px;
+    }
+
+    .login-box input {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .login-box button {
+      padding: 10px 20px;
+      background: #00bfff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .toggle-btn {
+      margin-top: 15px;
+      color: #00bfff;
+      cursor: pointer;
+      text-decoration: underline;
     }
 
     .search-container {
       text-align: center;
-      margin-bottom: 25px;
+      padding: 20px;
+      width: 100%;
+      max-width: 900px;
     }
 
-    #searchInput {
-      width: 80%;
-      max-width: 400px;
-      padding: 12px 16px;
-      border-radius: 12px;
+    .search-container input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 5px;
       border: none;
-      font-size: 1.1rem;
       outline: none;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      box-shadow:
-        inset 0 0 10px rgba(0,255,255,0.3);
-      transition: background 0.3s ease;
-    }
-    #searchInput::placeholder {
-      color: #a0f0f0;
-    }
-    #searchInput:focus {
-      background: rgba(0,255,255,0.15);
     }
 
-    /* Grid de juegos */
     .grid {
-      display: none;
-      grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
-      gap: 20px;
-      max-width: 960px;
-      margin: 0 auto;
       display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 900px;
+      box-sizing: border-box;
     }
 
     .game {
-      background: rgba(255,255,255,0.05);
-      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow:
-        0 0 15px rgba(0, 255, 255, 0.3);
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
       text-align: center;
+      transition: transform 0.2s;
+      cursor: pointer;
     }
+
     .game:hover {
       transform: scale(1.05);
-      box-shadow:
-        0 0 25px rgba(0, 255, 255, 0.7);
     }
 
     .game img {
       width: 100%;
-      height: 110px;
+      height: 150px;
       object-fit: cover;
-      border-bottom: 2px solid #0ff;
       user-select: none;
     }
+
     .game-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      padding: 12px 8px;
-      color: #0ff;
-      user-select: none;
-    }
-
-    .game a {
-      color: inherit;
-      text-decoration: none;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    /* Icono usuario arriba a la derecha */
-    #userIcon {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 48px;
-      height: 48px;
-      background: #0ff;
-      border-radius: 50%;
-      box-shadow:
-        0 0 15px #0ff;
-      cursor: pointer;
-      display: none;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      transition: background 0.3s ease;
-    }
-    #userIcon:hover {
-      background: #0cc;
-    }
-    #userIcon svg {
-      width: 26px;
-      height: 26px;
-      fill: black;
-    }
-
-    /* Ventana info usuario */
-    #userPopup {
-      position: fixed;
-      top: 75px;
-      right: 20px;
-      background: rgba(0, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 20px;
-      width: 230px;
-      box-shadow: 0 0 20px #0ff;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      display: none;
-      z-index: 1100;
-      user-select: none;
-    }
-    #userPopup button {
-      margin-top: 15px;
-      background: #0ff;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      padding: 8px;
-      width: 100%;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow:
-        0 0 10px #0ff;
-      transition: background 0.3s ease;
-    }
-    #userPopup button:hover {
-      background: #0cc;
-      color: white;
-    }
-    #userPopup div {
-      margin-bottom: 8px;
+      padding: 10px;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.6);
     }
   </style>
 </head>
 <body>
 
-<canvas id="snow"></canvas>
+  <!-- Login / Registro -->
+  <div class="login-container active" id="loginContainer">
+    <div class="login-box" id="loginBox">
+      <h2>Inicia Sesión</h2>
+      <input type="text" id="username" placeholder="Nombre de usuario" />
+      <input type="password" id="password" placeholder="Contraseña" />
+      <button onclick="login()">Entrar</button>
+      <div class="toggle-btn" onclick="toggleRegister()">¿No tienes cuenta? Regístrate</div>
+    </div>
 
-<div class="container">
-
-  <h1>CELEX - Juegos</h1>
-
-  <!-- Login -->
-  <div id="loginContainer" class="auth-container active">
-    <h2>Iniciar Sesión</h2>
-    <label for="loginUser">Usuario</label>
-    <input type="text" id="loginUser" placeholder="Introduce tu usuario" autocomplete="off" />
-    <label for="loginPassword">Contraseña</label>
-    <input type="password" id="loginPassword" placeholder="Introduce tu contraseña" autocomplete="off" />
-    <button onclick="login()">Entrar</button>
-    <div class="switch-auth" onclick="switchAuth('register')">¿No tienes cuenta? Regístrate</div>
+    <div class="login-box" id="registerBox" style="display:none;">
+      <h2>Regístrate</h2>
+      <input type="text" id="regUsername" placeholder="Nombre de usuario" />
+      <input type="password" id="regPassword" placeholder="Contraseña" />
+      <input type="password" id="regPasswordConfirm" placeholder="Repite la contraseña" />
+      <button onclick="register()">Registrarse</button>
+      <div class="toggle-btn" onclick="toggleRegister()">¿Ya tienes cuenta? Inicia sesión</div>
+    </div>
   </div>
 
-  <!-- Registro -->
-  <div id="registerContainer" class="auth-container" style="display:none;">
-    <h2>Registrarse</h2>
-    <label for="registerUser">Usuario</label>
-    <input type="text" id="registerUser" placeholder="Elige un usuario" autocomplete="off" />
-    <label for="registerPassword">Contraseña</label>
-    <input type="password" id="registerPassword" placeholder="Elige una contraseña" autocomplete="off" />
-    <label for="registerPassword2">Repite la contraseña</label>
-    <input type="password" id="registerPassword2" placeholder="Repite la contraseña" autocomplete="off" />
-    <button onclick="register()">Registrar</button>
-    <div class="switch-auth" onclick="switchAuth('login')">¿Ya tienes cuenta? Inicia sesión</div>
-  </div>
-
-  <!-- Buscador -->
-  <div id="searchSection" style="display:none;">
+  <!-- Juegos -->
+  <div class="game-panel" id="gamePanel">
     <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />
+      <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
+    </div>
+
+    <div class="grid" id="gameGrid">
+      <div class="game"><a href="Slope-Source-code-main/index.html"><img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope"><div class="game-title">Slope</div></a></div>
+      <div class="game"><a href="Subway-Surfers/index.html"><img src="R.png" alt="Subway Surfers"><div class="game-title">Subway Surfers</div></a></div>
+      <div class="game"><a href="BurritoBison-main/index.html"><img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison"><div class="game-title">Burrito Bison</div></a></div>
+      <div class="game"><a href="drive-mad-main/index.html"><img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad"><div class="game-title">Drive Mad</div></a></div>
+      <div class="game"><a href="1v1lol/"><img src="1v1lol/logo.png" alt="1v1.lol"><div class="game-title">1v1.lol</div></a></div>
+      <div class="game"><a href="bitlife/index.html"><img src="bitlife/logo.png" alt="Bitlife"><div class="game-title">Bitlife</div></a></div>
+      <div class="game"><a href="driftboss/index.html"><img src="driftboss/branding/logo1.png" alt="Drift Boss"><div class="game-title">Drift Boss</div></a></div>
+      <div class="game"><a href="happywheels/index.html"><img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels"><div class="game-title">Happy Wheels</div></a></div>
+      <div class="game"><a href="pacman/index.html"><img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman"><div class="game-title">Pacman</div></a></div>
+      <div class="game"><a href="skibidi1v100/index.html"><img src="skibidi1v100/logo.png" alt="Skibidi 1v100"><div class="game-title">Skibidi 1v100</div></a></div>
+      <div class="game"><a href="snowrider3d/index.html"><img src="snowrider3d/snow.png" alt="Snow Rider 3D"><div class="game-title">Snow Rider 3D</div></a></div>
+      <div class="game"><a href="volleyrandom/index.html"><img src="volleyrandom/splash.png" alt="Volley Random"><div class="game-title">Volley Random</div></a></div>
     </div>
   </div>
-
-  <!-- Grid Juegos -->
-  <div class="grid" id="gameGrid" style="display:none;">
-    <div class="game">
-      <a href="Slope-Source-code-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />
-        <div class="game-title">Slope</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="Subway-Surfers/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="R.png" alt="Subway Surfers" />
-        <div class="game-title">Subway Surfers</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="BurritoBison-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />
-        <div class="game-title">Burrito Bison</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="drive-mad-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />
-        <div class="game-title">Drive Mad</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="1v1lol/" target="_blank" rel="noopener noreferrer">
-        <img src="1v1lol/logo.png" alt="1v1.lol" />
-        <div class="game-title">1v1.lol</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="bitlife/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="bitlife/logo.png" alt="Bitlife" />
-        <div class="game-title">Bitlife</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="driftboss/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="driftboss/branding/logo1.png" alt="Drift Boss" />
-        <div class="game-title">Drift Boss</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="happywheels/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels" />
-        <div class="game-title">Happy Wheels</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="pacman/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman" />
-        <div class="game-title">Pacman</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="skibidi1v100/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="skibidi1v100/logo.png" alt="Skibidi 1v100" />
-        <div class="game-title">Skibidi 1v100</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="snowrider3d/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="snowrider3d/snow.png" alt="Snow Rider 3D" />
-        <div class="game-title">Snow Rider 3D</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="volleyrandom/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="volleyrandom/splash.png" alt="Volley Random" />
-        <div class="game-title">Volley Random</div>
-      </a>
-    </div>
-  </div>
-
-</div>
-
-<!-- Icono Usuario -->
-<div id="userIcon" onclick="toggleUserPopup()" title="Información del usuario" aria-label="Información del usuario">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
-    <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.9 1.7-9.9 5v2.7h19.8v-2.7c0-3.3-6.6-5-9.9-5z"/>
-  </svg>
-</div>
-
-<!-- Ventana info usuario -->
-<div id="userPopup" role="dialog" aria-modal="true" aria-labelledby="infoUser">
-  <div><strong>Usuario:</strong> <span id="infoUser"></span></div>
-  <div><strong>Registrado el:</strong> <span id="infoRegistered"></span></div>
-  <button onclick="logout()">Cerrar sesión</button>
-</div>
 
 <script>
-  // Cambiar entre login y registro
-  function switchAuth(type) {
-    const loginC = document.getElementById('loginContainer');
-    const registerC = document.getElementById('registerContainer');
-    if (type === 'login') {
-      loginC.style.display = 'block';
-      registerC.style.display = 'none';
-    } else {
-      loginC.style.display = 'none';
-      registerC.style.display = 'block';
-    }
-  }
+  // Usuarios cargados por defecto
+  let users = JSON.parse(localStorage.getItem('users')) || {
+    'admin': '1234',
+    'usuario1': 'abcd',
+    'gamer': 'gk4'
+  };
 
-  // Registro
-  function register() {
-    const username = document.getElementById('registerUser').value.trim();
-    const password = document.getElementById('registerPassword').value;
-    const password2 = document.getElementById('registerPassword2').value;
-
-    if (!username) {
-      alert('El usuario no puede estar vacío.');
-      return;
-    }
-    if (password.length < 4) {
-      alert('La contraseña debe tener al menos 4 caracteres.');
-      return;
-    }
-    if (password !== password2) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
-
-    // Cargar usuarios almacenados
-    let users = JSON.parse(localStorage.getItem('users') || '{}');
-
-    // Comprobar duplicado (ignorando mayúsculas)
-    const exists = Object.keys(users).some(u => u.toLowerCase() === username.toLowerCase());
-    if (exists) {
-      alert('El usuario ya existe, elige otro.');
-      return;
-    }
-
-    // Guardar nuevo usuario con fecha registro
-    users[username] = {
-      password: password,
-      registered: new Date().toISOString()
-    };
+  // Guarda usuarios en localStorage
+  function saveUsers() {
     localStorage.setItem('users', JSON.stringify(users));
-
-    alert('Registro exitoso. Ahora inicia sesión.');
-    switchAuth('login');
-
-    // Limpiar inputs
-    document.getElementById('registerUser').value = '';
-    document.getElementById('registerPassword').value = '';
-    document.getElementById('registerPassword2').value = '';
   }
 
-  // Login
+  function toggleRegister() {
+    const loginBox = document.getElementById('loginBox');
+    const registerBox = document.getElementById('registerBox');
+    if (loginBox.style.display === 'none') {
+      loginBox.style.display = 'block';
+      registerBox.style.display = 'none';
+    } else {
+      loginBox.style.display = 'none';
+      registerBox.style.display = 'block';
+    }
+  }
+
   function login() {
-    const username = document.getElementById('loginUser').value.trim();
-    const password = document.getElementById('loginPassword').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-    if (!username) {
-      alert('Introduce tu usuario.');
-      return;
-    }
-    if (!password) {
-      alert('Introduce tu contraseña.');
+    if (!username || !password) {
+      alert('Por favor completa todos los campos');
       return;
     }
 
-    let users = JSON.parse(localStorage.getItem('users') || '{}');
-
-    // Buscar usuario ignorando mayúsculas
-    let matchedUser = null;
-    for (const user in users) {
-      if (user.toLowerCase() === username.toLowerCase()) {
-        matchedUser = user;
-        break;
-      }
+    if (users[username] && users[username] === password) {
+      document.getElementById('loginContainer').classList.remove('active');
+      document.getElementById('gamePanel').classList.add('active');
+      alert('¡Bienvenido, ' + username + '!');
+    } else {
+      alert('Usuario o contraseña incorrectos');
     }
+  }
 
-    if (!matchedUser) {
-      alert('Usuario no encontrado.');
+  function register() {
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const passwordConfirm = document.getElementById('regPasswordConfirm').value.trim();
+
+    if (!username || !password || !passwordConfirm) {
+      alert('Por favor completa todos los campos');
       return;
     }
 
-    if (users[matchedUser].password !== password) {
-      alert('Contraseña incorrecta.');
+    if (users[username]) {
+      alert('Este nombre de usuario ya está en uso');
       return;
     }
 
-    // Guardar sesión en localStorage
-    localStorage.setItem('currentUser', matchedUser);
-    localStorage.setItem('currentUserRegistered', users[matchedUser].registered);
-
-    onLoginSuccess(matchedUser, users[matchedUser].registered);
-  }
-
-  // Al iniciar sesión correctamente
-  function onLoginSuccess(user, registered) {
-    // Ocultar login/registro
-    document.getElementById('loginContainer').style.display = 'none';
-    document.getElementById('registerContainer').style.display = 'none';
-
-    // Mostrar buscador y juegos
-    document.getElementById('searchSection').style.display = 'block';
-    document.getElementById('gameGrid').style.display = 'grid';
-
-    // Mostrar icono usuario
-    const icon = document.getElementById('userIcon');
-    icon.style.display = 'flex';
-
-    // Guardar datos en el icono para mostrar info
-    icon.dataset.user = user;
-    icon.dataset.registered = registered;
-
-    // Actualizar popup info usuario
-    document.getElementById('infoUser').textContent = user;
-    document.getElementById('infoRegistered').textContent = new Date(registered).toLocaleDateString();
-
-    // Limpiar campos login
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPassword').value = '';
-  }
-
-  // Comprobar si ya está logueado al cargar la página
-  window.onload = function() {
-    let currentUser = localStorage.getItem('currentUser');
-    let currentUserRegistered = localStorage.getItem('currentUserRegistered');
-    if (currentUser && currentUserRegistered) {
-      onLoginSuccess(currentUser, currentUserRegistered);
+    if (password !== passwordConfirm) {
+      alert('Las contraseñas no coinciden');
+      return;
     }
-    // Iniciar animación fondo nieve
-    startSnow();
+
+    users[username] = password;
+    saveUsers();
+    alert('Usuario registrado con éxito. Ahora puedes iniciar sesión.');
+    toggleRegister();
   }
 
-  // Cerrar sesión
-  function logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('currentUserRegistered');
-
-    // Ocultar panel juegos y buscador
-    document.getElementById('searchSection').style.display = 'none';
-    document.getElementById('gameGrid').style.display = 'none';
-
-    // Ocultar icono y popup usuario
-    document.getElementById('userIcon').style.display = 'none';
-    document.getElementById('userPopup').style.display = 'none';
-
-    // Mostrar login
-    switchAuth('login');
-    document.getElementById('loginContainer').style.display = 'block';
-  }
-
-  // Mostrar/Ocultar popup info usuario
-  function toggleUserPopup() {
-    const popup = document.getElementById('userPopup');
-    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
-  }
-
-  // Filtrar juegos por búsqueda
   function searchGames() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
+    const input = document.getElementById('searchInput').value.toLowerCase();
     const games = document.querySelectorAll('.game');
+
     games.forEach(game => {
       const title = game.querySelector('.game-title').textContent.toLowerCase();
-      game.style.display = title.includes(search) ? 'flex' : 'none';
+      game.style.display = title.includes(input) ? '' : 'none';
     });
-  }
-
-
-  /* Fondo animado copitos de nieve */
-  function startSnow() {
-    const canvas = document.getElementById('snow');
-    const ctx = canvas.getContext('2d');
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    class Snowflake {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.radius = 1 + Math.random() * 3;
-        this.speed = 0.5 + Math.random() * 1.5;
-        this.wind = Math.random() * 1 - 0.5;
-      }
-      update() {
-        this.y += this.speed;
-        this.x += this.wind;
-        if (this.y > height) this.reset();
-        if (this.x > width) this.x = 0;
-        if (this.x < 0) this.x = width;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fill();
-      }
-    }
-
-    let flakes = [];
-    const flakesCount = 150;
-    for (let i = 0; i < flakesCount; i++) {
-      flakes.push(new Snowflake());
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      flakes.forEach(flake => {
-        flake.update();
-        flake.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    });
-
-    animate();
   }
 </script>
 </body>
