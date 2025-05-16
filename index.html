@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>CELEX - Juegos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -13,18 +13,29 @@
 
     body {
       margin: 0;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      background: black;
+      color: white;
+      overflow-x: hidden;
     }
 
-    .login-container, .game-panel {
+    canvas#snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .login-container, .register-container, .game-panel {
       display: none;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      position: relative;
+      z-index: 1;
     }
 
-    .login-container.active {
+    .login-container.active, .register-container.active {
       display: flex;
     }
 
@@ -32,15 +43,15 @@
       display: block;
     }
 
-    .login-box {
-      background: rgba(0, 0, 0, 0.8);
+    .box {
+      background: rgba(0, 0, 0, 0.85);
       padding: 30px;
       border-radius: 15px;
       text-align: center;
       box-shadow: 0 0 10px #000;
     }
 
-    .login-box input {
+    .box input {
       margin: 10px 0;
       padding: 12px;
       width: 260px;
@@ -48,13 +59,22 @@
       border-radius: 8px;
     }
 
-    .login-box button {
+    .box button {
       padding: 12px 25px;
       background: #00bfff;
       border: none;
       color: white;
       border-radius: 8px;
       font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .box a {
+      color: #00bfff;
+      display: block;
+      margin-top: 15px;
+      text-decoration: underline;
       cursor: pointer;
     }
 
@@ -153,78 +173,164 @@
   </style>
 </head>
 <body>
-  <!-- Login -->
-  <div class="login-container active" id="loginContainer">
-    <div class="login-box">
-      <h2>Inicia Sesión</h2>
-      <input type="text" id="username" placeholder="Nombre de usuario" />
-      <input type="password" id="password" placeholder="Contraseña" />
-      <button onclick="login()">Entrar</button>
-    </div>
-  </div>
+<canvas id="snow"></canvas>
 
-  <!-- Panel de juegos -->
-  <div class="game-panel" id="gamePanel">
-    <div class="header">
-      <h1>CELEX - Juegos</h1>
-      <div class="user-icon">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil">
-        <div class="user-popup" id="userInfo">
-          <p><strong>Usuario:</strong> <span id="infoUsername"></span></p>
-          <p><strong>Estado:</strong> Conectado</p>
-        </div>
+<!-- Login -->
+<div class="login-container active" id="loginContainer">
+  <div class="box">
+    <h2>Inicia Sesión</h2>
+    <input type="text" id="loginUser" placeholder="Nombre de usuario">
+    <input type="password" id="loginPass" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <a onclick="toggleRegister()">¿No tienes cuenta? Regístrate</a>
+  </div>
+</div>
+
+<!-- Registro -->
+<div class="register-container" id="registerContainer">
+  <div class="box">
+    <h2>Regístrate</h2>
+    <input type="text" id="registerUser" placeholder="Nombre de usuario">
+    <input type="password" id="registerPass" placeholder="Contraseña">
+    <button onclick="register()">Crear cuenta</button>
+    <a onclick="toggleLogin()">¿Ya tienes cuenta? Inicia sesión</a>
+  </div>
+</div>
+
+<!-- Panel de juegos -->
+<div class="game-panel" id="gamePanel">
+  <div class="header">
+    <h1>CELEX - Juegos</h1>
+    <div class="user-icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil">
+      <div class="user-popup" id="userInfo">
+        <p><strong>Usuario:</strong> <span id="infoUsername"></span></p>
+        <p><strong>Estado:</strong> Conectado</p>
       </div>
     </div>
-
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
-    </div>
-
-    <div class="grid" id="gameGrid">
-      <div class="game"><a href="Slope-Source-code-main/index.html"><img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope"><div class="game-title">Slope</div></a></div>
-      <div class="game"><a href="Subway-Surfers/index.html"><img src="R.png" alt="Subway Surfers"><div class="game-title">Subway Surfers</div></a></div>
-      <div class="game"><a href="BurritoBison-main/index.html"><img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison"><div class="game-title">Burrito Bison</div></a></div>
-      <div class="game"><a href="drive-mad-main/index.html"><img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad"><div class="game-title">Drive Mad</div></a></div>
-      <div class="game"><a href="1v1lol/"><img src="1v1lol/logo.png" alt="1v1.lol"><div class="game-title">1v1.lol</div></a></div>
-      <div class="game"><a href="bitlife/index.html"><img src="bitlife/logo.png" alt="Bitlife"><div class="game-title">Bitlife</div></a></div>
-      <div class="game"><a href="driftboss/index.html"><img src="driftboss/branding/logo1.png" alt="Drift Boss"><div class="game-title">Drift Boss</div></a></div>
-      <div class="game"><a href="happywheels/index.html"><img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels"><div class="game-title">Happy Wheels</div></a></div>
-      <div class="game"><a href="pacman/index.html"><img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman"><div class="game-title">Pacman</div></a></div>
-      <div class="game"><a href="skibidi1v100/index.html"><img src="skibidi1v100/logo.png" alt="Skibidi 1v100"><div class="game-title">Skibidi 1v100</div></a></div>
-      <div class="game"><a href="snowrider3d/index.html"><img src="snowrider3d/snow.png" alt="Snow Rider 3D"><div class="game-title">Snow Rider 3D</div></a></div>
-      <div class="game"><a href="volleyrandom/index.html"><img src="volleyrandom/splash.png" alt="Volley Random"><div class="game-title">Volley Random</div></a></div>
-    </div>
   </div>
 
-  <script>
-    const users = {
-      'admin': '1234',
-      'usuario1': 'abcd',
-      'gamer': 'gk4'
-    };
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
+  </div>
 
-    function login() {
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+  <div class="grid" id="gameGrid">
+    <div class="game"><a href="Slope-Source-code-main/index.html"><img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope"><div class="game-title">Slope</div></a></div>
+    <div class="game"><a href="Subway-Surfers/index.html"><img src="R.png" alt="Subway Surfers"><div class="game-title">Subway Surfers</div></a></div>
+    <div class="game"><a href="BurritoBison-main/index.html"><img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison"><div class="game-title">Burrito Bison</div></a></div>
+    <div class="game"><a href="drive-mad-main/index.html"><img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad"><div class="game-title">Drive Mad</div></a></div>
+    <div class="game"><a href="1v1lol/"><img src="1v1lol/logo.png" alt="1v1.lol"><div class="game-title">1v1.lol</div></a></div>
+    <div class="game"><a href="bitlife/index.html"><img src="bitlife/logo.png" alt="Bitlife"><div class="game-title">Bitlife</div></a></div>
+    <div class="game"><a href="driftboss/index.html"><img src="driftboss/branding/logo1.png" alt="Drift Boss"><div class="game-title">Drift Boss</div></a></div>
+    <div class="game"><a href="happywheels/index.html"><img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels"><div class="game-title">Happy Wheels</div></a></div>
+    <div class="game"><a href="pacman/index.html"><img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman"><div class="game-title">Pacman</div></a></div>
+    <div class="game"><a href="skibidi1v100/index.html"><img src="skibidi1v100/logo.png" alt="Skibidi 1v100"><div class="game-title">Skibidi 1v100</div></a></div>
+    <div class="game"><a href="snowrider3d/index.html"><img src="snowrider3d/snow.png" alt="Snow Rider 3D"><div class="game-title">Snow Rider 3D</div></a></div>
+    <div class="game"><a href="volleyrandom/index.html"><img src="volleyrandom/splash.png" alt="Volley Random"><div class="game-title">Volley Random</div></a></div>
+  </div>
+</div>
 
-      if (users[username] && users[username] === password) {
-        document.getElementById('loginContainer').classList.remove('active');
-        document.getElementById('gamePanel').classList.add('active');
-        document.getElementById('infoUsername').innerText = username;
-      } else {
-        alert('Usuario o contraseña incorrectos');
+<script>
+  function toggleRegister() {
+    document.getElementById('loginContainer').classList.remove('active');
+    document.getElementById('registerContainer').classList.add('active');
+  }
+
+  function toggleLogin() {
+    document.getElementById('registerContainer').classList.remove('active');
+    document.getElementById('loginContainer').classList.add('active');
+  }
+
+  function register() {
+    const user = document.getElementById('registerUser').value.trim();
+    const pass = document.getElementById('registerPass').value.trim();
+
+    if (!user || !pass) {
+      alert('Rellena todos los campos');
+      return;
+    }
+
+    if (localStorage.getItem(`user_${user}`)) {
+      alert('Este usuario ya existe');
+      return;
+    }
+
+    localStorage.setItem(`user_${user}`, pass);
+    alert('Cuenta creada. Ahora inicia sesión.');
+    toggleLogin();
+  }
+
+  function login() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+
+    const storedPass = localStorage.getItem(`user_${user}`);
+    if (storedPass && storedPass === pass) {
+      document.getElementById('loginContainer').classList.remove('active');
+      document.getElementById('gamePanel').classList.add('active');
+      document.getElementById('infoUsername').textContent = user;
+    } else {
+      alert('Usuario o contraseña incorrectos');
+    }
+  }
+
+  function searchGames() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const games = document.querySelectorAll('.game');
+    games.forEach(game => {
+      const title = game.querySelector('.game-title').textContent.toLowerCase();
+      game.style.display = title.includes(input) ? '' : 'none';
+    });
+  }
+
+  // Efecto de nieve
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  const flakes = [];
+  for (let i = 0; i < 100; i++) {
+    flakes.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 4 + 1,
+      d: Math.random() + 1
+    });
+  }
+
+  function drawFlakes() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    flakes.forEach(flake => {
+      ctx.moveTo(flake.x, flake.y);
+      ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2, true);
+    });
+    ctx.fill();
+    moveFlakes();
+  }
+
+  function moveFlakes() {
+    flakes.forEach(flake => {
+      flake.y += Math.pow(flake.d, 2);
+      if (flake.y > height) {
+        flake.y = 0;
+        flake.x = Math.random() * width;
       }
-    }
+    });
+  }
 
-    function searchGames() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const games = document.querySelectorAll('.game');
+  setInterval(drawFlakes, 30);
 
-      games.forEach(game => {
-        const title = game.querySelector('.game-title').textContent.toLowerCase();
-        game.style.display = title.includes(input) ? '' : 'none';
-      });
-    }
-  </script>
+  window.onresize = () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  };
+</script>
 </body>
 </html>
