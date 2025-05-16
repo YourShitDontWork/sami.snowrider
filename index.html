@@ -165,7 +165,7 @@
     <input type="email" id="email" placeholder="Correo electrónico">
     <input type="password" id="password" placeholder="Contraseña">
     <button onclick="login()">Entrar</button>
-    <p>¿No tienes cuenta? <a href="#" onclick="toggleForms()">Regístrate</a></p>
+    <p>¿No tienes cuenta? <a href="#" onclick="toggleForms(true)">Regístrate</a></p>
   </div>
 
   <div id="registerContainer">
@@ -174,7 +174,7 @@
     <input type="password" id="regPass" placeholder="Contraseña">
     <input type="password" id="regRepeat" placeholder="Repite la contraseña">
     <button onclick="register()">Registrarse</button>
-    <p>¿Ya tienes cuenta? <a href="#" onclick="toggleForms()">Iniciar sesión</a></p>
+    <p>¿Ya tienes cuenta? <a href="#" onclick="toggleForms(false)">Iniciar sesión</a></p>
   </div>
 
   <div id="userPanel">U</div>
@@ -263,11 +263,17 @@
 
 
   <script>
-    function toggleForms() {
+    function toggleForms(showRegister = false) {
       const login = document.getElementById('loginContainer');
       const register = document.getElementById('registerContainer');
-      login.style.display = login.style.display === 'none' ? 'block' : 'none';
-      register.style.display = register.style.display === 'none' ? 'block' : 'none';
+
+      if (showRegister) {
+        login.style.display = 'none';
+        register.style.display = 'block';
+      } else {
+        login.style.display = 'block';
+        register.style.display = 'none';
+      }
     }
 
     document.getElementById('userPanel').addEventListener('click', () => {
@@ -312,7 +318,7 @@
       try {
         localStorage.setItem('users', JSON.stringify(users));
         alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        toggleForms();
+        toggleForms(false); // Mostrar login después de registrar
       } catch (e) {
         console.error('Error al guardar el usuario:', e);
         alert('No se pudo guardar el usuario.');
