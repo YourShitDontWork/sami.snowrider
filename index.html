@@ -196,6 +196,7 @@
       color: #00fff7;
       font-weight: 600;
       font-size: 1.1rem;
+      z-index: 1001;
     }
     #userPanel:hover {
       background: #222;
@@ -307,7 +308,7 @@
 </head>
 <body>
 
-  <!-- Copos de nieve animados -->
+  <!-- Copos de nieve -->
   <div class="snowflake"></div>
   <div class="snowflake"></div>
   <div class="snowflake"></div>
@@ -326,7 +327,7 @@
       <input type="text" id="loginUser" autocomplete="username" />
       <label for="loginPassword">Contraseña</label>
       <input type="password" id="loginPassword" autocomplete="current-password" />
-      <button onclick="login()">Iniciar Sesión</button>
+      <button onclick="login()">Iniciar sesión</button>
       <div class="switch-link" onclick="showRegister()">¿No tienes cuenta? Regístrate</div>
     </div>
 
@@ -338,16 +339,34 @@
       <input type="password" id="regPass" autocomplete="new-password" />
       <label for="regRepeat">Repetir contraseña</label>
       <input type="password" id="regRepeat" autocomplete="new-password" />
-      <button onclick="register()">Registrarse</button>
+      <button onclick="register()">Registrar</button>
       <div class="switch-link" onclick="showLogin()">¿Ya tienes cuenta? Inicia sesión</div>
     </div>
 
+    <!-- Buscador juegos -->
+    <div id="searchGamesContainer">
+      <input id="searchInput" type="text" placeholder="Buscar juegos..." oninput="filterGames()" />
+    </div>
+
+    <!-- Galería juegos -->
+    <div id="gameGrid">
+      <!-- Ejemplo de juegos -->
+      <div class="game" onclick="alert('Abrir Burrito Bison')">
+        <img src="https://i.imgur.com/pO3xY7v.png" alt="Burrito Bison" />
+        <div class="game-title">Burrito Bison</div>
+      </div>
+      <div class="game" onclick="alert('Abrir Candy Crush')">
+        <img src="https://i.imgur.com/h1VmhTf.png" alt="Candy Crush" />
+        <div class="game-title">Candy Crush</div>
+      </div>
+      <!-- Más juegos aquí -->
+    </div>
   </div>
 
   <!-- Panel usuario arriba derecha -->
-  <div id="userPanel" onclick="toggleUserInfo()">
+  <div id="userPanel" onclick="toggleUserInfo(event)">
+    <span id="userIcon">👤</span>
     <span id="displayUser"></span>
-    <span id="userIcon">ℹ️</span>
   </div>
 
   <!-- Info usuario desplegable -->
@@ -359,47 +378,8 @@
     <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
   </div>
 
-  <!-- Buscador juegos -->
-  <div id="searchGamesContainer">
-    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()" />
-  </div>
-
-  <!-- Grid juegos -->
-  <div id="gameGrid">
-    <div class="game">
-      <a href="Slope-Source-code-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope" />
-        <div class="game-title">Slope</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="Subway-Surfers/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="R.png" alt="Subway Surfers" />
-        <div class="game-title">Subway Surfers</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="BurritoBison-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison" />
-        <div class="game-title">Burrito Bison</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="drive-mad-main/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad" />
-        <div class="game-title">Drive Mad</div>
-      </a>
-    </div>
-    <div class="game">
-      <a href="1v1lol/" target="_blank" rel="noopener noreferrer">
-        <img src="1v1lol/1v1.png" alt="1v1.lol" />
-        <div class="game-title">1v1.lol</div>
-      </a>
-    </div>
-  </div>
-
   <script>
-    // Funciones para mostrar formularios
+    // Mostrar login o registro
     function showLogin() {
       document.getElementById('loginContainer').classList.add('active');
       document.getElementById('registerContainer').classList.remove('active');
@@ -410,13 +390,11 @@
       document.getElementById('loginContainer').classList.remove('active');
       clearMessages();
     }
-
-    // Limpia mensajes de error (implementar si quieres mostrar)
     function clearMessages() {
-      // Aquí puedes añadir lógica para limpiar mensajes si agregas feedback visual
+      // Aquí para mensajes futuros de error o confirmación
     }
 
-    // Obtener usuarios desde localStorage
+    // Usuarios en localStorage
     function getUsers() {
       const users = localStorage.getItem('users');
       if (!users) return [];
@@ -426,8 +404,6 @@
         return [];
       }
     }
-
-    // Guardar usuarios en localStorage
     function saveUsers(users) {
       localStorage.setItem('users', JSON.stringify(users));
     }
@@ -448,14 +424,11 @@
       }
 
       let users = getUsers();
-
-      // Verificar si el usuario ya existe (case insensitive)
       if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
         alert('El nombre de usuario ya está en uso');
         return;
       }
 
-      // Guardar nuevo usuario
       const newUser = {
         username,
         password: pass,
@@ -468,7 +441,6 @@
       alert('Registro exitoso. Ya puedes iniciar sesión.');
       showLogin();
 
-      // Limpiar campos
       document.getElementById('regUser').value = '';
       document.getElementById('regPass').value = '';
       document.getElementById('regRepeat').value = '';
@@ -485,7 +457,6 @@
       }
 
       const users = getUsers();
-      // Buscar usuario (case insensitive)
       const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
       if (!user || user.password !== pass) {
@@ -493,78 +464,95 @@
         return;
       }
 
-      // Guardar sesión
       localStorage.setItem('loggedInUser', JSON.stringify(user));
       showLoggedInUI(user);
+
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPassword').value = '';
     }
 
-    // Mostrar UI cuando se loguea
+    // Mostrar UI usuario logueado
     function showLoggedInUI(user) {
-      // Ocultar login y registro
       document.getElementById('loginContainer').classList.remove('active');
       document.getElementById('registerContainer').classList.remove('active');
 
-      // Mostrar panel usuario
       const userPanel = document.getElementById('userPanel');
       const displayUser = document.getElementById('displayUser');
       displayUser.textContent = user.username;
       userPanel.style.display = 'flex';
 
-      // Ocultar mensaje error si tienes
-      clearMessages();
-
-      // Mostrar juegos y buscador
+      // Mostrar buscador y juegos
       document.getElementById('searchGamesContainer').style.display = 'block';
       document.getElementById('gameGrid').style.display = 'grid';
     }
 
-    // Toggle ventana info usuario
-    function toggleUserInfo() {
+    // Toggle info usuario
+    function toggleUserInfo(event) {
+      event.stopPropagation(); // evitar que se cierre al hacer clic en panel
       const info = document.getElementById('userInfo');
       if (info.style.display === 'block') {
         info.style.display = 'none';
       } else {
-        // Cargar datos
-        const loggedUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedUser) return;
-
-        document.getElementById('infoUser').textContent = loggedUser.username;
-        document.getElementById('infoRegistered').textContent = loggedUser.registered;
-        document.getElementById('infoPremium').textContent = loggedUser.premium ? 'Sí' : 'No';
-        document.getElementById('infoExpire').textContent = loggedUser.expire || 'N/A';
+        // Actualizar info
+        const user = getLoggedInUser();
+        if (!user) return;
+        document.getElementById('infoUser').textContent = user.username;
+        document.getElementById('infoRegistered').textContent = user.registered || 'N/A';
+        document.getElementById('infoPremium').textContent = user.premium ? 'Sí' : 'No';
+        document.getElementById('infoExpire').textContent = user.expire || '-';
 
         info.style.display = 'block';
+      }
+    }
+
+    // Obtener usuario logueado
+    function getLoggedInUser() {
+      const user = localStorage.getItem('loggedInUser');
+      if (!user) return null;
+      try {
+        return JSON.parse(user);
+      } catch {
+        return null;
       }
     }
 
     // Logout
     function logout() {
       localStorage.removeItem('loggedInUser');
-      location.reload();
+      document.getElementById('userPanel').style.display = 'none';
+      document.getElementById('userInfo').style.display = 'none';
+      document.getElementById('searchGamesContainer').style.display = 'none';
+      document.getElementById('gameGrid').style.display = 'none';
+      showLogin();
     }
 
-    // Buscador juegos
-    function searchGames() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
+    // Filtrar juegos por nombre
+    function filterGames() {
+      const filter = document.getElementById('searchInput').value.toLowerCase();
       const games = document.querySelectorAll('#gameGrid .game');
       games.forEach(game => {
         const title = game.querySelector('.game-title').textContent.toLowerCase();
-        if (title.includes(search)) {
-          game.style.display = '';
-        } else {
-          game.style.display = 'none';
-        }
+        game.style.display = title.includes(filter) ? 'flex' : 'none';
       });
     }
 
-    // Al cargar la página, si hay sesión iniciada, mostrar UI
+    // Al cargar la página, si hay sesión mostrar UI
     window.onload = () => {
-      const loggedUser = localStorage.getItem('loggedInUser');
-      if (loggedUser) {
-        showLoggedInUI(JSON.parse(loggedUser));
+      const user = getLoggedInUser();
+      if (user) {
+        showLoggedInUI(user);
+      } else {
+        showLogin();
+      }
+    };
+
+    // Cerrar ventana info al hacer clic fuera
+    window.onclick = () => {
+      const info = document.getElementById('userInfo');
+      if (info.style.display === 'block') {
+        info.style.display = 'none';
       }
     };
   </script>
-
 </body>
 </html>
