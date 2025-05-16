@@ -2,127 +2,180 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CELEX - Juegos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
+      margin: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    .login-container, .game-panel {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container.active {
+      display: flex;
+    }
+
+    .game-panel.active {
+      display: block;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .login-box input {
+      margin: 10px 0;
+      padding: 12px;
+      width: 260px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .login-box button {
+      padding: 12px 25px;
+      background: #00bfff;
+      border: none;
       color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .user-icon {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .user-icon img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .user-popup {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      min-width: 200px;
+      z-index: 999;
+    }
+
+    .user-popup p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .user-icon:hover .user-popup {
+      display: block;
+    }
+
+    .search-container {
       text-align: center;
       padding: 20px;
     }
-    input, button {
-      font-size: 1.1em;
+
+    .search-container input {
       padding: 10px;
-      margin: 8px 0;
-      width: 250px;
-      border-radius: 6px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 8px;
       border: none;
+      outline: none;
     }
-    button {
-      cursor: pointer;
-      background-color: #00bfa5;
-      color: white;
-    }
-    button:hover {
-      background-color: #009e8a;
-    }
-    #loginContainer, #registerContainer {
-      max-width: 300px;
-      margin: auto;
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      display: none;
-    }
-    #loginContainer.active, #registerContainer.active {
-      display: block;
-    }
-    #userPanel {
-      display: none;
-      margin-top: 20px;
-      background: #00bfa5;
-      padding: 15px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    #userInfo {
-      margin-top: 15px;
-      background: #333;
-      padding: 15px;
-      border-radius: 10px;
-      max-width: 320px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    a {
-      color: #00bfa5;
-      cursor: pointer;
-    }
-    .search-container {
-      margin: 20px auto;
-    }
+
     .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 20px;
-      margin-top: 20px;
+      padding: 20px;
     }
+
     .game {
-      background: #1e1e1e;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
       overflow: hidden;
-      width: 180px;
+      text-align: center;
+      transition: transform 0.2s;
+      backdrop-filter: blur(3px);
     }
+
+    .game:hover {
+      transform: scale(1.05);
+    }
+
     .game img {
       width: 100%;
-      height: 100px;
+      height: 150px;
       object-fit: cover;
     }
+
     .game-title {
       padding: 10px;
-      font-weight: bold;
-    }
-    #gameSection {
-      display: none;
+      font-weight: 600;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.6);
     }
   </style>
 </head>
 <body>
-  <h1>CELEX - Juegos</h1>
-
-  <div id="loginContainer" class="active">
-    <h2>Iniciar Sesión</h2>
-    <input type="text" id="loginUser" placeholder="Nombre de usuario" autocomplete="username" />
-    <input type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password" />
-    <button onclick="login()">Entrar</button>
-    <p>¿No tienes cuenta? <a onclick="showRegister()">Regístrate aquí</a></p>
+  <!-- Login -->
+  <div class="login-container active" id="loginContainer">
+    <div class="login-box">
+      <h2>Inicia Sesión</h2>
+      <input type="text" id="username" placeholder="Nombre de usuario" />
+      <input type="password" id="password" placeholder="Contraseña" />
+      <button onclick="login()">Entrar</button>
+    </div>
   </div>
 
-  <div id="registerContainer">
-    <h2>Registro</h2>
-    <input type="text" id="regUser" placeholder="Nombre de usuario" autocomplete="username" />
-    <input type="password" id="regPass" placeholder="Contraseña" autocomplete="new-password" />
-    <input type="password" id="regRepeat" placeholder="Repetir contraseña" autocomplete="new-password" />
-    <button onclick="register()">Registrarse</button>
-    <p>¿Ya tienes cuenta? <a onclick="showLogin()">Iniciar sesión aquí</a></p>
-  </div>
+  <!-- Panel de juegos -->
+  <div class="game-panel" id="gamePanel">
+    <div class="header">
+      <h1>CELEX - Juegos</h1>
+      <div class="user-icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil">
+        <div class="user-popup" id="userInfo">
+          <p><strong>Usuario:</strong> <span id="infoUsername"></span></p>
+          <p><strong>Estado:</strong> Conectado</p>
+        </div>
+      </div>
+    </div>
 
-  <div id="userPanel">
-    <h3>Bienvenido, <span id="displayUser"></span> 👋</h3>
-    <button onclick="logout()">Cerrar sesión</button>
-  </div>
-
-  <div id="userInfo" style="display:none;">
-    <p><strong>Usuario:</strong> <span id="infoUser"></span></p>
-    <p><strong>Fecha registro:</strong> <span id="infoRegistered"></span></p>
-    <p><strong>Premium:</strong> <span id="infoPremium"></span></p>
-    <p><strong>Caduca:</strong> <span id="infoExpire"></span></p>
-  </div>
-
-  <div id="gameSection">
     <div class="search-container">
       <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
     </div>
@@ -144,124 +197,34 @@
   </div>
 
   <script>
-    function showRegister() {
-      document.getElementById('loginContainer').classList.remove('active');
-      document.getElementById('registerContainer').classList.add('active');
-    }
-
-    function showLogin() {
-      document.getElementById('registerContainer').classList.remove('active');
-      document.getElementById('loginContainer').classList.add('active');
-    }
-
-    function register() {
-      const username = document.getElementById('regUser').value.trim().toLowerCase();
-      const password = document.getElementById('regPass').value;
-      const repeatPass = document.getElementById('regRepeat').value;
-
-      if (!username || !password || !repeatPass) {
-        alert('Por favor, completa todos los campos');
-        return;
-      }
-
-      if (password !== repeatPass) {
-        alert('Las contraseñas no coinciden');
-        return;
-      }
-
-      let users = JSON.parse(localStorage.getItem('users') || '{}');
-
-      if (users[username]) {
-        alert('El nombre de usuario ya está en uso');
-        return;
-      }
-
-      const now = new Date();
-      const regDate = now.toLocaleDateString();
-
-      users[username] = {
-        password: password,
-        premium: true,
-        expire: '31/12/2025',
-        registered: regDate
-      };
-
-      localStorage.setItem('users', JSON.stringify(users));
-      alert('Registro exitoso! Ahora inicia sesión.');
-      showLogin();
-
-      document.getElementById('regUser').value = '';
-      document.getElementById('regPass').value = '';
-      document.getElementById('regRepeat').value = '';
-    }
+    const users = {
+      'admin': '1234',
+      'usuario1': 'abcd',
+      'gamer': 'gk4'
+    };
 
     function login() {
-      const username = document.getElementById('loginUser').value.trim().toLowerCase();
-      const password = document.getElementById('loginPassword').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-      if (!username || !password) {
-        alert('Introduce nombre de usuario y contraseña');
-        return;
+      if (users[username] && users[username] === password) {
+        document.getElementById('loginContainer').classList.remove('active');
+        document.getElementById('gamePanel').classList.add('active');
+        document.getElementById('infoUsername').innerText = username;
+      } else {
+        alert('Usuario o contraseña incorrectos');
       }
-
-      let users = JSON.parse(localStorage.getItem('users') || '{}');
-
-      if (!users[username] || users[username].password !== password) {
-        alert('Credenciales incorrectas');
-        return;
-      }
-
-      localStorage.setItem('loggedInUser', username);
-      showUserPanel(username);
-    }
-
-    function showUserPanel(username) {
-      const users = JSON.parse(localStorage.getItem('users'));
-      const user = users[username];
-
-      if (!user) return;
-
-      document.getElementById('loginContainer').classList.remove('active');
-      document.getElementById('registerContainer').classList.remove('active');
-      document.getElementById('userPanel').style.display = 'block';
-      document.getElementById('userInfo').style.display = 'block';
-      document.getElementById('gameSection').style.display = 'block';
-
-      document.getElementById('displayUser').textContent = username;
-      document.getElementById('infoUser').textContent = username;
-      document.getElementById('infoRegistered').textContent = user.registered;
-      document.getElementById('infoPremium').textContent = user.premium ? 'Sí' : 'No';
-      document.getElementById('infoExpire').textContent = user.expire;
-
-      document.getElementById('loginUser').value = '';
-      document.getElementById('loginPassword').value = '';
-    }
-
-    function logout() {
-      localStorage.removeItem('loggedInUser');
-      document.getElementById('userPanel').style.display = 'none';
-      document.getElementById('userInfo').style.display = 'none';
-      document.getElementById('gameSection').style.display = 'none';
-      showLogin();
     }
 
     function searchGames() {
       const input = document.getElementById('searchInput').value.toLowerCase();
       const games = document.querySelectorAll('.game');
+
       games.forEach(game => {
         const title = game.querySelector('.game-title').textContent.toLowerCase();
-        game.style.display = title.includes(input) ? 'block' : 'none';
+        game.style.display = title.includes(input) ? '' : 'none';
       });
     }
-
-    window.onload = function() {
-      const loggedUser = localStorage.getItem('loggedInUser');
-      if (loggedUser) {
-        showUserPanel(loggedUser);
-      } else {
-        showLogin();
-      }
-    };
   </script>
 </body>
 </html>
