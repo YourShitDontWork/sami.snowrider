@@ -185,7 +185,7 @@
   </div>
 
   <div id="gameGrid" style="display:none">
-    <div class="game">
+   <div class="game">
       <a href="Slope-Source-code-main/index.html">
         <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
         <div class="game-title">Slope</div>
@@ -285,7 +285,12 @@
       const users = JSON.parse(localStorage.getItem('users') || '{}');
       if (users[email]) return alert('El usuario ya existe.');
 
-      users[email] = { password: pass, premium: true, expire: '31/12/2025' };
+      users[email] = {
+        password: pass,
+        premium: true,
+        expire: '31/12/2025',
+        playedGames: []
+      };
       localStorage.setItem('users', JSON.stringify(users));
       alert('Registro exitoso. Ahora puedes iniciar sesión.');
       toggleForms();
@@ -314,6 +319,18 @@
     }
 
     function playGame(url) {
+      const email = localStorage.getItem('username');
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (users[email]) {
+        users[email].playedGames = users[email].playedGames || [];
+        if (!users[email].playedGames.includes(url)) {
+          users[email].playedGames.push(url);
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+        console.log(`Juegos jugados por ${email}:`, users[email].playedGames);
+      }
+
       window.open(url, '_blank');
     }
 
