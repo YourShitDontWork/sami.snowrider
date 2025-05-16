@@ -145,7 +145,7 @@
       border-radius: 15px;
       display: none;
       color: white;
-      width: 220px;
+      width: 250px;
       box-shadow: 0 0 10px #00ffe1;
       z-index: 50;
       font-weight: 600;
@@ -165,27 +165,34 @@
     <input type="email" id="email" placeholder="Correo electrónico">
     <input type="password" id="password" placeholder="Contraseña">
     <button onclick="login()">Entrar</button>
-    <p>¿No tienes cuenta? <a href="#" onclick="toggleForms(true)">Regístrate</a></p>
+    <p>¿No tienes cuenta? <a href="#" onclick="toggleForms()">Regístrate</a></p>
   </div>
 
   <div id="registerContainer">
     <h2>Registro</h2>
+    <input type="text" id="regUsername" placeholder="Nombre de usuario">
     <input type="email" id="regEmail" placeholder="Correo electrónico">
     <input type="password" id="regPass" placeholder="Contraseña">
     <input type="password" id="regRepeat" placeholder="Repite la contraseña">
     <button onclick="register()">Registrarse</button>
-    <p>¿Ya tienes cuenta? <a href="#" onclick="toggleForms(false)">Iniciar sesión</a></p>
+    <p>¿Ya tienes cuenta? <a href="#" onclick="toggleForms()">Iniciar sesión</a></p>
   </div>
 
   <div id="userPanel">U</div>
   <div id="userDropdown">
     <p><strong>Usuario:</strong> <span id="userName">-</span></p>
+    <p><strong>Correo:</strong> <span id="userEmail">-</span></p>
     <p><strong>Premium:</strong> <span id="userPremium">No</span></p>
     <p><strong>Caduca:</strong> <span id="userExpire">-</span></p>
+    <p><strong>Registrado:</strong> <span id="userRegistered">-</span></p>
     <button onclick="logout()" style="margin-top: 10px; padding: 10px; background: #ff4c4c; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Cerrar sesión</button>
   </div>
 
   <div id="gameGrid" style="display:none">
+    <div class="game" onclick="playGame('burrito-bison/index.html')">
+      <img src="img/burrito.jpg" alt="Burrito Bison">
+      <div class="game-title">Burrito Bison</div>
+    </div>
     <div class="game">
       <a href="Slope-Source-code-main/index.html">
         <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
@@ -263,17 +270,11 @@
 
 
   <script>
-    function toggleForms(showRegister = false) {
+    function toggleForms() {
       const login = document.getElementById('loginContainer');
       const register = document.getElementById('registerContainer');
-
-      if (showRegister) {
-        login.style.display = 'none';
-        register.style.display = 'block';
-      } else {
-        login.style.display = 'block';
-        register.style.display = 'none';
-      }
+      login.style.display = login.style.display === 'none' ? 'block' : 'none';
+      register.style.display = register.style.display === 'none' ? 'block' : 'none';
     }
 
     document.getElementById('userPanel').addEventListener('click', () => {
@@ -281,12 +282,18 @@
       dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
     });
 
+    function getTodayDate() {
+      const date = new Date();
+      return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+    }
+
     function register() {
       const email = document.getElementById('regEmail').value.trim();
       const pass = document.getElementById('regPass').value.trim();
       const repeat = document.getElementById('regRepeat').value.trim();
+      const username = document.getElementById('regUsername').value.trim();
 
-      if (!email || !pass || !repeat) {
+      if (!email || !pass || !repeat || !username) {
         alert('Completa todos los campos.');
         return;
       }
@@ -295,14 +302,7 @@
         return;
       }
 
-      let users = {};
-      try {
-        users = JSON.parse(localStorage.getItem('users')) || {};
-      } catch (e) {
-        console.error('Error al leer usuarios:', e);
-        users = {};
-      }
-
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
       if (users[email]) {
         alert('El usuario ya existe.');
         return;
@@ -310,33 +310,22 @@
 
       users[email] = {
         password: pass,
+        username: username,
         premium: true,
         expire: '31/12/2025',
+        registered: getTodayDate(),
         playedGames: []
       };
 
-      try {
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        toggleForms(false); // Mostrar login después de registrar
-      } catch (e) {
-        console.error('Error al guardar el usuario:', e);
-        alert('No se pudo guardar el usuario.');
-      }
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Registro exitoso. Ahora puedes iniciar sesión.');
+      toggleForms();
     }
 
     function login() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
-      let users = {};
-
-      try {
-        users = JSON.parse(localStorage.getItem('users')) || {};
-      } catch (e) {
-        console.error('Error al leer usuarios:', e);
-        alert('Error interno al intentar iniciar sesión.');
-        return;
-      }
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
 
       if (!users[email] || users[email].password !== password) {
         alert('Credenciales incorrectas.');
@@ -346,13 +335,17 @@
       const user = users[email];
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('username', email);
+
       document.getElementById('loginContainer').style.display = 'none';
       document.getElementById('registerContainer').style.display = 'none';
       document.getElementById('gameGrid').style.display = 'grid';
       document.getElementById('userPanel').style.display = 'flex';
-      document.getElementById('userName').textContent = email.split('@')[0];
+
+      document.getElementById('userName').textContent = user.username || '-';
+      document.getElementById('userEmail').textContent = email;
       document.getElementById('userPremium').textContent = user.premium ? 'Sí' : 'No';
       document.getElementById('userExpire').textContent = user.expire || '-';
+      document.getElementById('userRegistered').textContent = user.registered || '-';
     }
 
     function logout() {
@@ -371,7 +364,6 @@
           users[email].playedGames.push(url);
           localStorage.setItem('users', JSON.stringify(users));
         }
-        console.log(`Juegos jugados por ${email}:`, users[email].playedGames);
       }
 
       window.open(url, '_blank');
@@ -383,13 +375,18 @@
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         const user = users[email];
 
+        if (!user) return;
+
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('registerContainer').style.display = 'none';
         document.getElementById('gameGrid').style.display = 'grid';
         document.getElementById('userPanel').style.display = 'flex';
-        document.getElementById('userName').textContent = email.split('@')[0];
-        document.getElementById('userPremium').textContent = user?.premium ? 'Sí' : 'No';
-        document.getElementById('userExpire').textContent = user?.expire || '-';
+
+        document.getElementById('userName').textContent = user.username || '-';
+        document.getElementById('userEmail').textContent = email;
+        document.getElementById('userPremium').textContent = user.premium ? 'Sí' : 'No';
+        document.getElementById('userExpire').textContent = user.expire || '-';
+        document.getElementById('userRegistered').textContent = user.registered || '-';
       }
     }
   </script>
