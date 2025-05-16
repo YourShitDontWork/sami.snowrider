@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CELEX - Juegos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
     }
 
     body {
       margin: 0;
+      font-family: 'Montserrat', sans-serif;
       background: black;
       color: white;
       overflow-x: hidden;
@@ -22,136 +22,93 @@
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 0;
-      pointer-events: none;
+      z-index: -1;
     }
 
-    .login-container, .register-container, .game-panel {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-
-    .login-container.active, .register-container.active {
-      display: flex;
-    }
-
-    .game-panel.active {
-      display: block;
-    }
-
-    .box {
-      background: rgba(0, 0, 0, 0.85);
-      padding: 30px;
-      border-radius: 15px;
+    h1 {
       text-align: center;
-      box-shadow: 0 0 10px #000;
-    }
-
-    .box input {
-      margin: 10px 0;
-      padding: 12px;
-      width: 260px;
-      border: none;
-      border-radius: 8px;
-    }
-
-    .box button {
-      padding: 12px 25px;
-      background: #00bfff;
-      border: none;
-      color: white;
-      border-radius: 8px;
+      font-size: 3em;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff, 0 0 15px #0ff, 0 0 30px #0ff;
       font-weight: 600;
-      cursor: pointer;
-      margin-top: 10px;
+      margin: 20px 0;
     }
 
-    .box a {
-      color: #00bfff;
-      display: block;
-      margin-top: 15px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background: rgba(0, 0, 0, 0.7);
-    }
-
-    .header h1 {
-      margin: 0;
-      font-weight: 600;
-    }
-
-    .user-icon {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .user-icon img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-    }
-
-    .user-popup {
-      display: none;
-      position: absolute;
-      top: 40px;
-      right: 0;
-      background: #1e1e1e;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      min-width: 200px;
-      z-index: 999;
-    }
-
-    .user-popup p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-
-    .user-icon:hover .user-popup {
-      display: block;
-    }
-
-    .search-container {
-      text-align: center;
-      padding: 20px;
-    }
-
-    .search-container input {
+    input, button {
+      font-size: 1em;
       padding: 10px;
-      width: 300px;
-      font-size: 16px;
-      border-radius: 8px;
+      margin: 8px 0;
+      width: 100%;
+      border-radius: 6px;
       border: none;
-      outline: none;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #00bfa5;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #009e8a;
+    }
+
+    .container {
+      max-width: 320px;
+      margin: auto;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .container.active {
+      display: block;
+    }
+
+    #userIcon {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0ff;
+      display: none;
+      cursor: pointer;
+    }
+
+    #userPopup {
+      display: none;
+      position: fixed;
+      top: 65px;
+      right: 15px;
+      background: #222;
+      border-radius: 8px;
+      padding: 15px;
+      z-index: 10;
+      box-shadow: 0 0 10px #0ff;
+      color: white;
+      width: 250px;
     }
 
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px auto;
+      max-width: 1200px;
+      display: none;
     }
 
     .game {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      overflow: hidden;
+      background: #333;
+      padding: 10px;
+      border-radius: 10px;
+      width: 160px;
       text-align: center;
       transition: transform 0.2s;
-      backdrop-filter: blur(3px);
     }
 
     .game:hover {
@@ -160,177 +117,224 @@
 
     .game img {
       width: 100%;
-      height: 150px;
-      object-fit: cover;
+      border-radius: 8px;
     }
 
     .game-title {
-      padding: 10px;
+      margin-top: 10px;
       font-weight: 600;
-      font-size: 16px;
-      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .search-container {
+      text-align: center;
+      margin: 20px;
+      display: none;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 250px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+    }
+
+    a {
+      color: #0ff;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+
 <canvas id="snow"></canvas>
 
-<!-- Login -->
-<div class="login-container active" id="loginContainer">
-  <div class="box">
-    <h2>Inicia Sesión</h2>
-    <input type="text" id="loginUser" placeholder="Nombre de usuario">
-    <input type="password" id="loginPass" placeholder="Contraseña">
-    <button onclick="login()">Entrar</button>
-    <a onclick="toggleRegister()">¿No tienes cuenta? Regístrate</a>
-  </div>
+<h1>CELEX - Juegos</h1>
+
+<div id="userIcon" onclick="toggleUserPopup()">
+  <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" style="width:100%; border-radius:50%;">
+</div>
+<div id="userPopup">
+  <p><strong>Usuario:</strong> <span id="infoUser"></span></p>
+  <p><strong>Registrado:</strong> <span id="infoRegistered"></span></p>
+  <button onclick="logout()">Cerrar sesión</button>
 </div>
 
-<!-- Registro -->
-<div class="register-container" id="registerContainer">
-  <div class="box">
-    <h2>Regístrate</h2>
-    <input type="text" id="registerUser" placeholder="Nombre de usuario">
-    <input type="password" id="registerPass" placeholder="Contraseña">
-    <button onclick="register()">Crear cuenta</button>
-    <a onclick="toggleLogin()">¿Ya tienes cuenta? Inicia sesión</a>
-  </div>
+<div id="loginContainer" class="container active">
+  <h2>Iniciar Sesión</h2>
+  <input type="text" id="loginUser" placeholder="Usuario" />
+  <input type="password" id="loginPassword" placeholder="Contraseña" />
+  <button onclick="login()">Entrar</button>
+  <p>¿No tienes cuenta? <a onclick="showRegister()">Regístrate aquí</a></p>
 </div>
 
-<!-- Panel de juegos -->
-<div class="game-panel" id="gamePanel">
-  <div class="header">
-    <h1>CELEX - Juegos</h1>
-    <div class="user-icon">
-      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil">
-      <div class="user-popup" id="userInfo">
-        <p><strong>Usuario:</strong> <span id="infoUsername"></span></p>
-        <p><strong>Estado:</strong> Conectado</p>
-      </div>
-    </div>
-  </div>
+<div id="registerContainer" class="container">
+  <h2>Registro</h2>
+  <input type="text" id="regUser" placeholder="Usuario" />
+  <input type="password" id="regPass" placeholder="Contraseña" />
+  <input type="password" id="regRepeat" placeholder="Repetir contraseña" />
+  <button onclick="register()">Registrarse</button>
+  <p>¿Ya tienes cuenta? <a onclick="showLogin()">Iniciar sesión aquí</a></p>
+</div>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
-  </div>
+<div class="search-container" id="searchSection">
+  <input type="text" id="searchInput" placeholder="Buscar juegos..." onkeyup="searchGames()">
+</div>
 
-  <div class="grid" id="gameGrid">
-    <div class="game"><a href="Slope-Source-code-main/index.html"><img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope"><div class="game-title">Slope</div></a></div>
-    <div class="game"><a href="Subway-Surfers/index.html"><img src="R.png" alt="Subway Surfers"><div class="game-title">Subway Surfers</div></a></div>
-    <div class="game"><a href="BurritoBison-main/index.html"><img src="BurritoBison-main/images/burrito-png.png" alt="Burrito Bison"><div class="game-title">Burrito Bison</div></a></div>
-    <div class="game"><a href="drive-mad-main/index.html"><img src="drive-mad-main/webapp/cover.jpg" alt="Drive Mad"><div class="game-title">Drive Mad</div></a></div>
-    <div class="game"><a href="1v1lol/"><img src="1v1lol/logo.png" alt="1v1.lol"><div class="game-title">1v1.lol</div></a></div>
-    <div class="game"><a href="bitlife/index.html"><img src="bitlife/logo.png" alt="Bitlife"><div class="game-title">Bitlife</div></a></div>
-    <div class="game"><a href="driftboss/index.html"><img src="driftboss/branding/logo1.png" alt="Drift Boss"><div class="game-title">Drift Boss</div></a></div>
-    <div class="game"><a href="happywheels/index.html"><img src="happywheels/166950-HUdYLFwSkLSLQIwO.png" alt="Happy Wheels"><div class="game-title">Happy Wheels</div></a></div>
-    <div class="game"><a href="pacman/index.html"><img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg" alt="Pacman"><div class="game-title">Pacman</div></a></div>
-    <div class="game"><a href="skibidi1v100/index.html"><img src="skibidi1v100/logo.png" alt="Skibidi 1v100"><div class="game-title">Skibidi 1v100</div></a></div>
-    <div class="game"><a href="snowrider3d/index.html"><img src="snowrider3d/snow.png" alt="Snow Rider 3D"><div class="game-title">Snow Rider 3D</div></a></div>
-    <div class="game"><a href="volleyrandom/index.html"><img src="volleyrandom/splash.png" alt="Volley Random"><div class="game-title">Volley Random</div></a></div>
-  </div>
+<div class="grid" id="gameGrid">
+  <!-- Tus juegos -->
+  <div class="game"><a href="Slope-Source-code-main/index.html"><img src="Slope-Source-code-main/TemplateData/OIP.ico"><div class="game-title">Slope</div></a></div>
+  <div class="game"><a href="Subway-Surfers/index.html"><img src="R.png"><div class="game-title">Subway Surfers</div></a></div>
+  <div class="game"><a href="BurritoBison-main/index.html"><img src="BurritoBison-main/images/burrito-png.png"><div class="game-title">Burrito Bison</div></a></div>
+  <div class="game"><a href="drive-mad-main/index.html"><img src="drive-mad-main/webapp/cover.jpg"><div class="game-title">Drive Mad</div></a></div>
+  <div class="game"><a href="1v1lol/"><img src="1v1lol/logo.png"><div class="game-title">1v1.lol</div></a></div>
+  <div class="game"><a href="bitlife/index.html"><img src="bitlife/logo.png"><div class="game-title">Bitlife</div></a></div>
+  <div class="game"><a href="driftboss/index.html"><img src="driftboss/branding/logo1.png"><div class="game-title">Drift Boss</div></a></div>
+  <div class="game"><a href="happywheels/index.html"><img src="happywheels/166950-HUdYLFwSkLSLQIwO.png"><div class="game-title">Happy Wheels</div></a></div>
+  <div class="game"><a href="pacman/index.html"><img src="pacman/sejarah-penciptaan-game-legendaris-pac-man-10aXQ8DlD0.jpg"><div class="game-title">Pacman</div></a></div>
+  <div class="game"><a href="skibidi1v100/index.html"><img src="skibidi1v100/logo.png"><div class="game-title">Skibidi 1v100</div></a></div>
+  <div class="game"><a href="snowrider3d/index.html"><img src="snowrider3d/snow.png"><div class="game-title">Snow Rider 3D</div></a></div>
+  <div class="game"><a href="volleyrandom/index.html"><img src="volleyrandom/splash.png"><div class="game-title">Volley Random</div></a></div>
 </div>
 
 <script>
-  function toggleRegister() {
+  function showRegister() {
     document.getElementById('loginContainer').classList.remove('active');
     document.getElementById('registerContainer').classList.add('active');
   }
 
-  function toggleLogin() {
+  function showLogin() {
     document.getElementById('registerContainer').classList.remove('active');
     document.getElementById('loginContainer').classList.add('active');
   }
 
   function register() {
-    const user = document.getElementById('registerUser').value.trim();
-    const pass = document.getElementById('registerPass').value.trim();
+    const username = document.getElementById('regUser').value.trim();
+    const password = document.getElementById('regPass').value;
+    const repeatPass = document.getElementById('regRepeat').value;
 
-    if (!user || !pass) {
-      alert('Rellena todos los campos');
+    if (!username || !password || !repeatPass) {
+      alert('Completa todos los campos');
       return;
     }
 
-    if (localStorage.getItem(`user_${user}`)) {
-      alert('Este usuario ya existe');
+    if (password !== repeatPass) {
+      alert('Las contraseñas no coinciden');
       return;
     }
 
-    localStorage.setItem(`user_${user}`, pass);
-    alert('Cuenta creada. Ahora inicia sesión.');
-    toggleLogin();
+    let users = JSON.parse(localStorage.getItem('users') || '{}');
+    if (users[username.toLowerCase()]) {
+      alert('Nombre de usuario ya está en uso');
+      return;
+    }
+
+    const now = new Date().toLocaleDateString();
+
+    users[username.toLowerCase()] = {
+      username,
+      password,
+      registered: now
+    };
+
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Registro exitoso. Ahora inicia sesión.');
+    showLogin();
   }
 
   function login() {
-    const user = document.getElementById('loginUser').value.trim();
-    const pass = document.getElementById('loginPass').value.trim();
+    const username = document.getElementById('loginUser').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
 
-    const storedPass = localStorage.getItem(`user_${user}`);
-    if (storedPass && storedPass === pass) {
-      document.getElementById('loginContainer').classList.remove('active');
-      document.getElementById('gamePanel').classList.add('active');
-      document.getElementById('infoUsername').textContent = user;
-    } else {
-      alert('Usuario o contraseña incorrectos');
+    let users = JSON.parse(localStorage.getItem('users') || '{}');
+    if (!users[username] || users[username].password !== password) {
+      alert('Credenciales incorrectas');
+      return;
     }
+
+    localStorage.setItem('loggedInUser', username);
+    showGames(username);
+  }
+
+  function logout() {
+    localStorage.removeItem('loggedInUser');
+    location.reload();
+  }
+
+  function showGames(username) {
+    const users = JSON.parse(localStorage.getItem('users'));
+    const user = users[username];
+
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('registerContainer').style.display = 'none';
+    document.getElementById('userIcon').style.display = 'block';
+    document.getElementById('gameGrid').style.display = 'flex';
+    document.getElementById('searchSection').style.display = 'block';
+
+    document.getElementById('infoUser').textContent = user.username;
+    document.getElementById('infoRegistered').textContent = user.registered;
+  }
+
+  function toggleUserPopup() {
+    const popup = document.getElementById('userPopup');
+    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
   }
 
   function searchGames() {
     const input = document.getElementById('searchInput').value.toLowerCase();
     const games = document.querySelectorAll('.game');
     games.forEach(game => {
-      const title = game.querySelector('.game-title').textContent.toLowerCase();
+      const title = game.textContent.toLowerCase();
       game.style.display = title.includes(input) ? '' : 'none';
     });
   }
 
-  // Efecto de nieve
-  const canvas = document.getElementById('snow');
-  const ctx = canvas.getContext('2d');
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
+  // Autologin
+  window.onload = () => {
+    const user = localStorage.getItem('loggedInUser');
+    if (user) showGames(user);
+  };
 
-  const flakes = [];
-  for (let i = 0; i < 100; i++) {
-    flakes.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 4 + 1,
-      d: Math.random() + 1
-    });
+  // Nieve animada
+  const canvas = document.getElementById("snow");
+  const ctx = canvas.getContext("2d");
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+  let flakes = [];
+
+  function snow() {
+    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < flakes.length; i++) {
+      let f = flakes[i];
+      f.y += f.speed;
+      if (f.y > h) f.y = -10;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+    }
+    requestAnimationFrame(snow);
   }
 
-  function drawFlakes() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    flakes.forEach(flake => {
-      ctx.moveTo(flake.x, flake.y);
-      ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2, true);
-    });
-    ctx.fill();
-    moveFlakes();
+  function createFlakes() {
+    for (let i = 0; i < 150; i++) {
+      flakes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 3 + 1,
+        speed: Math.random() + 0.5
+      });
+    }
   }
 
-  function moveFlakes() {
-    flakes.forEach(flake => {
-      flake.y += Math.pow(flake.d, 2);
-      if (flake.y > height) {
-        flake.y = 0;
-        flake.x = Math.random() * width;
-      }
-    });
-  }
-
-  setInterval(drawFlakes, 30);
+  createFlakes();
+  snow();
 
   window.onresize = () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
   };
 </script>
+
 </body>
 </html>
