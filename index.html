@@ -192,7 +192,7 @@
   </div>
 
   <div id="gameGrid" style="display:none">
-<div class="game">
+    <div class="game">
       <a href="Slope-Source-code-main/index.html">
         <img src="Slope-Source-code-main/TemplateData/OIP.ico" alt="Slope">
         <div class="game-title">Slope</div>
@@ -309,10 +309,14 @@
         users = {};
       }
 
-      // Verificar si el usuario o el correo ya existen
-      for (const key in users) {
-        if (key === email || users[key].username === user) {
-          alert('El correo o usuario ya están registrados.');
+      // Comprobar si el correo o usuario ya existen:
+      for (const savedEmail in users) {
+        if (savedEmail.toLowerCase() === email.toLowerCase()) {
+          alert('Este correo ya está registrado.');
+          return;
+        }
+        if (users[savedEmail].username.toLowerCase() === user.toLowerCase()) {
+          alert('Este usuario ya está registrado.');
           return;
         }
       }
@@ -358,20 +362,29 @@
         return;
       }
 
-      if (!users[email] || users[email].password !== password) {
+      // Buscar email ignorando mayúsculas/minúsculas
+      let userKey = null;
+      for (const savedEmail in users) {
+        if (savedEmail.toLowerCase() === email.toLowerCase()) {
+          userKey = savedEmail;
+          break;
+        }
+      }
+
+      if (!userKey || users[userKey].password !== password) {
         alert('Credenciales incorrectas.');
         return;
       }
 
-      const user = users[email];
+      const user = users[userKey];
       localStorage.setItem('loggedIn', 'true');
-      localStorage.setItem('username', email);
+      localStorage.setItem('username', userKey);
       document.getElementById('loginContainer').style.display = 'none';
       document.getElementById('registerContainer').style.display = 'none';
       document.getElementById('gameGrid').style.display = 'grid';
       document.getElementById('userPanel').style.display = 'flex';
       document.getElementById('userName').textContent = user.username;
-      document.getElementById('userEmail').textContent = email;
+      document.getElementById('userEmail').textContent = userKey;
       document.getElementById('userPremium').textContent = user.premium ? 'Sí' : 'No';
       document.getElementById('userExpire').textContent = user.expire || '-';
       document.getElementById('userRegistered').textContent = user.registered || '-';
@@ -420,7 +433,7 @@
           document.getElementById('userExpire').textContent = user.expire || '-';
           document.getElementById('userRegistered').textContent = user.registered || '-';
         } else {
-          // Si no existe usuario (ej. borrado localStorage), desloguear
+          // Si no encuentra usuario, borrar sesión
           logout();
         }
       }
